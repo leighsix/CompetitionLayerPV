@@ -12,7 +12,6 @@ matplotlib.use("TkAgg")
 
 class InterconnectedLayerModeling:
     def __init__(self, setting):
-        # network : 1 = random regular graph   2 = barabasi-albert graph
         A_edges_array = self.A_layer_config(setting)
         self.A_edges = A_edges_array[0]
         self.AB_edges = A_edges_array[1]
@@ -33,7 +32,6 @@ class InterconnectedLayerModeling:
         AB_edges_list = self.AB_edges
         self.two_layer_graph.add_edges_from(AB_edges_list)
         return self.two_layer_graph
-
 
     def A_layer_config(self, setting):
         # A_layer 구성요소 A_layer_config(state = [1,2], node = 2048, edge = 5, Max = 2, Min = -2)

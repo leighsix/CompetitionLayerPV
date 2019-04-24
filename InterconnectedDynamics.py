@@ -14,7 +14,7 @@ class InterconnectedDynamics:
         self.decision = DecisionDynamics.DecisionDynamics()
         self.mp = MakingPandas.MakingPandas()
 
-    def interconnected_simultaneous_dynamics(self, setting, inter_layer, p, v):
+    def interconnected_dynamics0(self, setting, inter_layer, p, v):  #same:same:same
         total_value = np.zeros(13)
         for step_number in range(setting.Limited_step+1):
             temp_inter_layer = inter_layer
@@ -23,7 +23,7 @@ class InterconnectedDynamics:
                 initial_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                opinion_result = self.opinion.A_layer_simultaneous_dynamics(setting, temp_inter_layer, p)
+                opinion_result = self.opinion.A_layer_simultaneous_dynamics1(setting, temp_inter_layer, p)
                 probability = self.decision.B_state_change_probability_cal(setting, temp_inter_layer, v)
                 decision_result = self.decision.B_layer_simultaneous_dynamics(setting, temp_inter_layer, probability)
                 for node_A in range(setting.A_node):
@@ -44,7 +44,7 @@ class InterconnectedDynamics:
                 initial_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                inter_layer = self.opinion.A_layer_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_dynamics1(setting, inter_layer, p)
                 decision_result = self.decision.B_layer_dynamics(setting, inter_layer, v)
                 inter_layer = decision_result[0]
                 probability = decision_result[1]
@@ -65,7 +65,7 @@ class InterconnectedDynamics:
                 decision_result = self.decision.B_layer_dynamics(setting, inter_layer, v)
                 inter_layer = decision_result[0]
                 probability = decision_result[1]
-                inter_layer = self.opinion.A_layer_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_dynamics1(setting, inter_layer, p)
                 array_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = np.vstack([total_value, array_value])
         self.opinion.A_COUNT = 0
@@ -80,7 +80,7 @@ class InterconnectedDynamics:
                 initial_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                inter_layer = self.opinion.A_layer_simultaneous_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_simultaneous_dynamics1(setting, inter_layer, p)
                 decision_result = self.decision.B_layer_dynamics(setting, inter_layer, v)
                 inter_layer = decision_result[0]
                 probability = decision_result[1]
@@ -101,7 +101,7 @@ class InterconnectedDynamics:
                 decision_result = self.decision.B_layer_dynamics(setting, inter_layer, v)
                 inter_layer = decision_result[0]
                 probability = decision_result[1]
-                inter_layer = self.opinion.A_layer_simultaneous_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_simultaneous_dynamics1(setting, inter_layer, p)
                 array_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = np.vstack([total_value, array_value])
         self.opinion.A_COUNT = 0
@@ -116,7 +116,7 @@ class InterconnectedDynamics:
                 initial_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                inter_layer = self.opinion.A_layer_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_dynamics1(setting, inter_layer, p)
                 probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
                 inter_layer = self.decision.B_layer_simultaneous_dynamics(setting, inter_layer, probability)
                 array_value = self.making_properties_array(setting, inter_layer, p, v, probability)
@@ -135,7 +135,7 @@ class InterconnectedDynamics:
             elif step_number >= 1:
                 probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
                 inter_layer = self.decision.B_layer_simultaneous_dynamics(setting, inter_layer, probability)
-                inter_layer = self.opinion.A_layer_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_dynamics1(setting, inter_layer, p)
                 array_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = np.vstack([total_value, array_value])
         self.opinion.A_COUNT = 0
@@ -150,7 +150,7 @@ class InterconnectedDynamics:
                 initial_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                inter_layer = self.opinion.A_layer_simultaneous_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_simultaneous_dynamics1(setting, inter_layer, p)
                 probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
                 inter_layer = self.decision.B_layer_simultaneous_dynamics(setting, inter_layer, probability)
                 array_value = self.making_properties_array(setting, inter_layer, p, v, probability)
@@ -169,29 +169,33 @@ class InterconnectedDynamics:
             elif step_number >= 1:
                 probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
                 inter_layer = self.decision.B_layer_simultaneous_dynamics(setting, inter_layer, probability)
-                inter_layer = self.opinion.A_layer_simultaneous_dynamics(setting, inter_layer, p)
+                inter_layer = self.opinion.A_layer_simultaneous_dynamics1(setting, inter_layer, p)
                 array_value = self.making_properties_array(setting, inter_layer, p, v, probability)
                 total_value = np.vstack([total_value, array_value])
         self.opinion.A_COUNT = 0
         self.decision.B_COUNT = 0
         return total_value
 
-    # def interconnected_dynamics9(self, setting, inter_layer, p, v):  # step:step:opinion-decision
-    #     total_value = np.zeros(13)
-    #     for step_number in range(setting.Limited_step+1):
-    #         if step_number == 0:
-    #             probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
-    #             initial_value = self.making_properties_array(setting, inter_layer, p, v, probability)
-    #             total_value = total_value + initial_value
-    #         elif step_number >= 1:
-    #             probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
+    def interconnected_dynamics9(self, setting, inter_layer, p, v):  # step:step:opinion-decision
+        total_value = np.zeros(13)
+        for step_number in range(setting.Limited_step+1):
+            if step_number == 0:
+                probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
+                initial_value = self.making_properties_array(setting, inter_layer, p, v, probability)
+                total_value = total_value + initial_value
+            elif step_number >= 1:
+                for i, j in sorted(inter_layer.A_edges.edges()):
+
+                for node_i in range(setting.A_node, setting.A_node + setting.B_node):
+
+        #             probability = self.decision.B_state_change_probability_cal(setting, inter_layer, v)
     #             inter_layer = self.decision.B_layer_dynamics(setting, inter_layer, probability)
     #             inter_layer = self.opinion.A_layer_dynamics(setting, inter_layer, p)
     #             array_value = self.making_properties_array(setting, inter_layer, p, v, probability)
     #             total_value = np.vstack([total_value, array_value])
-    #     self.opinion.A_COUNT = 0
-    #     self.decision.B_COUNT = 0
-    #     return total_value
+        self.opinion.A_COUNT = 0
+        self.decision.B_COUNT = 0
+        return total_value
 
 
     def making_properties_array(self, setting, inter_layer, p, v, probability):

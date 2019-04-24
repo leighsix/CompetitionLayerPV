@@ -10,17 +10,6 @@ class DecisionDynamics:
     def __init__(self):
         self.B_COUNT = 0
 
-    def B_layer_simultaneous_dynamics(self, setting, inter_layer, probability):
-        temp_inter_layer = inter_layer
-        z = np.random.random(setting.B_node)
-        prob = (probability > z)
-        for node_i in range(setting.A_node, setting.A_node+setting.B_node):
-            if prob[node_i-setting.A_node] == 1:
-                inter_layer.two_layer_graph.nodes[node_i]['state'] = \
-                    -(temp_inter_layer.two_layer_graph.nodes[node_i]['state'])
-                self.B_COUNT += 1
-        return inter_layer
-
     def B_layer_dynamics(self, setting, inter_layer, v):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
         prob_v_list = []
         for node_i in range(setting.A_node, setting.A_node+setting.B_node):
@@ -47,6 +36,17 @@ class DecisionDynamics:
             prob_v_list.append(prob_v)
         prob_v_array = np.array(prob_v_list)
         return inter_layer, prob_v_array
+
+    def B_layer_simultaneous_dynamics(self, setting, inter_layer, probability):
+        temp_inter_layer = inter_layer
+        z = np.random.random(setting.B_node)
+        prob = (probability > z)
+        for node_i in range(setting.A_node, setting.A_node+setting.B_node):
+            if prob[node_i-setting.A_node] == 1:
+                inter_layer.two_layer_graph.nodes[node_i]['state'] = \
+                    -(temp_inter_layer.two_layer_graph.nodes[node_i]['state'])
+                self.B_COUNT += 1
+        return inter_layer
 
 
     def B_state_change_probability_cal(self, setting, inter_layer, v):
