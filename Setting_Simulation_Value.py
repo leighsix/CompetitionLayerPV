@@ -6,9 +6,9 @@ import random
 class Setting_Simulation_Value:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'step_same_table'
-        self.MODEL = 'step_step_opinion'
-        self.Structure = 'RR-RR'
+        self.table = 'test'
+        self.MODEL = 'test'
+        self.Structure = 'BA-BA'
 
         self.Limited_step = 100
         self.Repeating_number = 10
@@ -33,7 +33,7 @@ class Setting_Simulation_Value:
         self.P = simulation_condition[0]
         self.V = simulation_condition[1]
         self.variable_list = self.p_and_v_list(self.P, self.V)
-        self.workers = 5
+        self.workers = 1
 
     def simulation_condition(self, gap):
         self.P = np.linspace(0, 1, gap)

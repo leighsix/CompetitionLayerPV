@@ -99,8 +99,8 @@ class Visualization:
         cb.set_label(label='AS', size=15, labelpad=10)
         cb.ax.tick_params(labelsize=12)
         plt.clim(-1, 1)
-        plt.xlabel(r'$\beta$', fontsize=18, labelpad=6)
-        plt.ylabel(r'$\gamma$', fontsize=18, labelpad=6)
+        plt.xlabel(r'$v$', fontsize=18, labelpad=6)
+        plt.ylabel(r'$p$', fontsize=18, labelpad=6)
         #plt.clabel(contours, inline=True, fontsize=8)
 
     def average_state_for_steps(self, df, v_value, p_value):
@@ -114,7 +114,6 @@ class Visualization:
         plt.plot(df3['Steps'], df3['AS'], linestyle=':', marker='o', markersize=2, linewidth=0.3)
         plt.ylabel('A', fontsize=18, labelpad=4)
         plt.xlabel('time(step)', fontsize=18, labelpad=4)
-
 
 
     def flow_prob_v_chart(self, df, v_values, p_values):
@@ -163,6 +162,23 @@ class Visualization:
         plt.ylabel('AS', fontsize=18, labelpad=6)
         plt.xlabel('time(step)', fontsize=18, labelpad=6)
 
+    def average_state_for_steps_regarding_order(self, df, p_value, v_value):
+        v_list = Visualization.making_select_list(df, 'v')  # list이지만 실제로는 array
+        p_list = Visualization.making_select_list(df, 'p')
+        v = Visualization.covert_to_select_list_value(v_list, v_value)
+        p = Visualization.covert_to_select_list_value(p_list, p_value)
+        df = df[df.v == v]
+        df = df[df.p == p]
+        orders = df['Order'].unique()
+        for order in orders:
+            df1 = df[df.Order == order]
+            print(len(df1))
+            plt.plot(df1['Steps'], df1['AS'], label=r'%s' % order, linewidth=1.5)
+        plt.legend(framealpha=1, frameon=True, prop={'size': 12})
+        plt.ylabel('AS', fontsize=18, labelpad=6)
+        plt.xlabel('time(step)', fontsize=18, labelpad=6)
+
+
     @staticmethod
     def state_list_function(df, p_list, v_list):
         Z = np.zeros([len(p_list), len(v_list)])
@@ -194,11 +210,7 @@ class Visualization:
 if __name__ == "__main__":
     print("Visualization")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
-    setting.database = 'pv_variable'
-    setting.table = 'step_same_table'
-    select_db = SelectDB.SelectDB()
-    df = select_db.select_data_from_DB(setting)
-    df = df[df.Steps == 100]
+    # print(df)
     # array1 = Visualization.making_select_list(df, 'p')
     # array2 = Visualization.making_select_list(df, 'v')
     # temp1 = Visualization.covert_to_select_list_value(array1, 0.1)
@@ -206,10 +218,21 @@ if __name__ == "__main__":
     # df1 = df[df.p == temp1]
     # df2 = df1[df1.v == temp2]
     # print(df2)
+    # setting.database = 'pv_variable'
+    # setting.table = 'step_same_table'
+    setting.database = 'paper_revised_data'
+    setting.table = 'simulation_table3'
+    select_db = SelectDB.SelectDB()
+    df = select_db.select_data_from_DB(setting)
+    df = df[df.Steps == 100]
+
     visualization = Visualization()
     fig = plt.figure()
     sns.set()
     visualization.plot_3D_trisurf_for_average_state(df)
+
+    # visualization.average_state_for_steps_regarding_order(df, 0.5, 0.5)
+    # visualization.average_state_for_steps_scale(df, [0, 1], [0, 1])
     plt.show()
     plt.close()
 

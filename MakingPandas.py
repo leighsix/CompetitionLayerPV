@@ -6,13 +6,13 @@ import Setting_Simulation_Value
 
 class MakingPandas:
     def making_dataframe_per_step(self, setting, value_array):
-        columns = ['p', 'v', 'prob_v',
+        columns = ['p', 'v', 'prob_v', 'persuasion', 'compromise',
                    'A_plus', 'A_minus', 'B_plus', 'B_minus',
                    'Layer_A_Mean', 'Layer_B_Mean', 'AS',
-                   'A_total_edges', 'B_total_edges', 'change_count']
+                   'A_total_edges', 'B_total_edges', 'change_count', 'key_nodes_property']
         df = pd.DataFrame(value_array, columns=columns)
         step = [i for i in range(0, setting.Limited_step+1)]
-        df['MODEL'] = setting.MODEL
+        df['Model'] = setting.MODEL
         df['Steps'] = step
         df['Structure'] = setting.Structure
         df['A_node_number'] = setting.A_node

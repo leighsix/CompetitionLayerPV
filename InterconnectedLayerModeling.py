@@ -105,16 +105,19 @@ if __name__ == "__main__" :
     print("interconnectedlayer")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     inter_layer = InterconnectedLayerModeling(setting)
-    state = 0
-    for i in range(len(inter_layer.two_layer_graph.nodes)):
-        state += inter_layer.two_layer_graph.nodes[i]['state']
-    print(state)
-    print(inter_layer.A_edges.edges)
-    external_edge_number = len(inter_layer.AB_neighbor[1])
-    print(external_edge_number)
-    inter_edges = len(sorted(nx.all_neighbors(inter_layer.two_layer_graph, 1 + setting.A_node))) - external_edge_number
-    print(inter_edges)
-    print(sorted(nx.all_neighbors(inter_layer.two_layer_graph, 1 + setting.A_node), reverse=True))
+    print(len(inter_layer.two_layer_graph.nodes))
+    # print(len(sorted(inter_layer.A_edges.edges())) + len(sorted(inter_layer.AB_edges)))
+    # print(len(sorted(inter_layer.two_layer_graph.edges())))
+    # state = 0
+    # for i in range(len(inter_layer.two_layer_graph.nodes)):
+    #     state += inter_layer.two_layer_graph.nodes[i]['state']
+    # print(state)
+    # print(inter_layer.A_edges.edges)
+    # external_edge_number = len(inter_layer.AB_neighbor[1])
+    # print(external_edge_number)
+    # inter_edges = len(sorted(nx.all_neighbors(inter_layer.two_layer_graph, 1 + setting.A_node))) - external_edge_number
+    # print(inter_edges)
+    # print(sorted(nx.all_neighbors(inter_layer.two_layer_graph, 1 + setting.A_node), reverse=True))
 
     #print(Layer_A.AB_edges)
     #print(Layer_A.AB_neighbor)
