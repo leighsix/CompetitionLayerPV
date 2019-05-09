@@ -33,7 +33,7 @@ class DecisionDynamics:
                 z = random.random()
                 if z < prob_v:
                     inter_layer.two_layer_graph.nodes[node_i]['state'] = -(inter_layer.two_layer_graph.nodes[node_i]['state'])
-                    volatility_count +=1
+                    volatility_count += 1
                     self.B_COUNT += 1
         volatility_prob = volatility_count / setting.B_node
         return inter_layer, volatility_prob

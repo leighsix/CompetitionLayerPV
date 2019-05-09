@@ -10,7 +10,7 @@ class NodeProperty:
         if select_method == 'hub':
             ordering_A_node = self.order_hub_and_authority(inter_layer)[0]
         elif select_method == 'authority':
-            ordering_A_node = self.order_hub_and_authority(inter_layer)[3]
+            ordering_A_node = self.order_hub_and_authority(inter_layer)[2]
         elif select_method == 'pagerank':
             ordering_A_node = self.order_pagerank(inter_layer)[0]
         elif select_method == 'eigenvector':
@@ -50,7 +50,7 @@ class NodeProperty:
         if select_method == 'hub':
             ordering_B_node = self.order_hub_and_authority(inter_layer)[1]
         elif select_method == 'authority':
-            ordering_B_node = self.order_hub_and_authority(inter_layer)[4]
+            ordering_B_node = self.order_hub_and_authority(inter_layer)[3]
         elif select_method == 'pagerank':
             ordering_B_node = self.order_pagerank(inter_layer)[1]
         elif select_method == 'eigenvector':
@@ -283,8 +283,8 @@ if __name__ == "__main__":
     cal_property = NodeProperty()
     # select = cal_property.cal_node_A_and_node_B_centrality(inter_layer)
     start = time.time()
-    select = cal_property.ordering_A_node(inter_layer, 'pagerank')[0:3]
-    print(select)
+    select = cal_property.order_hub_and_authority(inter_layer)
+    print(select[0])
     end = time.time()
     print(end-start)
 

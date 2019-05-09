@@ -1,21 +1,19 @@
 import numpy as np
-import math
 import random
-
 
 class Setting_Simulation_Value:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'test'
-        self.MODEL = 'test'
+        self.table = 'keynode_table2'
+        self.MODEL = 'BA-BA'
         self.Structure = 'BA-BA'
 
         self.Limited_step = 100
-        self.Repeating_number = 10
+        self.Repeating_number = 100
 
         self.A_state = [1, 2]
         self.A_node = 2048
-        self.A_edge = 5
+        self.A_edge = 4
         self.A_inter_edges = 1
         self.A = self.static_making_A_array()
         self.MAX = 2
@@ -23,17 +21,29 @@ class Setting_Simulation_Value:
 
         self.B_state = [-1]
         self.B_node = 2048
-        self.B_edge = 5
+        self.B_edge = 4
         self.B_inter_edges = int(self.A_node / self.B_node)
         self.B = self.static_making_B_array()
 
         self.DB = 'MySQL'
-        self.gap = 30
+        self.gap = 50
         simulation_condition = self.simulation_condition(self.gap)
         self.P = simulation_condition[0]
         self.V = simulation_condition[1]
         self.variable_list = self.p_and_v_list(self.P, self.V)
-        self.workers = 1
+        self.workers = 5
+
+        self.select_method_list = ['0', 'pagerank', 'betweenness', 'number_degree', 'degree', 'eigenvector', 'closeness',
+                                   'hub', 'authority', 'load', 'AB_hub', 'AB_authority', 'AB_pagerank', 'AB_eigenvector',
+                                   'AB_degree', 'AB_betweenness', 'AB_closeness', 'AB_load', 'AB_number_degree']
+
+        self.step_list = [r'$O(s) \leftrightarrow D(s)$', r'$O(o)\to D(o)$', r'$O(o)\leftarrow D(o)$', r'$O(s)\to D(o)$',
+                          r'$O(s) \leftarrow D(o)$', r'$O(o)\to D(s)$', r'$O(o) \leftarrow D(s)$', r'$O(s)\to D(s)$',
+                          r'$O(s) \leftarrow D(s)$', r'$O(o)\Leftrightarrow D(o)$']
+
+        self.x_list = ['Steps', 'keynode_number']
+
+        self.y_list = ['AS', 'prob_v', 'persuasion', 'compromise', 'change_count']
 
     def simulation_condition(self, gap):
         self.P = np.linspace(0, 1, gap)

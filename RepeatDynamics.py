@@ -6,12 +6,6 @@ import InterconnectedDynamics
 import InterconnectedLayerModeling
 import time
 
-select_method_list = ['hub', 'authority', 'pagerank', 'eigenvector', 'degree', 'betweenness', 'closeness',
-                      'load', 'number_degree', 'AB_hub', 'AB_authority', 'AB_pagerank', 'AB_eigenvector',
-                      'AB_degree', 'AB_betweenness', 'AB_closeness', 'AB_load', 'AB_number_degree']
-
-step_list = [r'$O(s)<->D(s)$', r'$O(o)->D(o)$', r'$O(o)<-D(o)$', r'$O(s)->D(o)$', r'$O(s)<-D(o)$', r'$O(o)->D(s)$',
-             r'$O(o)<-D(s)$', r'$O(s)->D(s)$', r'$O(s)<-D(s)$', r'$O(o)<=>D(o)$']
 
 class RepeatDynamics:
     def __init__(self):
@@ -19,11 +13,12 @@ class RepeatDynamics:
         self.mp = MakingPandas.MakingPandas()
         self.node_property = NodeProperty.NodeProperty()
 
-    def repeat_dynamics(self, setting, p, v, select_step=1, select_method=None, node_number=None):
+    def repeat_dynamics(self, setting, p, v, select_step=1, select_method=0, node_number=0):
         num_data = np.zeros([setting.Limited_step + 1, 16])
+        centrality_method = setting.select_method_list[select_method]
         for i in range(setting.Repeating_number):
             inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
-            key_nodes = self.select_key_A_node(inter_layer, select_method, node_number)
+            key_nodes = self.select_key_A_node(inter_layer, centrality_method, node_number)
             node_i_names = key_nodes[0]
             sum_properties = key_nodes[1]
             if select_step == 0:    # 'O(s)<->D(s)'
@@ -58,18 +53,21 @@ class RepeatDynamics:
                 num_data = num_data + total_array
         Num_Data = num_data / setting.Repeating_number
         panda_db = self.mp.making_dataframe_per_step(setting, Num_Data)
-        panda_db['Order'] = step_list[select_step]
-        panda_db['keynode_method'] = select_method
-        panda_db['keynode_number'] = node_number
+        panda_db['Order'] = setting.step_list[select_step]
+        panda_db['keynode_method'] = centrality_method
+        if select_method == '0':
+            panda_db['keynode_number'] = 0
+        elif select_method != '0':
+            panda_db['keynode_number'] = node_number
         return panda_db
 
     def select_key_A_node(self, inter_layer, select_method, node_number):
         node_i_names = {}
         sum_properties = 0
-        if select_method == None :
+        if select_method == '0':
             node_i_names = None
             sum_properties = 0
-        elif select_method != None :
+        elif select_method != '0':
             select_nodes_list = []
             nodes_properties = []
             select_nodes = self.node_property.ordering_A_node(inter_layer, select_method)[0:node_number]
@@ -83,10 +81,10 @@ class RepeatDynamics:
     def select_key_B_node(self, inter_layer, select_method, node_number):
         node_i_names = {}
         sum_properties = 0
-        if select_method == None :
+        if select_method == '0':
             node_i_names = None
             sum_properties = 0
-        elif select_method != None :
+        elif select_method != '0':
             select_nodes_list = []
             nodes_properties = []
             select_nodes = self.node_property.ordering_A_node(inter_layer, select_method)[0:node_number]
@@ -106,9 +104,7 @@ if __name__ == "__main__":
     p = 0.2
     v = 0.5
     repeat = RepeatDynamics()
-    # keynodes = repeat.select_key_A_node(inter_layer, 'pagerank', 2)
-    # print(keynodes[0], keynodes[1])
-    result = repeat.repeat_dynamics(setting, p, v)
+    result = repeat.repeat_dynamics(setting, p, v, select_step=1, select_method=1, node_number=1)
     print(result)
     end = time.time()
     print(end - start)

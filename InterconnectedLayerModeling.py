@@ -105,7 +105,7 @@ if __name__ == "__main__" :
     print("interconnectedlayer")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     inter_layer = InterconnectedLayerModeling(setting)
-    print(len(inter_layer.two_layer_graph.nodes))
+    print(len(inter_layer.A_edges.edges))
     # print(len(sorted(inter_layer.A_edges.edges())) + len(sorted(inter_layer.AB_edges)))
     # print(len(sorted(inter_layer.two_layer_graph.edges())))
     # state = 0

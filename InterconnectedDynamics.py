@@ -6,6 +6,7 @@ import MakingPandas
 import InterconnectedLayerModeling
 import matplotlib
 import time
+import random
 matplotlib.use("Agg")
 
 class InterconnectedDynamics:
@@ -207,6 +208,7 @@ class InterconnectedDynamics:
         self.opinion.A_COUNT = 0
         self.decision.B_COUNT = 0
         return total_value
+
 
     def making_properties_array(self, setting, inter_layer, p, v, persuasion_prob, compromise_prob, volatility_prob, sum_properties):
         interacting_properties = self.mp.interacting_property(setting, inter_layer)
