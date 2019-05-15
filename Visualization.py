@@ -4,6 +4,7 @@ import Setting_Simulation_Value
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
+import random
 import pandas as pd
 from sympy import *
 from matplotlib import cycler
@@ -11,10 +12,13 @@ from mpl_toolkits.mplot3d.axes3d import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 matplotlib.use("TkAgg")
 
+marker = ['-o', '-x', '-v', '-^', '-s', '-d', '']
+linestyle = ['-r', '--r', '-.r', ':r', '-g', '--g', '-.g', ':g', '-b', '--b', '-.b', ':b', '-c', '--c', '-.c', ':c',
+             '-m', '--m', '-.m', ':m', '-y', '--y', '-.y', ':y', '-k', '--k', '-.k', ':k']
+random.shuffle(linestyle)
 
 class Visualization:
     def plot_2D_for_average_state(self, df, p_values=None, v_values=None):  # v_values =[]
-        marker = ['-o', '-x', '-v', '-^', '-s', '-d']
         plt.style.use('seaborn-whitegrid')
         ax = fig.add_subplot(111)
         ax.tick_params(axis='both', labelsize=14)
@@ -78,6 +82,7 @@ class Visualization:
 
     def timeflow_chart(self, setting, df, x_list=0, y_list=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
                        keynode_method=(False, 0), keynode_number=(False, 1)):
+        plt.style.use('seaborn-whitegrid')
         p_list = Visualization.making_select_list(df, 'p')
         v_list = Visualization.making_select_list(df, 'v')
         temp_p_values = Visualization.covert_to_select_list_value(p_list, p_values)
@@ -106,11 +111,11 @@ class Visualization:
                 pv_df = df1[df1.v == temp_v_values[i]]
                 if order[0] is True:
                     orders = pv_df['Order'].unique()
-                    for ordering in orders:
+                    for style, ordering in enumerate(orders):
                         pv_df2 = pv_df[pv_df.Order == ordering]
                         pv_df3 = pv_df2[pv_df2.keynode_method == setting.select_method_list[keynode_method[1]]]
                         pv_df3 = pv_df3.sort_values(by='Steps', ascending=True)
-                        plt.plot(pv_df3['Steps'], pv_df3['AS'], label=r'%s' % ordering, linewidth=1.5)
+                        plt.plot(pv_df3['Steps'], pv_df3['AS'], linestyle[style], label=r'%s' % ordering, linewidth=1.5)
                         plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                 elif order[0] is False:
                     pv_df2 = pv_df[pv_df.Order == setting.step_list[order[1]]]

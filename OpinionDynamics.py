@@ -44,6 +44,7 @@ class OpinionDynamics:
             node_i_names = set()
         for node_i in sorted(inter_layer.A_edges):
             neighbors = np.array(sorted(nx.neighbors(inter_layer.two_layer_graph, node_i)))
+            random.shuffle(neighbors)
             for neighbor in neighbors:
                 if neighbor < setting.A_node:
                     result = self.two_node_in_layer_A(setting, inter_layer, p, node_i_names,
@@ -137,6 +138,7 @@ class OpinionDynamics:
         total_edges = len(sorted(inter_layer.A_edges.edges())) + len(sorted(inter_layer.AB_edges))
         for node_i in sorted(inter_layer.A_edges):
             neighbors = np.array(sorted(nx.neighbors(inter_layer.two_layer_graph, node_i)))
+            random.shuffle(neighbors)
             for neighbor in neighbors:
                 if neighbor < setting.A_node:
                     result = self.two_node_in_layer_A(setting, inter_layer, p, node_i_names, persuasion_count,
@@ -182,6 +184,7 @@ class OpinionDynamics:
         total_edges = len(sorted(temp_inter_layer.A_edges.edges())) + len(sorted(temp_inter_layer.AB_edges))
         for node_i in sorted(temp_inter_layer.A_edges):
             neighbors = np.array(sorted(nx.neighbors(temp_inter_layer.two_layer_graph, node_i)))
+            random.shuffle(neighbors)
             for neighbor in neighbors:
                 if neighbor < setting.A_node:
                     result = self.one_node_in_layer_A(setting, temp_inter_layer, p, node_i_names,
@@ -413,8 +416,8 @@ if __name__ == "__main__":
     print(state)
     opinion = OpinionDynamics()
     start = time.time()
-    for i in range(2):
-        result = opinion.A_layer_simultaneous_dynamics2(setting, inter_layer, 0.5, node_i_names=None)
+    for i in range(10):
+        result = opinion.A_layer_simultaneous_dynamics1(setting, inter_layer, 0.4, node_i_names=None)
         print(result)
         print(inter_layer.two_layer_graph.nodes[0]['state'], inter_layer.two_layer_graph.nodes[1]['state'],
               inter_layer.two_layer_graph.nodes[2]['state'])

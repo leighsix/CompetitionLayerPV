@@ -4,7 +4,7 @@ import random
 class Setting_Simulation_Value:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'comparison_order_table'
+        self.table = 'comparison_order_table2'
         self.MODEL = 'BA-BA'
         self.Structure = 'BA-BA'
 
