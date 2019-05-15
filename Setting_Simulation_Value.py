@@ -4,7 +4,7 @@ import random
 class Setting_Simulation_Value:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'keynode_table2'
+        self.table = 'comparison_order_table'
         self.MODEL = 'BA-BA'
         self.Structure = 'BA-BA'
 
@@ -26,7 +26,7 @@ class Setting_Simulation_Value:
         self.B = self.static_making_B_array()
 
         self.DB = 'MySQL'
-        self.gap = 50
+        self.gap = 30
         simulation_condition = self.simulation_condition(self.gap)
         self.P = simulation_condition[0]
         self.V = simulation_condition[1]
@@ -35,11 +35,15 @@ class Setting_Simulation_Value:
 
         self.select_method_list = ['0', 'pagerank', 'betweenness', 'number_degree', 'degree', 'eigenvector', 'closeness',
                                    'hub', 'authority', 'load', 'AB_hub', 'AB_authority', 'AB_pagerank', 'AB_eigenvector',
-                                   'AB_degree', 'AB_betweenness', 'AB_closeness', 'AB_load', 'AB_number_degree']
+                                   'AB_degree', 'AB_betweenness', 'AB_closeness', 'AB_load', 'AB_number_degree', 'random']
 
-        self.step_list = [r'$O(s) \leftrightarrow D(s)$', r'$O(o)\to D(o)$', r'$O(o)\leftarrow D(o)$', r'$O(s)\to D(o)$',
-                          r'$O(s) \leftarrow D(o)$', r'$O(o)\to D(s)$', r'$O(o) \leftarrow D(s)$', r'$O(s)\to D(s)$',
-                          r'$O(s) \leftarrow D(s)$', r'$O(o)\Leftrightarrow D(o)$']
+        self.step_list1 = [r'$O(s, o) \leftrightarrow D(s)$', r'$O(o, o) \to D(o)$', r'$O(o, o) \leftarrow D(o)$', r'$O(s, o) \to D(o)$',
+                           r'$O(s, o) \leftarrow D(o)$', r'$O(o, o) \to D(s)$', r'$O(o, o) \leftarrow D(s)$', r'$O(s, o) \to D(s)$',
+                           r'$O(s, o) \leftarrow D(s)$', r'$O(o, o) \Leftrightarrow D(o)$']
+
+        self.step_list2 = [r'$O(s, s) \leftrightarrow D(s)$', r'$O(o, s) \to D(o)$', r'$O(o, s) \leftarrow D(o)$', r'$O(s, s) \to D(o)$',
+                           r'$O(s, s) \leftarrow D(o)$', r'$O(o, s) \to D(s)$', r'$O(o, s) \leftarrow D(s)$', r'$O(s, s) \to D(s)$',
+                           r'$O(s, s) \leftarrow D(s)$', r'$O(o, s) \Leftrightarrow D(o)$']
 
         self.x_list = ['Steps', 'keynode_number']
 

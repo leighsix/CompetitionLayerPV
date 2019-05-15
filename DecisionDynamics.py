@@ -10,9 +10,9 @@ class DecisionDynamics:
     def __init__(self):
         self.B_COUNT = 0
 
-    def B_layer_dynamics(self, setting, inter_layer, v, node_i_names=None):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
+    def B_layer_sequential_dynamics(self, setting, inter_layer, v, node_i_names=None):  # B_layer 다이내믹스, 베타 적용 및 언어데스 알고리즘 적용
         volatility_count = 0
-        if node_i_names == None : 
+        if node_i_names is None:
             node_i_names = set()
         for node_i in range(setting.A_node, setting.A_node+setting.B_node):
             if inter_layer.two_layer_graph.nodes[node_i]['name'] not in node_i_names:
@@ -40,7 +40,7 @@ class DecisionDynamics:
 
     def B_layer_simultaneous_dynamics(self, setting, inter_layer, v, node_i_names=None):
         volatility_count = 0
-        if node_i_names == None : 
+        if node_i_names is None:
             node_i_names = set()
         prob_v_array = self.B_state_change_probability_cal(setting, inter_layer, v)[0]
         temp_inter_layer = inter_layer
@@ -90,7 +90,7 @@ if __name__ == "__main__" :
     start = time.time()
     decision = DecisionDynamics()
     for i in range(10):
-        decision_result = decision.B_layer_dynamics(setting, inter_layer, 0.5, node_i_names={'B_1', 'B_2'})
+        decision_result = decision.B_layer_sequential_dynamics(setting, inter_layer, 0.5, node_i_names={'B_1', 'B_2'})
         inter_layer = decision_result[0]
         print(decision_result[1])
         print(inter_layer.two_layer_graph.nodes[setting.A_node+1]['state'], inter_layer.two_layer_graph.nodes[setting.A_node+2]['state'])

@@ -10,8 +10,83 @@ import time
 class OpinionDynamics:
     def __init__(self):
         self.A_COUNT = 0
+        self.A_Right_COUNT = 0
 
-    def AB_layer_dynamics(self, setting, inter_layer, p, v, node_i_names=None):
+    def A_layer_sequential_dynamics(self, setting, inter_layer, p, using_prob=False, node_i_names=None):
+        sequential_dynamics = 0
+        if using_prob is False:
+            sequential_dynamics = self.A_layer_sequential_dynamics1(setting, inter_layer, p, node_i_names)
+        elif using_prob is True:
+            sequential_dynamics = self.A_layer_sequential_dynamics2(setting, inter_layer, p, node_i_names)
+        return sequential_dynamics[0], sequential_dynamics[1], sequential_dynamics[2]
+
+    def A_layer_simultaneous_dynamics(self, setting, inter_layer, p, using_prob=False, node_i_names=None):
+        simultaneous_dynamics = 0
+        if using_prob is False:
+            simultaneous_dynamics = self.A_layer_simultaneous_dynamics1(setting, inter_layer, p, node_i_names)
+        elif using_prob is True:
+            simultaneous_dynamics = self.A_layer_simultaneous_dynamics2(setting, inter_layer, p, node_i_names)
+        return simultaneous_dynamics[0], simultaneous_dynamics[1], simultaneous_dynamics[2]
+
+    def AB_layer_sequential_dynamics(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None):
+        sequential_dynamics = 0
+        if using_prob is False:
+            sequential_dynamics = self.AB_layer_sequential_dynamics1(setting, inter_layer, p, v, node_i_names)
+        elif using_prob is True:
+            sequential_dynamics = self.AB_layer_sequential_dynamics2(setting, inter_layer, p, v, node_i_names)
+        return sequential_dynamics[0], sequential_dynamics[1], sequential_dynamics[2], sequential_dynamics[3]
+
+    def AB_layer_sequential_dynamics1(self, setting, inter_layer, p, v, node_i_names=None):
+        persuasion_count = 0
+        compromise_count = 0
+        volatility_count = 0
+        if node_i_names is None:
+            node_i_names = set()
+        for node_i in sorted(inter_layer.A_edges):
+            neighbors = np.array(sorted(nx.neighbors(inter_layer.two_layer_graph, node_i)))
+            for neighbor in neighbors:
+                if neighbor < setting.A_node:
+                    result = self.two_node_in_layer_A(setting, inter_layer, p, node_i_names,
+                                                      persuasion_count, compromise_count, node_i, neighbor)
+                    inter_layer = result[0]
+                    persuasion_count = result[1]
+                    compromise_count = result[2]
+                elif neighbor >= setting.A_node:
+                    result = self.two_node_in_layer_AB(setting, inter_layer, p, node_i_names,
+                                                       persuasion_count, compromise_count, node_i, neighbor)
+                    inter_layer = result[0]
+                    persuasion_count = result[1]
+                    compromise_count = result[2]
+            connected_B_node = self.finding_B_node(inter_layer, node_i)
+            if inter_layer.two_layer_graph.nodes[connected_B_node]['name'] not in node_i_names:
+                B_node_neighbors = np.array(sorted(nx.neighbors(inter_layer.two_layer_graph, connected_B_node)))
+                B_node_neighbor_state = []
+                for B_node_neighbor in B_node_neighbors:
+                    B_node_neighbor_state.append(inter_layer.two_layer_graph.nodes[B_node_neighbor]['state'])
+                B_node_neighbor_array = np.array(B_node_neighbor_state)
+                B_node_same_orientation = int(
+                    np.sum(B_node_neighbor_array * inter_layer.two_layer_graph.nodes[connected_B_node]['state'] > 0))
+                B_node_opposite_orientation = len(B_node_neighbors) - B_node_same_orientation
+                if B_node_opposite_orientation == 0:
+                    prob_v = 0
+                else:
+                    if v == 0:
+                        prob_v = 0
+                    else:
+                        prob_v = (B_node_opposite_orientation / len(B_node_neighbors)) ** (1 / v) * (
+                                    len(B_node_neighbors) / B_node_opposite_orientation)
+                z = random.random()
+                if z < prob_v:
+                    inter_layer.two_layer_graph.nodes[connected_B_node]['state'] \
+                        = -(inter_layer.two_layer_graph.nodes[connected_B_node]['state'])
+                    volatility_count += 1
+                    self.A_COUNT += 1
+        volatility_prob = volatility_count / setting.A_node
+        persuasion_prob = persuasion_count / (len(inter_layer.A_edges.edges()) + len(inter_layer.AB_edges))
+        compromise_prob = compromise_count / (len(inter_layer.A_edges.edges()) + len(inter_layer.AB_edges))
+        return inter_layer, persuasion_prob, compromise_prob, volatility_prob
+
+    def AB_layer_sequential_dynamics2(self, setting, inter_layer, p, v, node_i_names=None):
         persuasion_count = 0
         compromise_count = 0
         volatility_count = 0
@@ -22,10 +97,10 @@ class OpinionDynamics:
                 prob = self.three_probability_of_opinion_dynamics(inter_layer, p, node_i)
                 z = random.random()
                 if z < prob[1]:
-                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.A_layer_persuasion_function2(setting, inter_layer, node_i)
+                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.one_node_persuasion_function(setting, inter_layer, node_i)
                     persuasion_count += 1
                 elif z > prob[1]+prob[0]:
-                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.A_layer_compromise_function2(setting, inter_layer, node_i)
+                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.one_node_compromise_function(setting, inter_layer, node_i)
                     compromise_count += 1
                 connected_B_node = self.finding_B_node(inter_layer, node_i)
                 if inter_layer.two_layer_graph.nodes[connected_B_node]['name'] not in node_i_names:
@@ -45,7 +120,8 @@ class OpinionDynamics:
                             prob_v = (B_node_opposite_orientation / len(B_node_neighbors)) ** (1 / v) * (len(B_node_neighbors) / B_node_opposite_orientation)
                     z = random.random()
                     if z < prob_v:
-                        inter_layer.two_layer_graph.nodes[connected_B_node]['state'] = -(inter_layer.two_layer_graph.nodes[connected_B_node]['state'])
+                        inter_layer.two_layer_graph.nodes[connected_B_node]['state'] \
+                            = -(inter_layer.two_layer_graph.nodes[connected_B_node]['state'])
                         volatility_count += 1
                         self.A_COUNT += 1
         volatility_prob = volatility_count / setting.A_node
@@ -53,40 +129,45 @@ class OpinionDynamics:
         compromise_prob = compromise_count / setting.A_node
         return inter_layer, persuasion_prob, compromise_prob, volatility_prob
 
-    def A_layer_dynamics1(self, setting, inter_layer, p, node_i_names=None):  # original_step
+    def A_layer_sequential_dynamics1(self, setting, inter_layer, p, node_i_names=None):  # original_step
         persuasion_count = 0
         compromise_count = 0
-        if node_i_names == None : 
+        if node_i_names is None:
             node_i_names = set()
         total_edges = len(sorted(inter_layer.A_edges.edges())) + len(sorted(inter_layer.AB_edges))
-        for i, j in sorted(inter_layer.A_edges.edges()):
-            result = self.two_node_in_layer_A(setting, inter_layer, p, node_i_names, persuasion_count, compromise_count, i, j)
-            inter_layer = result[0]
-            persuasion_count = result[1]
-            compromise_count = result[2]
-        for i, j in sorted(inter_layer.AB_edges):
-            result = self.two_node_in_layer_AB(setting, inter_layer, p, node_i_names, persuasion_count, compromise_count, i, j)
-            inter_layer = result[0]
-            persuasion_count = result[1]
-            compromise_count = result[2]
+        for node_i in sorted(inter_layer.A_edges):
+            neighbors = np.array(sorted(nx.neighbors(inter_layer.two_layer_graph, node_i)))
+            for neighbor in neighbors:
+                if neighbor < setting.A_node:
+                    result = self.two_node_in_layer_A(setting, inter_layer, p, node_i_names, persuasion_count,
+                                                      compromise_count, node_i, neighbor)
+                    inter_layer = result[0]
+                    persuasion_count = result[1]
+                    compromise_count = result[2]
+                elif neighbor >= setting.A_node:
+                    result = self.two_node_in_layer_AB(setting, inter_layer, p, node_i_names, persuasion_count,
+                                                       compromise_count, node_i, neighbor)
+                    inter_layer = result[0]
+                    persuasion_count = result[1]
+                    compromise_count = result[2]
         persuasion_prob = persuasion_count / total_edges
         compromise_prob = compromise_count / total_edges
         return inter_layer, persuasion_prob, compromise_prob
 
-    def A_layer_dynamics2(self, setting, inter_layer, p, node_i_names=None):  # probability_step
+    def A_layer_sequential_dynamics2(self, setting, inter_layer, p, node_i_names=None):  # probability_step
         persuasion_count = 0
         compromise_count = 0
-        if node_i_names == None : 
+        if node_i_names is None:
             node_i_names = set()
         for node_i in sorted(inter_layer.A_edges):
             if inter_layer.two_layer_graph.nodes[node_i]['name'] not in node_i_names:
                 prob = self.three_probability_of_opinion_dynamics(inter_layer, p, node_i)
                 z = random.random()
                 if z < prob[1]:
-                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.A_layer_persuasion_function2(setting, inter_layer, node_i)
+                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.one_node_persuasion_function(setting, inter_layer, node_i)
                     persuasion_count += 1
                 elif z > prob[1]+prob[0]:
-                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.A_layer_compromise_function2(setting, inter_layer, node_i) 
+                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.one_node_compromise_function(setting, inter_layer, node_i)
                     compromise_count += 1
         persuasion_prob = persuasion_count / len(sorted(inter_layer.A_edges))
         compromise_prob = compromise_count / len(sorted(inter_layer.A_edges))
@@ -96,19 +177,24 @@ class OpinionDynamics:
         temp_inter_layer = inter_layer
         persuasion_count = 0
         compromise_count = 0
-        if node_i_names == None : 
+        if node_i_names is None:
             node_i_names = set()
-        total_edges = len(sorted(inter_layer.A_edges.edges())) + len(sorted(inter_layer.AB_edges))
-        for i, j in sorted(temp_inter_layer.A_edges.edges()):
-            result = self.two_node_in_layer_A(setting, inter_layer, p, node_i_names, persuasion_count, compromise_count, i, j)
-            inter_layer = result[0]
-            persuasion_count = result[1]
-            compromise_count = result[2]
-        for i, j in sorted(temp_inter_layer.AB_edges):
-            result = self.two_node_in_layer_AB(setting, inter_layer, p, node_i_names, persuasion_count, compromise_count, i, j)
-            inter_layer = result[0]
-            persuasion_count = result[1]
-            compromise_count = result[2]
+        total_edges = len(sorted(temp_inter_layer.A_edges.edges())) + len(sorted(temp_inter_layer.AB_edges))
+        for node_i in sorted(temp_inter_layer.A_edges):
+            neighbors = np.array(sorted(nx.neighbors(temp_inter_layer.two_layer_graph, node_i)))
+            for neighbor in neighbors:
+                if neighbor < setting.A_node:
+                    result = self.one_node_in_layer_A(setting, temp_inter_layer, p, node_i_names,
+                                                      persuasion_count, compromise_count, node_i, neighbor)
+                    inter_layer = result[0]
+                    persuasion_count = result[1]
+                    compromise_count = result[2]
+                elif neighbor >= setting.A_node:
+                    result = self.two_node_in_layer_AB(setting, temp_inter_layer, p, node_i_names,
+                                                       persuasion_count, compromise_count, node_i, neighbor)
+                    inter_layer = result[0]
+                    persuasion_count = result[1]
+                    compromise_count = result[2]
         persuasion_prob = persuasion_count / total_edges
         compromise_prob = compromise_count / total_edges
         return inter_layer, persuasion_prob, compromise_prob
@@ -117,7 +203,7 @@ class OpinionDynamics:
         temp_inter_layer = inter_layer
         persuasion_count = 0
         compromise_count = 0
-        if node_i_names == None : 
+        if node_i_names is None:
             node_i_names = set()
         prob_array = self.A_state_change_probability_cal(temp_inter_layer, p)[0]
         z = np.random.random((setting.A_node, 1))
@@ -125,10 +211,10 @@ class OpinionDynamics:
         for node_i in sorted(temp_inter_layer.A_edges):
             if inter_layer.two_layer_graph.nodes[node_i]['name'] not in node_i_names:  
                 if prob[node_i] == 1:
-                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.A_layer_persuasion_function2(setting, temp_inter_layer, node_i)
+                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.one_node_persuasion_function(setting, temp_inter_layer, node_i)
                     persuasion_count += 1
                 elif prob[node_i] == 2:
-                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.A_layer_compromise_function2(setting, temp_inter_layer, node_i)
+                    inter_layer.two_layer_graph.nodes[node_i]['state'] = self.one_node_compromise_function(setting, temp_inter_layer, node_i)
                     compromise_count += 1
         persuasion_prob = persuasion_count / len(sorted(inter_layer.A_edges))
         compromise_prob = compromise_count / len(sorted(inter_layer.A_edges))              
@@ -179,6 +265,26 @@ class OpinionDynamics:
                     node_compromise_prob += p ** (n + opposite_orientation - m) * ((1 - p) ** (same_orientation - n + m)) * n_combi * m_combi
         return node_unchanging_prob, node_persuasion_prob, node_compromise_prob
 
+    def one_node_in_layer_A(self, setting, inter_layer, p, node_i_names, persuasion_count, compromise_count, i, j):
+        temp_inter_layer = inter_layer
+        a = temp_inter_layer.two_layer_graph.nodes[i]['state']
+        b = temp_inter_layer.two_layer_graph.nodes[j]['state']
+        if a * b > 0:
+            z = random.random()
+            if z < p:
+                persuasion_func = self.two_node_persuasion_function(setting, a, b)
+                if temp_inter_layer.two_layer_graph.nodes[i]['name'] not in node_i_names:
+                    inter_layer.two_layer_graph.nodes[i]['state'] = persuasion_func[0]
+                    persuasion_count += 1
+        elif a * b < 0:
+            z = random.random()
+            if z < (1 - p):
+                compromise_func = self.two_node_compromise_function(setting, a, b, p, z)
+                if temp_inter_layer.two_layer_graph.nodes[i]['name'] not in node_i_names:
+                    inter_layer.two_layer_graph.nodes[i]['state'] = compromise_func[0]
+                    compromise_count += 1
+        return inter_layer, persuasion_count, compromise_count
+
     def two_node_in_layer_A(self, setting, inter_layer, p, node_i_names, persuasion_count, compromise_count, i, j):
         temp_inter_layer = inter_layer
         a = temp_inter_layer.two_layer_graph.nodes[i]['state']
@@ -186,7 +292,7 @@ class OpinionDynamics:
         if a * b > 0:
             z = random.random()
             if z < p:
-                persuasion_func = self.A_layer_persuasion_function(setting, a, b)
+                persuasion_func = self.two_node_persuasion_function(setting, a, b)
                 if temp_inter_layer.two_layer_graph.nodes[i]['name'] not in node_i_names:
                     inter_layer.two_layer_graph.nodes[i]['state'] = persuasion_func[0]
                     if temp_inter_layer.two_layer_graph.nodes[j]['name'] not in node_i_names:
@@ -198,7 +304,7 @@ class OpinionDynamics:
         elif a * b < 0:
             z = random.random()
             if z < (1 - p):
-                compromise_func = self.A_layer_compromise_function(setting, a, b, p, z)
+                compromise_func = self.two_node_compromise_function(setting, a, b, p, z)
                 if temp_inter_layer.two_layer_graph.nodes[i]['name'] not in node_i_names:
                     inter_layer.two_layer_graph.nodes[i]['state'] = compromise_func[0]
                     if temp_inter_layer.two_layer_graph.nodes[j]['name'] not in node_i_names:
@@ -211,19 +317,19 @@ class OpinionDynamics:
     
     def two_node_in_layer_AB(self, setting, inter_layer, p, node_i_names, persuasion_count, compromise_count, i, j):
         temp_inter_layer = inter_layer
-        a = temp_inter_layer.two_layer_graph.nodes[j]['state']
-        b = temp_inter_layer.two_layer_graph.nodes[i]['state']
+        a = temp_inter_layer.two_layer_graph.nodes[i]['state']
+        b = temp_inter_layer.two_layer_graph.nodes[j]['state']
         if a * b > 0:
             z = random.random()
             if z < p:
-                if temp_inter_layer.two_layer_graph.nodes[j]['name'] not in node_i_names :
-                    inter_layer.two_layer_graph.nodes[j]['state'] = self.AB_layer_persuasion_function(setting, a)
+                if temp_inter_layer.two_layer_graph.nodes[i]['name'] not in node_i_names:
+                    inter_layer.two_layer_graph.nodes[i]['state'] = self.one_node_persuasion_function(setting, temp_inter_layer, i)
                     persuasion_count += 1
         elif a * b < 0:
             z = random.random()
             if z < (1 - p):
-                if temp_inter_layer.two_layer_graph.nodes[j]['name'] not in node_i_names :
-                    inter_layer.two_layer_graph.nodes[j]['state'] = self.AB_layer_compromise_function(setting, a)
+                if temp_inter_layer.two_layer_graph.nodes[i]['name'] not in node_i_names:
+                    inter_layer.two_layer_graph.nodes[i]['state'] = self.one_node_compromise_function(setting, temp_inter_layer, i)
                     compromise_count += 1
         return inter_layer, persuasion_count, compromise_count
     
@@ -231,7 +337,7 @@ class OpinionDynamics:
         f = math.factorial
         return f(n) // f(r) // f(n - r)
 
-    def A_layer_persuasion_function(self, setting, a, b):  # A layer 중에서 same orientation 에서 일어나는  변동 현상
+    def two_node_persuasion_function(self, setting, a, b):  # A layer 중에서 same orientation 에서 일어나는  변동 현상
         if a > 0 and b > 0:
             a = self.A_layer_node_right(a, setting.MAX)
             b = self.A_layer_node_right(b, setting.MAX)
@@ -240,7 +346,7 @@ class OpinionDynamics:
             b = self.A_layer_node_left(b, setting.MIN)
         return a, b
 
-    def A_layer_compromise_function(self, setting, a, b, p, z):  # A layer  중에서 opposite orientation 에서 일어나는 변동 현상
+    def two_node_compromise_function(self, setting, a, b, p, z):  # A layer  중에서 opposite orientation 에서 일어나는 변동 현상
         if a * b == -1:
             if z < ((1 - p) / 2):
                 a = 1
@@ -256,27 +362,15 @@ class OpinionDynamics:
             b = self.A_layer_node_left(b, setting.MIN)
         return a, b
 
-    def AB_layer_persuasion_function(self, setting, a):  # A-B layer 중에서 same orientation 에서 일어나는  변동 현상
-        if a > 0:
-            a = self.A_layer_node_right(a, setting.MAX)
-        elif a < 0:
-            a = self.A_layer_node_left(a, setting.MIN)
-        return a
-    def AB_layer_compromise_function(self, setting, a):  # A-B layer  중에서 opposite orientation 에서 일어나는 변동 현상
-        if a > 0:
-            a = self.A_layer_node_left(a, setting.MIN)
-        elif a < 0:
-            a = self.A_layer_node_right(a, setting.MAX)
-        return a
-
-    def A_layer_persuasion_function2(self, setting, inter_layer, node_i):
+    def one_node_persuasion_function(self, setting, inter_layer, node_i):
         a = inter_layer.two_layer_graph.nodes[node_i]['state']
         if a > 0:
             a = self.A_layer_node_right(a, setting.MAX)
         elif a < 0:
            a = self.A_layer_node_left(a, setting.MIN)
         return a
-    def A_layer_compromise_function2(self, setting, inter_layer, node_i):
+
+    def one_node_compromise_function(self, setting, inter_layer, node_i):
         a = inter_layer.two_layer_graph.nodes[node_i]['state']
         if a > 0:
            a = self.A_layer_node_left(a, setting.MIN)
@@ -319,10 +413,11 @@ if __name__ == "__main__":
     print(state)
     opinion = OpinionDynamics()
     start = time.time()
-    for i in range(10):
-        result = opinion.A_layer_dynamics1(setting, inter_layer, 0.2, node_i_names={'A_0', 'A_1', 'A_2', 'A_3'})
+    for i in range(2):
+        result = opinion.A_layer_simultaneous_dynamics2(setting, inter_layer, 0.5, node_i_names=None)
         print(result)
-        print(inter_layer.two_layer_graph.nodes[0]['state'],inter_layer.two_layer_graph.nodes[1]['state'], inter_layer.two_layer_graph.nodes[2]['state'], inter_layer.two_layer_graph.nodes[3]['state'] )
+        print(inter_layer.two_layer_graph.nodes[0]['state'], inter_layer.two_layer_graph.nodes[1]['state'],
+              inter_layer.two_layer_graph.nodes[2]['state'])
     state = 0
     for i in range(setting.A_node):
         state += inter_layer.two_layer_graph.nodes[i]['state']

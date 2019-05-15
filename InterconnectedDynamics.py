@@ -6,7 +6,6 @@ import MakingPandas
 import InterconnectedLayerModeling
 import matplotlib
 import time
-import random
 matplotlib.use("Agg")
 
 class InterconnectedDynamics:
@@ -15,7 +14,7 @@ class InterconnectedDynamics:
         self.decision = DecisionDynamics.DecisionDynamics()
         self.mp = MakingPandas.MakingPandas()
 
-    def interconnected_dynamics0(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  #same:same:same
+    def interconnected_dynamics0(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  #same:same:same
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             temp_inter_layer = inter_layer
@@ -26,7 +25,7 @@ class InterconnectedDynamics:
                                                              opinion_prob[2],  decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                opinion_result = self.opinion.A_layer_simultaneous_dynamics1(setting, temp_inter_layer, p, node_i_names)
+                opinion_result = self.opinion.A_layer_simultaneous_dynamics(setting, temp_inter_layer, p, using_prob, node_i_names)
                 decision_result = self.decision.B_layer_simultaneous_dynamics(setting, temp_inter_layer, v, node_i_names)
                 for node_A in range(setting.A_node):
                     inter_layer.two_layer_graph.nodes[node_A]['state'] = opinion_result[0].two_layer_graph.nodes[node_A]['state']
@@ -39,7 +38,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics1(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # step:step:opinion
+    def interconnected_dynamics1(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # step:step:opinion
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -49,8 +48,8 @@ class InterconnectedDynamics:
                                                              opinion_prob[2], decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                opinion_result = self.opinion.A_layer_dynamics1(setting, inter_layer, p, node_i_names)
-                decision_result = self.decision.B_layer_dynamics(setting, opinion_result[0], v, node_i_names)
+                opinion_result = self.opinion.A_layer_sequential_dynamics(setting, inter_layer, p, using_prob, node_i_names)
+                decision_result = self.decision.B_layer_sequential_dynamics(setting, opinion_result[0], v, node_i_names)
                 array_value = self.making_properties_array(setting, decision_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
                 total_value = np.vstack([total_value, array_value])
@@ -58,7 +57,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics2(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # step:step:decision
+    def interconnected_dynamics2(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # step:step:decision
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -68,8 +67,8 @@ class InterconnectedDynamics:
                                                              opinion_prob[2], decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                decision_result = self.decision.B_layer_dynamics(setting, inter_layer, v, node_i_names)
-                opinion_result = self.opinion.A_layer_dynamics1(setting, decision_result[0], p, node_i_names)
+                decision_result = self.decision.B_layer_sequential_dynamics(setting, inter_layer, v, node_i_names)
+                opinion_result = self.opinion.A_layer_sequential_dynamics(setting, decision_result[0], p, using_prob, node_i_names)
                 array_value = self.making_properties_array(setting, opinion_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
                 total_value = np.vstack([total_value, array_value])
@@ -77,7 +76,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics3(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # same:step:opinion
+    def interconnected_dynamics3(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # same:step:opinion
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -87,8 +86,8 @@ class InterconnectedDynamics:
                                                              opinion_prob[2], decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                opinion_result = self.opinion.A_layer_simultaneous_dynamics1(setting, inter_layer, p, node_i_names)
-                decision_result = self.decision.B_layer_dynamics(setting, opinion_result[0], v, node_i_names)
+                opinion_result = self.opinion.A_layer_simultaneous_dynamics(setting, inter_layer, p, using_prob, node_i_names)
+                decision_result = self.decision.B_layer_sequential_dynamics(setting, opinion_result[0], v, node_i_names)
                 array_value = self.making_properties_array(setting, decision_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
                 total_value = np.vstack([total_value, array_value])
@@ -96,7 +95,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics4(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # same:step:decision
+    def interconnected_dynamics4(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # same:step:decision
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -106,8 +105,8 @@ class InterconnectedDynamics:
                                                              opinion_prob[2], decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                decision_result = self.decision.B_layer_dynamics(setting, inter_layer, v, node_i_names)
-                opinion_result = self.opinion.A_layer_simultaneous_dynamics1(setting, decision_result[0], p, node_i_names)
+                decision_result = self.decision.B_layer_sequential_dynamics(setting, inter_layer, v, node_i_names)
+                opinion_result = self.opinion.A_layer_simultaneous_dynamics(setting, decision_result[0], p, using_prob, node_i_names)
                 array_value = self.making_properties_array(setting, opinion_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
                 total_value = np.vstack([total_value, array_value])
@@ -115,7 +114,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics5(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # step:same:opinion
+    def interconnected_dynamics5(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # step:same:opinion
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -125,7 +124,7 @@ class InterconnectedDynamics:
                                                              opinion_prob[2], decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                opinion_result = self.opinion.A_layer_dynamics1(setting, inter_layer, p, node_i_names)
+                opinion_result = self.opinion.A_layer_sequential_dynamics(setting, inter_layer, p, using_prob, node_i_names)
                 decision_result = self.decision.B_layer_simultaneous_dynamics(setting, opinion_result[0], v, node_i_names)
                 array_value = self.making_properties_array(setting, decision_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
@@ -134,7 +133,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics6(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # step:same:decision
+    def interconnected_dynamics6(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # step:same:decision
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -145,7 +144,7 @@ class InterconnectedDynamics:
                 total_value = total_value + initial_value
             elif step_number >= 1:
                 decision_result = self.decision.B_layer_simultaneous_dynamics(setting, inter_layer, v, node_i_names)
-                opinion_result = self.opinion.A_layer_dynamics1(setting, decision_result[0], p, node_i_names)
+                opinion_result = self.opinion.A_layer_sequential_dynamics(setting, decision_result[0], p, using_prob, node_i_names)
                 array_value = self.making_properties_array(setting, decision_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
                 total_value = np.vstack([total_value, array_value])
@@ -153,7 +152,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics7(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # same:same:opinion
+    def interconnected_dynamics7(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # same:same:opinion
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -163,7 +162,7 @@ class InterconnectedDynamics:
                                                              opinion_prob[2], decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                opinion_result = self.opinion.A_layer_simultaneous_dynamics1(setting, inter_layer, p, node_i_names)
+                opinion_result = self.opinion.A_layer_simultaneous_dynamics(setting, inter_layer, p, using_prob, node_i_names)
                 decision_result = self.decision.B_layer_simultaneous_dynamics(setting, opinion_result[0], v, node_i_names)
                 array_value = self.making_properties_array(setting, decision_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
@@ -172,7 +171,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics8(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # same:same:decision
+    def interconnected_dynamics8(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # same:same:decision
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -183,7 +182,7 @@ class InterconnectedDynamics:
                 total_value = total_value + initial_value
             elif step_number >= 1:
                 decision_result = self.decision.B_layer_simultaneous_dynamics(setting, inter_layer, v, node_i_names)
-                opinion_result = self.opinion.A_layer_simultaneous_dynamics1(setting, decision_result[0], p, node_i_names)
+                opinion_result = self.opinion.A_layer_simultaneous_dynamics(setting, decision_result[0], p, using_prob, node_i_names)
                 array_value = self.making_properties_array(setting, decision_result[0], p, v, opinion_result[1],
                                                            opinion_result[2], decision_result[1], sum_properties)
                 total_value = np.vstack([total_value, array_value])
@@ -191,7 +190,7 @@ class InterconnectedDynamics:
         self.decision.B_COUNT = 0
         return total_value
 
-    def interconnected_dynamics9(self, setting, inter_layer, p, v, node_i_names=None, sum_properties=0):  # step:step:opinion-decision
+    def interconnected_dynamics9(self, setting, inter_layer, p, v, using_prob=False, node_i_names=None, sum_properties=0):  # step:step:opinion-decision
         total_value = np.zeros(16)
         for step_number in range(setting.Limited_step+1):
             if step_number == 0:
@@ -201,7 +200,7 @@ class InterconnectedDynamics:
                                                              opinion_prob[2], decision_prob[1], sum_properties)
                 total_value = total_value + initial_value
             elif step_number >= 1:
-                AB_dynamics_result = self.opinion.AB_layer_dynamics(setting, inter_layer, p, v, node_i_names)
+                AB_dynamics_result = self.opinion.AB_layer_sequential_dynamics(setting, inter_layer, p, v, using_prob, node_i_names)
                 array_value = self.making_properties_array(setting, AB_dynamics_result[0], p, v, AB_dynamics_result[1],
                                                            AB_dynamics_result[2], AB_dynamics_result[3], sum_properties)
                 total_value = np.vstack([total_value, array_value])

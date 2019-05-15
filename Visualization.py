@@ -131,8 +131,6 @@ class Visualization:
                                          marker='o', label=r'%s' % key_method, linewidth=1.5)
                                 plt.ylim(-1.2, 1.2)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
-        # plt.xlabel('%s' % setting.x_list[x_list], fontsize=18, labelpad=6)
-        # plt.ylabel('%s' % setting.y_list[y_list], fontsize=18, labelpad=6)
 
 
     def average_state_for_steps_regarding_order(self, df, p_value, v_value):
@@ -195,19 +193,23 @@ if __name__ == "__main__":
     print("Visualization")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     setting.database = 'pv_variable'
-    setting.table = 'keynode_table'   #'step_same_table'  #'comparison_os_table'
+    setting.table = 'comparison_order_table'   #'step_same_table'  #'comparison_os_table'
     select_db = SelectDB.SelectDB()
     df = select_db.select_data_from_DB(setting)
     df = df.fillna(0)
+    # df = df[df.Steps == 10]
     visualization = Visualization()
     fig = plt.figure()
     sns.set()
+    # visualization.plot_3D_for_average_state(df, 'scatter')
     # visualization.plot_3D_to_2D_contour_for_average_state(df)
     # visualization.plot_2D_for_average_state(df)
     # select_list = Visualization.making_select_list(df, 'v')
     # temp = Visualization.covert_to_select_list_value(select_list, [0.1, 0.2])
-    visualization.timeflow_chart(setting, df, x_list=0, y_list=0, p_values=(0, 1), v_values=(0, 1),
-                                 order=(False, 1), keynode_method=(False, 0), keynode_number=(False, 1))
+    visualization.timeflow_chart(setting, df, x_list=0, y_list=0, p_values=[0.4], v_values=[0.4],
+                                 order=(True, 1), keynode_method=(False, 0), keynode_number=(False, 1))
+    # plt.xlabel('ratio of unchanged node', fontsize=16, labelpad=6)
+    # plt.ylabel('AS', fontsize=16, labelpad=6)
     # visualization.average_state_for_steps_regarding_order(df, [0.4], [0.4])
     # visualization.average_state_for_steps_regarding_order(df, [0.5], [0.5])
 

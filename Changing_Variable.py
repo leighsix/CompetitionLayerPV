@@ -4,6 +4,7 @@ import sqlalchemy
 from concurrent import futures
 from tqdm import tqdm
 
+
 class Changing_Variable:
     def __init__(self):
         self.repeat_dynamics = RepeatDynamics.RepeatDynamics()
@@ -25,20 +26,25 @@ class Changing_Variable:
     def making_variable_tuples_list(self, setting):
         p = 0.4
         v = 0.4
+        unchanged_state = 0
         setting_variable_list = []
-        for select_step in range(1, 2):
-            for select_method in range(0, 5):
-                for node_number in [1, 2, 3, 4]:
-                    setting_variable_list.append((setting, p, v, select_step, select_method, node_number))
+        for using_prob in [False, True]:
+            for select_step in range(0, 10):
+                for select_method in [0]:
+                    for node_number in [0]:
+                        setting_variable_list.append((setting, p, v, using_prob, select_step, select_method,
+                                                      node_number, unchanged_state))
         return setting_variable_list
 
     def calculate_for_simulation(self, setting_variable_tuple):
         panda_db = self.repeat_dynamics.repeat_dynamics(setting_variable_tuple[0],
                                                         setting_variable_tuple[1],
                                                         setting_variable_tuple[2],
-                                                        select_step=setting_variable_tuple[3],
-                                                        select_method=setting_variable_tuple[4],
-                                                        node_number=setting_variable_tuple[5])
+                                                        using_prob=setting_variable_tuple[3],
+                                                        select_step=setting_variable_tuple[4],
+                                                        select_method=setting_variable_tuple[5],
+                                                        node_number=setting_variable_tuple[6],
+                                                        unchanged_state=setting_variable_tuple[7])
         return panda_db
 
 
@@ -46,6 +52,7 @@ if __name__ == "__main__":
     print("Changing_Variable")
     setting = Setting_Simulation_Value.Setting_Simulation_Value()
     changing_variable = Changing_Variable()
+    # print(changing_variable.making_variable_tuples_list(setting))
     # lis = changing_variable.making_variable_tuples_list(setting)
     # for tu in lis:
     #     print(tu)
