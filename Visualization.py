@@ -1,6 +1,6 @@
 import SelectDB
 import numpy as np
-import Setting_Simulation_Value
+import SettingSimulationValue
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
@@ -9,22 +9,53 @@ import pandas as pd
 from sympy import *
 from matplotlib import cycler
 from mpl_toolkits.mplot3d.axes3d import *
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 matplotlib.use("TkAgg")
 
 marker = ['-o', '-x', '-v', '-^', '-s', '-d', '']
-linestyle = ['-r', '--r', '-.r', ':r', '-g', '--g', '-.g', ':g', '-b', '--b', '-.b', ':b', '-c', '--c', '-.c', ':c',
-             '-m', '--m', '-.m', ':m', '-y', '--y', '-.y', ':y', '-k', '--k', '-.k', ':k']
+linestyle = ['-r', '--r', '-.r', ':r', '-g', '--g', '-.g', ':g', '-b', '--b', '-.b', ':b', '-c', '--c', '-.c',
+             ':c', '-m', '--m', '-.m', ':m', '-y', '--y', '-.y', ':y', '-k', '--k', '-.k', ':k']
 random.shuffle(linestyle)
 
+x_list = ['Steps', 'keynode_number']
+y_list = ['AS', 'prob_v', 'persuasion', 'compromise', 'change_count', 'consensus_index']
+
 class Visualization:
-    def plot_2D_for_average_state(self, df, p_values=None, v_values=None):  # v_values =[]
+    def __init__(self, setting):
+        self.select_db = SelectDB.SelectDB()
+        self.df = self.making_df(setting)
+
+    def making_df(self, setting):
+        df = self.select_db.select_data_from_DB(setting)
+        df = df.fillna(0)
+        df['consensus_index'] = ((df['A_plus'] * df['B_minus']) + (df['A_minus'] * df['B_plus'])) / (setting.A_node * setting.B_node)
+        return df
+
+    def making_chart(self, setting, plot_type='2D', p_value_list=None, v_value_list=None, steps_2d=100,
+                     chart_type='scatter', steps_3d=100,
+                     x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
+                     keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100,
+                     steps_hist=100):
+        if plot_type == '2D':
+            Visualization.plot_2D_for_average_state(self.df, p_value_list, v_value_list, steps_2d)
+        elif plot_type == '3D':
+            Visualization.plot_3D_for_average_state(self.df, chart_type, steps_3d)
+        elif plot_type == 'timeflow':
+            Visualization.timeflow_chart(setting, self.df, x_index, y_index, p_values, v_values, order,
+                                         keynode_method, select_layer, keynode_number, steps_timeflow)
+        elif plot_type == 'hist':
+            Visualization.making_mixed_hist(self.df, steps_hist)
+
+    @staticmethod
+    def plot_2D_for_average_state(df, p_value_list=None, v_value_list=None, steps_2d=100):  # v_values =[]
+        fig = plt.figure()
+        sns.set()
         plt.style.use('seaborn-whitegrid')
         ax = fig.add_subplot(111)
         ax.tick_params(axis='both', labelsize=14)
-        if p_values is not None:
+        df = df[df.Steps == steps_2d]
+        if p_value_list is not None:
             p_list = Visualization.making_select_list(df, 'p')
-            temp_values = Visualization.covert_to_select_list_value(p_list, p_values)
+            temp_values = Visualization.covert_to_select_list_value(p_list, p_value_list)
             for i, p_value in enumerate(temp_values):
                 df1 = df[df.p == p_value]
                 df1 = df1.sort_values(by='v', ascending=True)
@@ -34,9 +65,9 @@ class Visualization:
                 plt.legend(framealpha=1, frameon=True, prop={'size': 12})
                 plt.ylim(-1.5, 1.5)
                 plt.ylabel('AS', fontsize=18, labelpad=4)
-        elif v_values is not None:
+        elif v_value_list is not None:
             v_list = Visualization.making_select_list(df, 'v')
-            temp_values = Visualization.covert_to_select_list_value(v_list, v_values)
+            temp_values = Visualization.covert_to_select_list_value(v_list, v_value_list)
             for i, v_value in enumerate(temp_values):
                 df1 = df[df.v == v_value]
                 df1 = df1.sort_values(by='p', ascending=True)
@@ -46,7 +77,7 @@ class Visualization:
                 plt.legend(framealpha=1, frameon=True, prop={'size': 12})
                 plt.ylim(-1.5, 1.5)
                 plt.ylabel('AS', fontsize=18, labelpad=4)
-        elif p_values is None and v_values is None:
+        elif p_value_list is None and v_value_list is None:
             v_list = Visualization.making_select_list(df, 'v')  # list이지만 실제로는 array
             p_list = Visualization.making_select_list(df, 'p')
             X, Y = np.meshgrid(v_list, p_list)
@@ -60,9 +91,13 @@ class Visualization:
             plt.ylabel(r'$p$', fontsize=18, labelpad=6)
             # plt.clabel(contours, inline=True, fontsize=8)
 
-    def plot_3D_for_average_state(self, df, chart_type):
+    @staticmethod
+    def plot_3D_for_average_state(df, chart_type='scatter', steps_3d=100):
+        plt.figure()
+        sns.set()
         plt.style.use('seaborn-whitegrid')
         ax = plt.axes(projection='3d')
+        df = df[df.Steps == steps_3d]
         if chart_type == 'scatter':
             ax.scatter(df['v'], df['p'], df['AS'], c=df['AS'], cmap='RdBu', linewidth=0.2)
         elif chart_type == 'trisurf':
@@ -80,8 +115,11 @@ class Visualization:
         ax.tick_params(axis='both', labelsize=14)
         ax.view_init(45, 45)
 
-    def timeflow_chart(self, setting, df, x_list=0, y_list=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
-                       keynode_method=(False, 0), keynode_number=(False, 1)):
+    @staticmethod
+    def timeflow_chart(setting, df, x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
+                       keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100):
+        plt.figure()
+        sns.set()
         plt.style.use('seaborn-whitegrid')
         p_list = Visualization.making_select_list(df, 'p')
         v_list = Visualization.making_select_list(df, 'v')
@@ -94,67 +132,114 @@ class Visualization:
             pv_df = df3[df3.v <= v_list[-1]]
             p_df = sorted(pv_df['p'].unique())
             v_df = sorted(pv_df['v'].unique())
-            print(p_df, v_df)
             for i in p_df:
                 for j in v_df:
                     pv_df1 = pv_df[pv_df.p == i]
                     pv_df2 = pv_df1[pv_df1.v == j]
-                    orders = pv_df2['Order'].unique()
+                    orders = pv_df2['Orders'].unique()
                     for ordering in orders:
-                        pv_df3 = pv_df2[pv_df2.Order == ordering]
+                        pv_df3 = pv_df2[pv_df2.Orders == ordering]
                         pv_df4 = pv_df3[pv_df3.keynode_method == setting.select_method_list[keynode_method[1]]]
                         pv_df4 = pv_df4.sort_values(by='Steps', ascending=True)
-                        plt.plot(pv_df4['Steps'], pv_df4['AS'], linewidth=1.5)
+                        plt.plot(pv_df4[x_list[x_index]], pv_df4[y_list[y_index]], linewidth=1.5)
         else:
             for i in range(len(temp_p_values)):
                 df1 = df[df.p == temp_p_values[i]]
                 pv_df = df1[df1.v == temp_v_values[i]]
                 if order[0] is True:
-                    orders = pv_df['Order'].unique()
+                    orders = pv_df['Orders'].unique()
                     for style, ordering in enumerate(orders):
-                        pv_df2 = pv_df[pv_df.Order == ordering]
+                        pv_df2 = pv_df[pv_df.Orders == ordering]
                         pv_df3 = pv_df2[pv_df2.keynode_method == setting.select_method_list[keynode_method[1]]]
                         pv_df3 = pv_df3.sort_values(by='Steps', ascending=True)
-                        plt.plot(pv_df3['Steps'], pv_df3['AS'], linestyle[style], label=r'%s' % ordering, linewidth=1.5)
+                        plt.plot(pv_df3[x_list[x_index]], pv_df3[y_list[y_index]], linestyle[style],
+                                 label=r'%s' % ordering, linewidth=1.5)
                         plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                 elif order[0] is False:
-                    pv_df2 = pv_df[pv_df.Order == setting.step_list[order[1]]]
+                    pv_df['Orders'] = r'$O(o, o) \to D(o)$'
+                    pv_df2 = pv_df[pv_df.Orders == setting.step_list1[order[1]]]
                     if keynode_method[0] is True:
-                        key_methods = pv_df['keynode_method'].unique()
+                        pv_df3 = pv_df2[pv_df.select_layer == select_layer]
+                        key_methods = pv_df3['keynode_method'].unique()
                         for key_method in key_methods:
-                            pv_df3 = pv_df2[pv_df2.keynode_method == key_method]
+                            pv_df4 = pv_df3[pv_df3.keynode_method == key_method]
                             if keynode_number[0] is False:
-                                pv_df4 = pv_df3[pv_df3.keynode_number == keynode_method[1]]
-                                pv_df4 = pv_df4.sort_values(by='Steps', ascending=True)
-                                plt.plot(pv_df4['Steps'], pv_df4['AS'], label=r'%s' % key_method,
-                                         linewidth=1.5)
+                                pv_df5 = pv_df4[pv_df4.keynode_number == keynode_number[1]]
+                                pv_df5 = pv_df5.sort_values(by='Steps', ascending=True)
+                                plt.plot(pv_df5[x_list[x_index]], pv_df5[y_list[y_index]],
+                                         label=r'%s(%s)' % (key_method, select_layer.split('_')[0]), linewidth=1.5)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                             elif keynode_number[0] is True:
-                                pv_df4 = pv_df3[pv_df3.Steps == setting.Limited_step]
-                                pv_df4 = pv_df4.sort_values(by='keynode_number', ascending=True)
-                                plt.plot(pv_df4['keynode_number'] / setting.A_node, pv_df4['AS'],
-                                         marker='o', label=r'%s' % key_method, linewidth=1.5)
-                                plt.ylim(-1.2, 1.2)
+                                pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
+                                pv_df5 = pv_df5.sort_values(by='keynode_number', ascending=True)
+                                plt.plot(pv_df5[x_list[x_index]] / setting.A_node, pv_df5[y_list[y_index]],
+                                         marker='o', label=r'%s(%s)' % (key_method, select_layer.split('_')[0]), linewidth=1.5)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
-
-
-    def average_state_for_steps_regarding_order(self, df, p_value, v_value):
-        v_list = Visualization.making_select_list(df, 'v')  # list이지만 실제로는 array
-        p_list = Visualization.making_select_list(df, 'p')
-        p = Visualization.covert_to_select_list_value(p_list, p_value)
-        v = Visualization.covert_to_select_list_value(v_list, v_value)
-        df1 = df[df.p == p[0]]
-        df2 = df1[df1.v == v[0]]
-        orders = df['Order'].unique()
-        for order in orders:
-            df3 = df2[df2.Order == order]
-            plt.plot(df3['Steps'], df3['AS'], label=r'%s' % order, linewidth=1.5)
-        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
-        plt.ylabel('AS', fontsize=18, labelpad=6)
-        plt.xlabel('time(step)', fontsize=18, labelpad=6)
+        plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
+        plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
         plt.title('AS comparison according to dynamics order')
-        plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
+        # plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
 
+    @staticmethod
+    def making_mixed_hist(df, steps_hist=100):   # Model, ASs, PCRs, NCRs, CRs
+        df_hist = Visualization.making_property_array_for_hist(df, steps_hist)
+        fig = plt.figure()  # 그래프 창생성
+        ax = fig.add_subplot(111)
+        N = len(df_hist)
+        tuples = Visualization.making_tuple_data_for_hist(df_hist)
+        ASs = tuples[1]
+        PCRs = tuples[2]  # 남학생 수
+        NCRs = tuples[3]  # 여학생 수
+        ind = np.arange(N)  # x축
+        width = 0.2  # 너비
+        p1 = ax.bar(ind - (width / 2), PCRs, width, color='SkyBlue')
+        p2 = ax.bar(ind - (width / 2), NCRs, width, color='IndianRed', bottom=PCRs)
+        p3 = ax.bar(ind + (width / 2), ASs, width, color='palegreen', label='AS')
+        ax.set_xlabel('model', fontsize=16)  # x축 라벨
+        ax.set_title('Competition results', fontsize=18)  # subplot의 제목
+        ax.set_yticks(np.arange(0, 1.2, 0.2))  # 0 ~ 81까지 10간격식으로 y축 틱설정
+        ax.set_xticks(ind)  # x축 틱설정
+        ax.set_xticklabels(tuples[0])  # x축 틱 라벨설정
+        ax.tick_params(labelsize=13)
+        plt.legend((p1[0], p2[0], p3[0]), ("PCR", "NCR", "AS total"), loc=0, fontsize=14)
+
+    @staticmethod
+    def making_property_array_for_hist(df, steps_hist):
+        property_array = np.zeros(5)
+        df_step = df[df.Steps == steps_hist]
+        model = df_step['Model']
+        model = sorted(model.unique())
+        for m in model:
+            df_model = df_step[df_step.Model == m]
+            AS_total = sum(df_model['AS']) / len(df_model)
+            pcr, ncr = Visualization.calculate_consensus_number_for_hist(df_model)
+            initial_value = np.array([m, AS_total, pcr, ncr, pcr + ncr])
+            property_array = np.vstack([property_array, initial_value])
+        property_data = property_array[1:]
+        columns = ['Model', 'AS_total', 'PCR', 'NCR', 'CR']
+        hist_df = pd.DataFrame(property_data, columns=columns)
+        return hist_df
+
+    @staticmethod
+    def calculate_consensus_number_for_hist(df):
+        pos_con = 0
+        neg_con = 0
+        AS_series= df['AS']
+        for i in range(len(df)):
+            if AS_series.iloc[i] > 0.95:
+                pos_con += 1
+            elif AS_series.iloc[i] < -0.95:
+                neg_con += 1
+        return pos_con / len(df), neg_con / len(df)
+
+    @staticmethod
+    def making_tuple_data_for_hist(df):
+        Model = tuple([i for i in df['Model']])
+        ASs = tuple([i for i in df['AS_total']])
+        PCRs = tuple([i for i in df['PCR']])
+        NCRs = tuple([i for i in df['NCR']])
+        CRs = tuple([i for i in df['CR']])
+        return Model, ASs, PCRs, NCRs, CRs
 
     @staticmethod
     def state_list_function(df, p_list, v_list):
@@ -194,32 +279,28 @@ class Visualization:
             list.append(select_list[i])
         return np.array(sorted(list))
 
+
 if __name__ == "__main__":
     print("Visualization")
-    setting = Setting_Simulation_Value.Setting_Simulation_Value()
+    setting = SettingSimulationValue.SettingSimulationValue()
     setting.database = 'pv_variable'
-    setting.table = 'comparison_order_table'   #'step_same_table'  #'comparison_os_table'
-    select_db = SelectDB.SelectDB()
-    df = select_db.select_data_from_DB(setting)
-    df = df.fillna(0)
-    # df = df[df.Steps == 10]
-    visualization = Visualization()
-    fig = plt.figure()
-    sns.set()
-    # visualization.plot_3D_for_average_state(df, 'scatter')
-    # visualization.plot_3D_to_2D_contour_for_average_state(df)
-    # visualization.plot_2D_for_average_state(df)
-    # select_list = Visualization.making_select_list(df, 'v')
-    # temp = Visualization.covert_to_select_list_value(select_list, [0.1, 0.2])
-    visualization.timeflow_chart(setting, df, x_list=0, y_list=0, p_values=[0.4], v_values=[0.4],
-                                 order=(True, 1), keynode_method=(False, 0), keynode_number=(False, 1))
-    # plt.xlabel('ratio of unchanged node', fontsize=16, labelpad=6)
-    # plt.ylabel('AS', fontsize=16, labelpad=6)
-    # visualization.average_state_for_steps_regarding_order(df, [0.4], [0.4])
-    # visualization.average_state_for_steps_regarding_order(df, [0.5], [0.5])
+    setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_os_table'
+    visualization = Visualization(setting)
+    visualization.making_chart(setting, plot_type='timeflow', p_value_list=None, v_value_list=None, steps_2d=100,
+                               chart_type='scatter', steps_3d=100,
+                               x_index=0, y_index=0, p_values=[0.4], v_values=[0.4], order=(True, 1),
+                               keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100,
+                               steps_hist=100)
 
-    # visualization.average_state_for_steps_scale(df, [0, 1], [0, 1])
+    # def f(x, y):
+    #     return
+    # ax = plt.axes(projection='3d')
+    # x = np.linspace(0, 2049, 2049)
+    # y = np.linspace(0, 2049, 2049)
+    # X, Y = np.meshgrid(x, y)
+    # Z = f(X, Y)
+    # ax.contour3D(X, Y, Z, 50, cmap='viridis')
+    # ax.scatter(X, Y, Z, c=Z, cmap='virdis')
     plt.show()
     plt.close()
-
     print("paint finished")

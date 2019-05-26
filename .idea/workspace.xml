@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Visualization.py" line="135" />
+    <bookmark url="file://$PROJECT_DIR$/Visualization.py" line="175" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1f7fbf9-dd3c-47cd-bf5a-940cb41d5cb0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/EdgeProperty.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SettingSimulationValue.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/CompetitionLayerPV.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CompetitionLayerPV.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Changing_Variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/Changing_Variable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DecisionDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/DecisionDynamics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InterconnectedDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/InterconnectedDynamics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/InterconnectedLayerModeling.py" beforeDir="false" afterPath="$PROJECT_DIR$/InterconnectedLayerModeling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MakingPandas.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NodeProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/NodeProperty.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OpinionDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/OpinionDynamics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Setting_Simulation_Value.py" beforeDir="false" afterPath="$PROJECT_DIR$/Setting_Simulation_Value.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RepeatDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/RepeatDynamics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SelectDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/SelectDB.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Setting_Simulation_Value.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,62 +30,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RepeatDynamics.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="16" column="55" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="55" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Visualization.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="682">
-              <caret line="224" column="27" lean-forward="true" selection-start-line="224" selection-start-column="27" selection-end-line="224" selection-end-column="27" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Changing_Variable.py">
+        <entry file="file://$PROJECT_DIR$/InterconnectedLayerModeling.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="32" column="41" lean-forward="true" selection-start-line="32" selection-start-column="41" selection-end-line="32" selection-end-column="41" />
+            <state relative-caret-position="2574">
+              <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
               <folding>
-                <element signature="e#0#31#0" expanded="true" />
-                <marker date="1557885836616" expanded="true" signature="2790:2810" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/InterconnectedDynamics.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="16" column="77" selection-start-line="16" selection-start-column="67" selection-end-line="16" selection-end-column="77" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Setting_Simulation_Value.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-352">
-              <caret line="14" column="26" lean-forward="true" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -82,10 +45,167 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/OpinionDynamics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9438">
-              <caret line="429" lean-forward="true" selection-start-line="429" selection-end-line="429" />
+            <state relative-caret-position="319">
+              <caret line="644" column="13" lean-forward="true" selection-start-line="644" selection-start-column="13" selection-end-line="644" selection-end-column="13" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#1610#2050#0" />
+                <element signature="e#2159#2610#0" />
+                <element signature="e#2723#4566#0" />
+                <element signature="e#3304#3730#0" />
+                <element signature="e#3830#7211#0" />
+                <element signature="e#7316#13650#0" />
+                <element signature="e#12741#13392#0" />
+                <element signature="e#13755#19119#0" />
+                <element signature="e#20393#22305#0" />
+                <element signature="e#22205#23474#0" />
+                <element signature="e#23285#25436#0" />
+                <element signature="e#25252#26652#0" />
+                <element signature="e#25568#26175#0" />
+                <element signature="e#27342#28731#0" />
+                <element signature="e#26257#26534#0" />
+                <element signature="e#26616#26892#0" />
+                <element signature="e#28427#28485#0" />
+                <element signature="e#28595#29301#0" />
+                <element signature="e#28838#29004#0" />
+                <element signature="e#29411#30644#0" />
+                <element signature="e#30755#31389#0" />
+                <element signature="e#31509#31800#0" />
+                <element signature="e#31926#32383#0" />
+                <element signature="e#32467#32687#0" />
+                <element signature="e#32771#32991#0" />
+                <element signature="e#33042#33286#0" />
+                <element signature="e#33338#33583#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DecisionDynamics.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-429">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#705#1048#0" />
+                <element signature="e#1234#2864#0" />
+                <element signature="e#2755#3643#0" />
+                <element signature="e#2667#3701#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/InterconnectedDynamics.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="236">
+              <caret line="11" column="122" lean-forward="true" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="122" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#723#3395#0" />
+                <element signature="e#3493#5392#0" />
+                <element signature="e#2388#3641#0" />
+                <element signature="e#3799#5052#0" />
+                <element signature="e#5209#6464#0" />
+                <element signature="e#6622#7877#0" />
+                <element signature="e#8034#9289#0" />
+                <element signature="e#9447#10703#0" />
+                <element signature="e#10860#12117#0" />
+                <element signature="e#12275#13533#0" />
+                <element signature="e#13699#14850#0" />
+                <element signature="e#21106#23032#0" />
+                <element signature="e#22848#25012#0" />
+                <element signature="e#24592#26435#0" />
+                <element signature="e#26334#28179#0" />
+                <element signature="e#28076#29546#0" />
+                <element signature="e#14994#15723#0" />
+                <element signature="e#22604#23408#0" />
+                <element signature="e#26571#27605#0" />
+                <element signature="e#26541#27148#0" />
+                <element signature="e#27247#28636#0" />
+                <element signature="e#28690#28748#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/RepeatDynamics.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="13" column="28" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#598#6752#0" />
+                <element signature="e#5287#6835#0" />
+                <element signature="e#8426#9025#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Changing_Variable.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="473">
+              <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+                <element signature="e#1815#2655#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/NodeProperty.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="9" column="24" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+                <element signature="e#235#1946#0" />
+                <element signature="e#2028#2305#0" />
+                <element signature="e#2379#2962#0" />
+                <element signature="e#3050#3662#0" />
+                <element signature="e#3745#4307#0" />
+                <element signature="e#4395#5007#0" />
+                <element signature="e#5093#5685#0" />
+                <element signature="e#5766#6308#0" />
+                <element signature="e#6383#6944#0" />
+                <element signature="e#7021#7589#0" />
+                <element signature="e#7669#8275#0" />
+                <element signature="e#8355#8961#0" />
+                <element signature="e#9039#9627#0" />
+                <element signature="e#9700#10243#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/SettingSimulationValue.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="22">
+              <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+              <folding>
+                <element signature="e#1826#2052#0" />
+                <element signature="e#2128#2219#0" />
+                <element signature="e#2295#2386#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EdgeProperty.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-275">
+              <caret line="13" column="17" lean-forward="true" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -93,9 +213,19 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>setting</find>
+      <find>B_edges</find>
+      <find>True</find>
+      <find>Order</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -105,25 +235,27 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Partial_Changing_Variable.py" />
+        <option value="$PROJECT_DIR$/Temp_Changing_Variable.py" />
+        <option value="$PROJECT_DIR$/SelectDB.py" />
+        <option value="$PROJECT_DIR$/Visualization.py" />
+        <option value="$PROJECT_DIR$/EdgeProperty.py" />
+        <option value="$PROJECT_DIR$/Setting_Simulation_Value.py" />
+        <option value="$PROJECT_DIR$/SettingSimulationValue.py" />
         <option value="$PROJECT_DIR$/MakingPandas.py" />
         <option value="$PROJECT_DIR$/InterconnectedLayerModeling.py" />
-        <option value="$PROJECT_DIR$/Temp_Changing_Variable.py" />
-        <option value="$PROJECT_DIR$/NodeProperty.py" />
+        <option value="$PROJECT_DIR$/OpinionDynamics.py" />
         <option value="$PROJECT_DIR$/DecisionDynamics.py" />
+        <option value="$PROJECT_DIR$/InterconnectedDynamics.py" />
+        <option value="$PROJECT_DIR$/NodeProperty.py" />
         <option value="$PROJECT_DIR$/RepeatDynamics.py" />
         <option value="$PROJECT_DIR$/Changing_Variable.py" />
-        <option value="$PROJECT_DIR$/InterconnectedDynamics.py" />
-        <option value="$PROJECT_DIR$/Visualization.py" />
-        <option value="$PROJECT_DIR$/Setting_Simulation_Value.py" />
-        <option value="$PROJECT_DIR$/OpinionDynamics.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-316" />
-    <option name="y" value="28" />
-    <option name="width" value="1332" />
-    <option name="height" value="983" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-7" />
+    <option name="width" value="854" />
+    <option name="height" value="1017" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -145,7 +277,9 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CompetingLayer" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CompetingLayer/AnalysisDB.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -164,7 +298,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Visualization">
+  <component name="RunManager" selected="Python.Changing_Variable">
     <configuration name="Changing_Variable" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="CompetitionLayerPV" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -178,6 +312,48 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Changing_Variable.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="DecisionDynamics" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="CompetitionLayerPV" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/DecisionDynamics.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="InterconnectedDynamics" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="CompetitionLayerPV" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/InterconnectedDynamics.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -207,27 +383,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="OpinionDynamics" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="CompetitionLayerPV" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/OpinionDynamics.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="RepeatDynamics" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="CompetitionLayerPV" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -249,34 +404,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Visualization" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="CompetitionLayerPV" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Visualization.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Visualization" />
-        <item itemvalue="Python.OpinionDynamics" />
         <item itemvalue="Python.Changing_Variable" />
         <item itemvalue="Python.RepeatDynamics" />
         <item itemvalue="Python.NodeProperty" />
+        <item itemvalue="Python.InterconnectedDynamics" />
+        <item itemvalue="Python.DecisionDynamics" />
       </list>
     </recent_temporary>
   </component>
@@ -293,23 +427,33 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13510254" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3295964" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.7195416" visible="true" weight="0.25336322" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49939686" weight="0.3295964" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.71471655" visible="true" weight="0.26569507" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39910313" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.2804584" side_tool="true" visible="true" weight="0.25336322" />
-      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49879372" weight="0.3295964" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49879372" weight="0.3295964" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49819058" weight="0.3295964" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.28528348" side_tool="true" visible="true" weight="0.26569507" />
+      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49939686" weight="0.3295964" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -317,16 +461,6 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Partial_Changing_Variable.py" />
-    <entry file="file://$PROJECT_DIR$/InterconnectedLayerModeling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2536">
-          <caret line="123" column="29" selection-start-line="123" selection-start-column="29" selection-end-line="123" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../CompetingLayer/VisualizationNew.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -352,27 +486,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MakingPandas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="19" column="54" selection-start-line="19" selection-start-column="54" selection-end-line="19" selection-end-column="54" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Anaconda3/Lib/concurrent/futures/_base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="206">
           <caret line="424" selection-start-line="424" selection-end-line="424" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Anaconda3/Lib/concurrent/futures/process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="176" column="46" lean-forward="true" selection-start-line="176" selection-start-column="46" selection-end-line="176" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -390,83 +507,224 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/NodeProperty.py">
+    <entry file="file://$PROJECT_DIR$/../Anaconda3/Lib/random.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2293">
-          <caret line="271" column="36" lean-forward="true" selection-start-line="271" selection-start-column="36" selection-end-line="271" selection-end-column="36" />
+        <state relative-caret-position="209">
+          <caret line="316" selection-start-line="316" selection-end-line="316" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Anaconda3/Lib/concurrent/futures/process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="241" lean-forward="true" selection-start-line="241" selection-end-line="241" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../CompetingLayer/AnalysisDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="262" column="25" selection-start-line="262" selection-start-column="25" selection-end-line="262" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SelectDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1166">
+          <caret line="53" selection-start-line="53" selection-end-line="53" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EdgeProperty.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-275">
+          <caret line="13" column="17" lean-forward="true" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DecisionDynamics.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2155">
-          <caret line="103" lean-forward="true" selection-start-line="103" selection-end-line="103" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/MakingPandas.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/InterconnectedDynamics.py">
+    <entry file="file://$PROJECT_DIR$/Visualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="16" column="77" selection-start-line="16" selection-start-column="67" selection-end-line="16" selection-end-column="77" />
+        <state relative-caret-position="374">
+          <caret line="297" column="36" lean-forward="true" selection-start-line="297" selection-start-column="36" selection-end-line="297" selection-end-column="36" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RepeatDynamics.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="16" column="55" selection-start-line="16" selection-start-column="45" selection-end-line="16" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Setting_Simulation_Value.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-352">
-          <caret line="14" column="26" lean-forward="true" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#835#1023#0" />
+            <element signature="e#1189#1800#0" />
+            <element signature="e#884#3161#0" />
+            <element signature="e#4368#5420#0" />
+            <element signature="e#5542#9560#0" />
+            <element signature="e#14981#15951#0" />
+            <element signature="e#17032#17808#0" />
+            <element signature="e#17966#18249#0" />
+            <element signature="e#18397#18756#0" />
+            <element signature="e#8561#8910#0" />
+            <element signature="e#9025#9591#0" />
+            <element signature="e#9662#9871#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/OpinionDynamics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9438">
-          <caret line="429" lean-forward="true" selection-start-line="429" selection-end-line="429" />
+        <state relative-caret-position="319">
+          <caret line="644" column="13" lean-forward="true" selection-start-line="644" selection-start-column="13" selection-end-line="644" selection-end-column="13" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#1610#2050#0" />
+            <element signature="e#2159#2610#0" />
+            <element signature="e#2723#4566#0" />
+            <element signature="e#3304#3730#0" />
+            <element signature="e#3830#7211#0" />
+            <element signature="e#7316#13650#0" />
+            <element signature="e#12741#13392#0" />
+            <element signature="e#13755#19119#0" />
+            <element signature="e#20393#22305#0" />
+            <element signature="e#22205#23474#0" />
+            <element signature="e#23285#25436#0" />
+            <element signature="e#25252#26652#0" />
+            <element signature="e#25568#26175#0" />
+            <element signature="e#27342#28731#0" />
+            <element signature="e#26257#26534#0" />
+            <element signature="e#26616#26892#0" />
+            <element signature="e#28427#28485#0" />
+            <element signature="e#28595#29301#0" />
+            <element signature="e#28838#29004#0" />
+            <element signature="e#29411#30644#0" />
+            <element signature="e#30755#31389#0" />
+            <element signature="e#31509#31800#0" />
+            <element signature="e#31926#32383#0" />
+            <element signature="e#32467#32687#0" />
+            <element signature="e#32771#32991#0" />
+            <element signature="e#33042#33286#0" />
+            <element signature="e#33338#33583#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Visualization.py">
+    <entry file="file://$PROJECT_DIR$/DecisionDynamics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="682">
-          <caret line="224" column="27" lean-forward="true" selection-start-line="224" selection-start-column="27" selection-end-line="224" selection-end-column="27" />
+        <state relative-caret-position="-429">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#705#1048#0" />
+            <element signature="e#1234#2864#0" />
+            <element signature="e#2755#3643#0" />
+            <element signature="e#2667#3701#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/InterconnectedDynamics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="11" column="122" lean-forward="true" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="122" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#723#3395#0" />
+            <element signature="e#3493#5392#0" />
+            <element signature="e#2388#3641#0" />
+            <element signature="e#3799#5052#0" />
+            <element signature="e#5209#6464#0" />
+            <element signature="e#6622#7877#0" />
+            <element signature="e#8034#9289#0" />
+            <element signature="e#9447#10703#0" />
+            <element signature="e#10860#12117#0" />
+            <element signature="e#12275#13533#0" />
+            <element signature="e#13699#14850#0" />
+            <element signature="e#21106#23032#0" />
+            <element signature="e#22848#25012#0" />
+            <element signature="e#24592#26435#0" />
+            <element signature="e#26334#28179#0" />
+            <element signature="e#28076#29546#0" />
+            <element signature="e#14994#15723#0" />
+            <element signature="e#22604#23408#0" />
+            <element signature="e#26571#27605#0" />
+            <element signature="e#26541#27148#0" />
+            <element signature="e#27247#28636#0" />
+            <element signature="e#28690#28748#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RepeatDynamics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="13" column="28" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#598#6752#0" />
+            <element signature="e#5287#6835#0" />
+            <element signature="e#8426#9025#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/NodeProperty.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#235#1946#0" />
+            <element signature="e#2028#2305#0" />
+            <element signature="e#2379#2962#0" />
+            <element signature="e#3050#3662#0" />
+            <element signature="e#3745#4307#0" />
+            <element signature="e#4395#5007#0" />
+            <element signature="e#5093#5685#0" />
+            <element signature="e#5766#6308#0" />
+            <element signature="e#6383#6944#0" />
+            <element signature="e#7021#7589#0" />
+            <element signature="e#7669#8275#0" />
+            <element signature="e#8355#8961#0" />
+            <element signature="e#9039#9627#0" />
+            <element signature="e#9700#10243#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Changing_Variable.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="32" column="41" lean-forward="true" selection-start-line="32" selection-start-column="41" selection-end-line="32" selection-end-column="41" />
+        <state relative-caret-position="473">
+          <caret line="65" lean-forward="true" selection-start-line="65" selection-end-line="65" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
-            <marker date="1557885836616" expanded="true" signature="2790:2810" ph="..." />
+            <element signature="e#1815#2655#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SettingSimulationValue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+          <folding>
+            <element signature="e#1826#2052#0" />
+            <element signature="e#2128#2219#0" />
+            <element signature="e#2295#2386#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/InterconnectedLayerModeling.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2574">
+          <caret line="123" lean-forward="true" selection-start-line="123" selection-end-line="123" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
