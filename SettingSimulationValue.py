@@ -23,23 +23,6 @@ class SettingSimulationValue:
         self.variable_list = SettingSimulationValue.p_and_v_list(gap=30)
         self.workers = 5
 
-        self.select_method_list = ['0', 'pagerank', 'betweenness', 'degree', 'eigenvector', 'closeness',
-                                   'load', 'AB_pagerank', 'AB_eigenvector', 'AB_degree', 'AB_betweenness',
-                                   'AB_closeness', 'AB_load', 'random']
-
-        self.step_list1 = [r'$O(s, o) \leftrightarrow D(s)$', r'$O(o, o) \to D(o)$', r'$O(o, o) \leftarrow D(o)$',
-                           r'$O(s, o) \to D(o)$', r'$O(s, o) \leftarrow D(o)$', r'$O(o, o) \to D(s)$',
-                           r'$O(o, o) \leftarrow D(s)$', r'$O(s, o) \to D(s)$',
-                           r'$O(s, o) \leftarrow D(s)$', r'$O(o, o) \Leftrightarrow D(o)$',
-                           r'$O(r, r) \to D(o)$', r'$O(r, r) \leftarrow D(o)$',
-                           r'$O(r, r) \to D(s)$', r'$O(r, r) \leftarrow D(s)$',
-                           r'$O(r, r) \Leftrightarrow D(r)$']
-
-        self.step_list2 = [r'$O(s, s) \leftrightarrow D(s)$', r'$O(o, s) \to D(o)$', r'$O(o, s) \leftarrow D(o)$',
-                           r'$O(s, s) \to D(o)$', r'$O(s, s) \leftarrow D(o)$', r'$O(o, s) \to D(s)$',
-                           r'$O(o, s) \leftarrow D(s)$', r'$O(s, s) \to D(s)$',
-                           r'$O(s, s) \leftarrow D(s)$', r'$O(o, s) \Leftrightarrow D(o)$']
-
     @staticmethod
     def p_and_v_list(gap):
         p_list = np.linspace(0, 1, gap)

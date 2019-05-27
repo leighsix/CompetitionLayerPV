@@ -1,11 +1,11 @@
-import SelectDB
-import numpy as np
 import SettingSimulationValue
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
 import random
 import pandas as pd
+import sqlalchemy
+import sqlite3
 from sympy import *
 from matplotlib import cycler
 from mpl_toolkits.mplot3d.axes3d import *
@@ -21,29 +21,33 @@ y_list = ['AS', 'prob_v', 'persuasion', 'compromise', 'change_count', 'consensus
 
 class Visualization:
     def __init__(self, setting):
-        self.select_db = SelectDB.SelectDB()
-        self.df = self.making_df(setting)
+        self.df = Visualization.select_data_from_DB(setting)
 
-    def making_df(self, setting):
-        df = self.select_db.select_data_from_DB(setting)
-        df = df.fillna(0)
-        df['consensus_index'] = ((df['A_plus'] * df['B_minus']) + (df['A_minus'] * df['B_plus'])) / (setting.A_node * setting.B_node)
-        return df
+    def run(self, setting, plot_type='2D', p_value_list=None, v_value_list=None, steps_2d=100,
+            chart_type='scatter', steps_3d=100,
+            x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
+            keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100,
+            steps_hist=100):
+        Visualization.making_chart(self.df, setting, plot_type, p_value_list, v_value_list, steps_2d,
+                                   chart_type, steps_3d, x_index, y_index, p_values, v_values, order,
+                                   keynode_method, select_layer, keynode_number, steps_timeflow,
+                                   steps_hist)
+        plt.show()
+        plt.close()
 
-    def making_chart(self, setting, plot_type='2D', p_value_list=None, v_value_list=None, steps_2d=100,
-                     chart_type='scatter', steps_3d=100,
-                     x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
-                     keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100,
-                     steps_hist=100):
+    @staticmethod
+    def making_chart(df, setting, plot_type, p_value_list, v_value_list, steps_2d,
+                     chart_type, steps_3d, x_index, y_index, p_values, v_values, order,
+                     keynode_method, select_layer, keynode_number, steps_timeflow, steps_hist):
         if plot_type == '2D':
-            Visualization.plot_2D_for_average_state(self.df, p_value_list, v_value_list, steps_2d)
+            Visualization.plot_2D_for_average_state(df, p_value_list, v_value_list, steps_2d)
         elif plot_type == '3D':
-            Visualization.plot_3D_for_average_state(self.df, chart_type, steps_3d)
+            Visualization.plot_3D_for_average_state(df, chart_type, steps_3d)
         elif plot_type == 'timeflow':
-            Visualization.timeflow_chart(setting, self.df, x_index, y_index, p_values, v_values, order,
+            Visualization.timeflow_chart(setting, df, x_index, y_index, p_values, v_values, order,
                                          keynode_method, select_layer, keynode_number, steps_timeflow)
         elif plot_type == 'hist':
-            Visualization.making_mixed_hist(self.df, steps_hist)
+            Visualization.making_mixed_hist(df, steps_hist)
 
     @staticmethod
     def plot_2D_for_average_state(df, p_value_list=None, v_value_list=None, steps_2d=100):  # v_values =[]
@@ -114,6 +118,16 @@ class Visualization:
         ax.set_title(r'$v$-$prob.p$-AS', fontsize=18)
         ax.tick_params(axis='both', labelsize=14)
         ax.view_init(45, 45)
+
+    @staticmethod
+    def select_data_from_DB(setting):
+        select_query = ('''SELECT * FROM %s;''' % str(setting.table))
+        engine = sqlalchemy.create_engine('mysql+pymysql://root:2853@localhost:3306/%s' % setting.database)
+        query = select_query
+        df = pd.read_sql_query(query, engine)
+        df = df.fillna(0)
+        df['consensus_index'] = ((df['A_plus'] * df['B_minus']) + (df['A_minus'] * df['B_plus'])) / (setting.A_node * setting.B_node)
+        return df
 
     @staticmethod
     def timeflow_chart(setting, df, x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
@@ -284,23 +298,11 @@ if __name__ == "__main__":
     print("Visualization")
     setting = SettingSimulationValue.SettingSimulationValue()
     setting.database = 'pv_variable'
-    setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_os_table'
+    setting.table = 'keynode_table'   #'step_same_table'  #'comparison_os_table'
     visualization = Visualization(setting)
-    visualization.making_chart(setting, plot_type='timeflow', p_value_list=None, v_value_list=None, steps_2d=100,
-                               chart_type='scatter', steps_3d=100,
-                               x_index=0, y_index=0, p_values=[0.4], v_values=[0.4], order=(True, 1),
-                               keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100,
-                               steps_hist=100)
-
-    # def f(x, y):
-    #     return
-    # ax = plt.axes(projection='3d')
-    # x = np.linspace(0, 2049, 2049)
-    # y = np.linspace(0, 2049, 2049)
-    # X, Y = np.meshgrid(x, y)
-    # Z = f(X, Y)
-    # ax.contour3D(X, Y, Z, 50, cmap='viridis')
-    # ax.scatter(X, Y, Z, c=Z, cmap='virdis')
-    plt.show()
-    plt.close()
+    visualization.run(setting, plot_type='timeflow', p_value_list=None, v_value_list=None, steps_2d=100,
+                      chart_type='scatter', steps_3d=100,
+                      x_index=1, y_index=0, p_values=[0.4], v_values=[0.4], order=(False, 1),
+                      keynode_method=(True, 0), select_layer='A_layer', keynode_number=(True, 1), steps_timeflow=100,
+                      steps_hist=100)
     print("paint finished")

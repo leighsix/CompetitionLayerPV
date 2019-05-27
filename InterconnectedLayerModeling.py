@@ -110,13 +110,16 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     start = time.time()
     inter_layer = InterconnectedLayerModeling(setting)
+    print(inter_layer.unique_neighbor_dict[1])
+    inter_layer.unique_neighbor_dict[1].remove(4)
+    print(inter_layer.unique_neighbor_dict[1])
     end = time.time()
     print(end-start)
     # print(inter_layer.two_layer_graph.nodes[1]['state'])
-    states = 0
-    for i in inter_layer.two_layer_graph.nodes:
-        states += inter_layer.two_layer_graph.nodes[i]['state']
-    print(states)
+    # states = 0
+    # for i in inter_layer.two_layer_graph.nodes:
+    #     states += inter_layer.two_layer_graph.nodes[i]['state']
+    # print(states)
     # print(sorted(inter_layer.two_layer_graph.nodes))
     # print(sorted(inter_layer.two_layer_graph.edges))
 

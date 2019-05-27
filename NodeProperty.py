@@ -6,7 +6,7 @@ import time
 
 
 class NodeProperty:
-    def __init__(self, setting, inter_layer, select_method, select_layer_number=0):
+    def __init__(self, setting, inter_layer, select_method='0', select_layer_number=0):
         self.nodes_order = NodeProperty.ordering_node(setting, inter_layer, select_method, select_layer_number)
 
     @staticmethod
@@ -64,7 +64,7 @@ class NodeProperty:
     def order_eigenvector_centrality(setting, inter_layer):
         A_node_order = []
         B_node_order = []
-        eigenvector_centrality = nx.eigenvector_centrality(inter_layer.two_layer_graph)
+        eigenvector_centrality = nx.eigenvector_centrality_numpy(inter_layer.two_layer_graph)
         eigenvector_order = sorted(eigenvector_centrality.items(), key=operator.itemgetter(1), reverse=True)
         for i in sorted(inter_layer.two_layer_graph.nodes):
             if eigenvector_order[i][0] < setting.A_node:
@@ -154,7 +154,7 @@ class NodeProperty:
     @staticmethod
     def order_AB_eigenvector(setting, inter_layer):
         AB_eigenvector = {}
-        dict = nx.eigenvector_centrality(inter_layer.two_layer_graph)
+        dict = nx.eigenvector_centrality_numpy(inter_layer.two_layer_graph)
         for node_i in inter_layer.A_nodes:
             connected_B_nodes_list = NodeProperty.finding_B_node(setting, inter_layer, node_i)
             integrated_eigenvector = 0
@@ -208,10 +208,10 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     start = time.time()
-    ordering_nodes = NodeProperty(setting, inter_layer, 'AB_pagerank', select_layer_number=0)
+    ordering_nodes = NodeProperty(setting, inter_layer, 'pagerank', select_layer_number=0)
     # select = cal_property.cal_node_A_and_node_B_centrality(inter_layer)
-    print(ordering_nodes.ordering_node)
-    for i, j in ordering_nodes.ordering_node:
+    print(ordering_nodes.nodes_order)
+    for i, j in ordering_nodes.nodes_order:
         print(i, j)
     # select2 = cal_property.order_AB_pagerank(inter_layer)
     # print(select2[0:10])
