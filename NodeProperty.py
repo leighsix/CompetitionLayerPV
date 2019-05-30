@@ -14,6 +14,8 @@ class NodeProperty:
         ordering_node = []
         if select_method == 'pagerank':
             ordering_node = NodeProperty.order_pagerank(setting, inter_layer)[select_layer_number]
+        elif select_method == 'pagerank_individual':
+            ordering_node = NodeProperty.order_pagerank_individual(setting, inter_layer)[select_layer_number]
         elif select_method == 'eigenvector':
             ordering_node = NodeProperty.order_eigenvector_centrality(setting, inter_layer)[select_layer_number]
         elif select_method == 'degree':
@@ -46,6 +48,43 @@ class NodeProperty:
             if neighbor >= setting.A_node:
                 connected_B_nodes_list.append(neighbor)
         return connected_B_nodes_list
+
+    @staticmethod
+    def finding_A_node(setting, inter_layer, node_i):
+        connected_A_nodes_list = []
+        neighbors = sorted(nx.neighbors(inter_layer.two_layer_graph, node_i))
+        for neighbor in neighbors:
+            if neighbor < setting.A_node:
+                connected_A_nodes_list.append(neighbor)
+        return connected_A_nodes_list
+
+    @staticmethod
+    def order_pagerank_individual(setting, inter_layer):
+        A_node_order = []
+        B_node_order = []
+        individual_pagerank = {}
+        pagerank_A = nx.pagerank(inter_layer.A_layer_graph)
+        pagerank_B = nx.pagerank(inter_layer.B_layer_graph)
+        for node_i in inter_layer.A_nodes:
+            connected_B_nodes_list = NodeProperty.finding_B_node(setting, inter_layer, node_i)
+            A_integrated_pagerank = 0
+            for connected_B_node in connected_B_nodes_list:
+                A_integrated_pagerank += (pagerank_B[connected_B_node] / len(connected_B_nodes_list))
+            individual_pagerank[node_i] = pagerank_A[node_i] + A_integrated_pagerank
+        for node_j in inter_layer.B_nodes:
+            connected_A_nodes_list = NodeProperty.finding_A_node(setting, inter_layer, node_j)
+            B_integrated_pagerank = 0
+            for connected_A_node in connected_A_nodes_list:
+                B_integrated_pagerank += (pagerank_A[connected_A_node] / len(connected_A_nodes_list))
+            individual_pagerank[node_j] = pagerank_B[node_j] + B_integrated_pagerank
+        individual_pagerank_order = sorted(individual_pagerank.items(), key=operator.itemgetter(1), reverse=True)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            if individual_pagerank_order[i][0] < setting.A_node:
+                A_node_order.append((individual_pagerank_order[i][0], individual_pagerank_order[i][1]))
+            else:
+                B_node_order.append((individual_pagerank_order[i][0], individual_pagerank_order[i][1]))
+        return A_node_order, B_node_order, individual_pagerank_order   # value = pagerank[node_number]
+
 
     @staticmethod
     def order_pagerank(setting, inter_layer):
@@ -208,11 +247,12 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     start = time.time()
-    ordering_nodes = NodeProperty(setting, inter_layer, 0, 'pagerank')
+    ordering_nodes1 = NodeProperty(setting, inter_layer, 0, 'pagerank')
+
+    ordering_nodes2 = NodeProperty(setting, inter_layer, 0, 'pagerank_individual')
     # select = cal_property.cal_node_A_and_node_B_centrality(inter_layer)
-    print(ordering_nodes.nodes_order)
-    for i, j in ordering_nodes.nodes_order:
-        print(i, j)
+    for i in range(20):
+        print(ordering_nodes1.nodes_order[i][0], ordering_nodes2.nodes_order[i][0])
     # select2 = cal_property.order_AB_pagerank(inter_layer)
     # print(select2[0:10])
     # select3 = nx.pagerank(inter_layer.two_layer_graph)

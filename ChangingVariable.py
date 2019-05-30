@@ -7,11 +7,13 @@ from tqdm import tqdm
 
 select_node_layers_list = ['A_layer', 'B_layer', 'mixed']
 select_edge_layers_list = ['A_internal', 'A_mixed', 'B_internal', 'B_mixed', 'external', 'mixed']
-select_node_method_list = ['0', 'pagerank', 'betweenness', 'degree', 'eigenvector', 'closeness',
+select_node_method_list = ['0', 'pagerank', 'pagerank_individual', 'betweenness', 'degree', 'eigenvector', 'closeness',
                            'load', 'AB_pagerank', 'AB_eigenvector', 'AB_degree', 'AB_betweenness',
                            'AB_closeness', 'AB_load', 'random']
 select_edge_method_list = ['0', 'edge_pagerank', 'edge_betweenness', 'edge_degree', 'edge_eigenvector', 'edge_closeness',
-                           'edge_load', 'random']
+                           'edge_load', 'random', 'edge_pagerank_sequential', 'edge_betweenness_sequential',
+                           'edge_degree_sequential', 'edge_eigenvector_sequential',
+                           'edge_closeness_sequential', 'edge_load_sequential']
 
 
 class ChangingVariable:

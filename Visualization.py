@@ -216,7 +216,7 @@ class Visualization:
                             elif keyedge_number[0] is True:
                                 pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
                                 pv_df5 = pv_df5.sort_values(by='keyedge_number', ascending=True)
-                                plt.plot(pv_df5[x_list[x_index]] / setting.A_node, pv_df5[y_list[y_index]],
+                                plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_total_edges'], pv_df5[y_list[y_index]],
                                          marker='o', label=r'%s(%s)' % (key_method, select_edge_layer), linewidth=1.5)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
         # plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)

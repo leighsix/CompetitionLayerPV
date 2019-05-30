@@ -11,7 +11,10 @@ class InterconnectedLayerModeling:
     def __init__(self, setting):
         self.A_nodes = [i for i in range(0, setting.A_node)]
         self.B_nodes = [i for i in range(setting.A_node, setting.A_node + setting.B_node)]
-        self.two_layer_graph = InterconnectedLayerModeling.making_interconnected_graph(setting, self.A_nodes, self.B_nodes)
+        graph = InterconnectedLayerModeling.making_interconnected_graph(setting, self.A_nodes, self.B_nodes)
+        self.A_layer_graph = graph[0]
+        self.B_layer_graph = graph[1]
+        self.two_layer_graph = graph[2]
         self.unique_neighbor_dict = InterconnectedLayerModeling.making_unique_neighbor_dict(self.two_layer_graph)
         edges_tuple = InterconnectedLayerModeling.making_edges_tuple_on_layer(setting, self.two_layer_graph)
         self.edges_on_A = edges_tuple[0]
@@ -23,17 +26,23 @@ class InterconnectedLayerModeling:
         A_states = random.sample(list(setting.A), setting.A_node)
         B_states = random.sample(list(setting.B), setting.B_node)
         two_layer_graph = nx.Graph()
+        A_layer_graph = nx.Graph()
+        B_layer_graph = nx.Graph()
         for i, a_node in enumerate(A_nodes):
+            A_layer_graph.add_node(a_node, state=A_states[i])
             two_layer_graph.add_node(a_node, state=A_states[i])
         for i, b_node in enumerate(B_nodes):
+            B_layer_graph.add_node(b_node, state=B_states[i])
             two_layer_graph.add_node(b_node, state=B_states[i])
         A_edges_list = InterconnectedLayerModeling.select_layer_A_model(setting)
+        A_layer_graph.add_edges_from(A_edges_list)
         two_layer_graph.add_edges_from(A_edges_list)
         B_edges_list = InterconnectedLayerModeling.select_layer_B_model(setting)
+        B_layer_graph.add_edges_from(B_edges_list)
         two_layer_graph.add_edges_from(B_edges_list)
         AB_edges_list = InterconnectedLayerModeling.making_interconnected_edges(setting, A_nodes, B_nodes)
         two_layer_graph.add_edges_from(AB_edges_list)
-        return two_layer_graph
+        return A_layer_graph, B_layer_graph, two_layer_graph
 
     @staticmethod
     def making_interconnected_edges(setting, A_nodes, B_nodes):
@@ -110,11 +119,7 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     start = time.time()
     inter_layer = InterconnectedLayerModeling(setting)
-    print(inter_layer.unique_neighbor_dict[1])
-    inter_layer.unique_neighbor_dict[1].remove(4)
-    print(inter_layer.unique_neighbor_dict[1])
-    end = time.time()
-    print(end-start)
+    print(sorted(inter_layer.A_layer_graph.edges))
     # print(inter_layer.two_layer_graph.nodes[1]['state'])
     # states = 0
     # for i in inter_layer.two_layer_graph.nodes:
