@@ -4,7 +4,7 @@ import numpy as np
 class SettingSimulationValue:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'keynode_table'
+        self.table = 'keyedge_table'
         self.Model = 'BA-BA'
         self.Structure = 'BA-BA'
 
@@ -20,18 +20,7 @@ class SettingSimulationValue:
         self.B_node = 2048
         self.B_edge = 4
         self.B = SettingSimulationValue.static_making_B_array(self.B_node, B_state=[-1])
-        self.variable_list = SettingSimulationValue.p_and_v_list(gap=30)
         self.workers = 5
-
-    @staticmethod
-    def p_and_v_list(gap):
-        p_list = np.linspace(0, 1, gap)
-        v_list = np.linspace(0, 1, gap)
-        variable_list = []
-        for p in p_list:
-            for v in v_list:
-                variable_list.append((p, v))
-        return variable_list
 
     @staticmethod
     def static_making_A_array(A_node, A_state):

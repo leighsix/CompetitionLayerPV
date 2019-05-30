@@ -6,11 +6,11 @@ import time
 
 
 class NodeProperty:
-    def __init__(self, setting, inter_layer, select_method='0', select_layer_number=0):
-        self.nodes_order = NodeProperty.ordering_node(setting, inter_layer, select_method, select_layer_number)
+    def __init__(self, setting, inter_layer, select_layer_number=0, select_method='0'):
+        self.nodes_order = NodeProperty.ordering_node(setting, inter_layer, select_layer_number, select_method)
 
     @staticmethod
-    def ordering_node(setting, inter_layer, select_method, select_layer_number):
+    def ordering_node(setting, inter_layer, select_layer_number, select_method):
         ordering_node = []
         if select_method == 'pagerank':
             ordering_node = NodeProperty.order_pagerank(setting, inter_layer)[select_layer_number]
@@ -208,7 +208,7 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     start = time.time()
-    ordering_nodes = NodeProperty(setting, inter_layer, 'pagerank', select_layer_number=0)
+    ordering_nodes = NodeProperty(setting, inter_layer, 0, 'pagerank')
     # select = cal_property.cal_node_A_and_node_B_centrality(inter_layer)
     print(ordering_nodes.nodes_order)
     for i, j in ordering_nodes.nodes_order:

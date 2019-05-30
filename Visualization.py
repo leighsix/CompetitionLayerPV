@@ -16,7 +16,7 @@ linestyle = ['-r', '--r', '-.r', ':r', '-g', '--g', '-.g', ':g', '-b', '--b', '-
              ':c', '-m', '--m', '-.m', ':m', '-y', '--y', '-.y', ':y', '-k', '--k', '-.k', ':k']
 random.shuffle(linestyle)
 
-x_list = ['Steps', 'keynode_number']
+x_list = ['Steps', 'keynode_number', 'keyedge_number']
 y_list = ['AS', 'prob_v', 'persuasion', 'compromise', 'change_count', 'consensus_index']
 
 class Visualization:
@@ -26,11 +26,13 @@ class Visualization:
     def run(self, setting, plot_type='2D', p_value_list=None, v_value_list=None, steps_2d=100,
             chart_type='scatter', steps_3d=100,
             x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
-            keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100,
+            keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+            keyedge_method=False, select_edge_layer='A_internal', keyedge_number=(False, 1), steps_timeflow=100,
             steps_hist=100):
         Visualization.making_chart(self.df, setting, plot_type, p_value_list, v_value_list, steps_2d,
                                    chart_type, steps_3d, x_index, y_index, p_values, v_values, order,
-                                   keynode_method, select_layer, keynode_number, steps_timeflow,
+                                   keynode_method, select_layer, keynode_number,
+                                   keyedge_method, select_edge_layer, keyedge_number, steps_timeflow,
                                    steps_hist)
         plt.show()
         plt.close()
@@ -38,19 +40,22 @@ class Visualization:
     @staticmethod
     def making_chart(df, setting, plot_type, p_value_list, v_value_list, steps_2d,
                      chart_type, steps_3d, x_index, y_index, p_values, v_values, order,
-                     keynode_method, select_layer, keynode_number, steps_timeflow, steps_hist):
+                     keynode_method, select_layer, keynode_number,
+                     keyedge_method, select_edge_layer, keyedge_number, steps_timeflow,
+                     steps_hist):
         if plot_type == '2D':
             Visualization.plot_2D_for_average_state(df, p_value_list, v_value_list, steps_2d)
         elif plot_type == '3D':
             Visualization.plot_3D_for_average_state(df, chart_type, steps_3d)
         elif plot_type == 'timeflow':
             Visualization.timeflow_chart(setting, df, x_index, y_index, p_values, v_values, order,
-                                         keynode_method, select_layer, keynode_number, steps_timeflow)
+                                         keynode_method, select_layer, keynode_number,
+                                         keyedge_method, select_edge_layer, keyedge_number, steps_timeflow)
         elif plot_type == 'hist':
             Visualization.making_mixed_hist(df, steps_hist)
 
     @staticmethod
-    def plot_2D_for_average_state(df, p_value_list=None, v_value_list=None, steps_2d=100):  # v_values =[]
+    def plot_2D_for_average_state(df, p_value_list, v_value_list, steps_2d):  # v_values =[]
         fig = plt.figure()
         sns.set()
         plt.style.use('seaborn-whitegrid')
@@ -96,7 +101,7 @@ class Visualization:
             # plt.clabel(contours, inline=True, fontsize=8)
 
     @staticmethod
-    def plot_3D_for_average_state(df, chart_type='scatter', steps_3d=100):
+    def plot_3D_for_average_state(df, chart_type, steps_3d):
         plt.figure()
         sns.set()
         plt.style.use('seaborn-whitegrid')
@@ -130,8 +135,9 @@ class Visualization:
         return df
 
     @staticmethod
-    def timeflow_chart(setting, df, x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
-                       keynode_method=(False, 0), select_layer='A_layer', keynode_number=(False, 1), steps_timeflow=100):
+    def timeflow_chart(setting, df, x_index, y_index, p_values, v_values, order,
+                       keynode_method, select_node_layer, keynode_number,
+                       keyedge_method, select_edge_layer, keyedge_number, steps_timeflow):
         plt.figure()
         sns.set()
         plt.style.use('seaborn-whitegrid')
@@ -153,27 +159,34 @@ class Visualization:
                     orders = pv_df2['Orders'].unique()
                     for ordering in orders:
                         pv_df3 = pv_df2[pv_df2.Orders == ordering]
-                        pv_df4 = pv_df3[pv_df3.keynode_method == setting.select_method_list[keynode_method[1]]]
+                        pv_df4 = pv_df3[pv_df3.keynode_method == '0']
                         pv_df4 = pv_df4.sort_values(by='Steps', ascending=True)
                         plt.plot(pv_df4[x_list[x_index]], pv_df4[y_list[y_index]], linewidth=1.5)
         else:
             for i in range(len(temp_p_values)):
                 df1 = df[df.p == temp_p_values[i]]
                 pv_df = df1[df1.v == temp_v_values[i]]
-                if order[0] is True:
+                if order is True:
                     orders = pv_df['Orders'].unique()
+                    # orders = [r'$O(o, o) \to D(o)$', r'$O(r, r) \to D(o)$', r'$O(s, o) \to D(o)$', r'$O(o, s) \to D(o)$',
+                    #           r'$O(s, s) \to D(o)$']
+                    # # orders = [r'$O(o, o) \to D(o)$', r'$O(o, o) \leftarrow D(o)$', r'$O(s, o) \to D(s)$', r'$O(s, o) \leftarrow D(s)$']
+                    # orders = [r'$O(o, o) \to D(o)$', r'$O(s, s) \leftrightarrow D(s)$', r'$O(r, r) \Leftrightarrow D(r)$']
+                    # # orders = [r'$O(o, o) \to D(o)$', r'$O(o, o) \to D(s)$', r'$O(s, o) \to D(o)$', r'$O(o, s) \to D(o)$',
+                    # #           r'$O(s, o) \to D(s)$', r'$O(o, s) \to D(s)$', r'$O(s, s) \to D(o)$',
+                    # #           r'$O(s, s) \to D(s)$']
                     for style, ordering in enumerate(orders):
                         pv_df2 = pv_df[pv_df.Orders == ordering]
-                        pv_df3 = pv_df2[pv_df2.keynode_method == setting.select_method_list[keynode_method[1]]]
+                        pv_df3 = pv_df2[pv_df2.keynode_method == '0']
                         pv_df3 = pv_df3.sort_values(by='Steps', ascending=True)
                         plt.plot(pv_df3[x_list[x_index]], pv_df3[y_list[y_index]], linestyle[style],
                                  label=r'%s' % ordering, linewidth=1.5)
                         plt.legend(framealpha=1, frameon=True, prop={'size': 10})
-                elif order[0] is False:
+                elif order is False:
                     pv_df['Orders'] = r'$O(o, o) \to D(o)$'
-                    pv_df2 = pv_df[pv_df.Orders == setting.step_list1[order[1]]]
-                    if keynode_method[0] is True:
-                        pv_df3 = pv_df2[pv_df.select_layer == select_layer]
+                    pv_df2 = pv_df[pv_df.Orders == r'$O(o, o) \to D(o)$']
+                    if keynode_method is True:
+                        pv_df3 = pv_df2[pv_df.select_node_layer == select_node_layer]
                         key_methods = pv_df3['keynode_method'].unique()
                         for key_method in key_methods:
                             pv_df4 = pv_df3[pv_df3.keynode_method == key_method]
@@ -181,21 +194,40 @@ class Visualization:
                                 pv_df5 = pv_df4[pv_df4.keynode_number == keynode_number[1]]
                                 pv_df5 = pv_df5.sort_values(by='Steps', ascending=True)
                                 plt.plot(pv_df5[x_list[x_index]], pv_df5[y_list[y_index]],
-                                         label=r'%s(%s)' % (key_method, select_layer.split('_')[0]), linewidth=1.5)
+                                         label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                             elif keynode_number[0] is True:
                                 pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
                                 pv_df5 = pv_df5.sort_values(by='keynode_number', ascending=True)
                                 plt.plot(pv_df5[x_list[x_index]] / setting.A_node, pv_df5[y_list[y_index]],
-                                         marker='o', label=r'%s(%s)' % (key_method, select_layer.split('_')[0]), linewidth=1.5)
+                                         marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
-        plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
+                    if keyedge_method is True:
+                        pv_df3 = pv_df2[pv_df.select_edge_layer == select_edge_layer]
+                        key_methods = pv_df3['keyedge_method'].unique()
+                        for key_method in key_methods:
+                            pv_df4 = pv_df3[pv_df3.keyedge_method == key_method]
+                            if keyedge_number[0] is False:
+                                pv_df5 = pv_df4[pv_df4.keyedge_number == keyedge_number[1]]
+                                pv_df5 = pv_df5.sort_values(by='Steps', ascending=True)
+                                plt.plot(pv_df5[x_list[x_index]], pv_df5[y_list[y_index]],
+                                         label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
+                                plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                            elif keyedge_number[0] is True:
+                                pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
+                                pv_df5 = pv_df5.sort_values(by='keyedge_number', ascending=True)
+                                plt.plot(pv_df5[x_list[x_index]] / setting.A_node, pv_df5[y_list[y_index]],
+                                         marker='o', label=r'%s(%s)' % (key_method, select_edge_layer), linewidth=1.5)
+                                plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+        # plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
+        # plt.xlabel('ratio of unchanged nodes', fontsize=16, labelpad=6)
+        plt.xlabel('ratio of removed edges', fontsize=16, labelpad=6)
         plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
         plt.title('AS comparison according to dynamics order')
         # plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
 
     @staticmethod
-    def making_mixed_hist(df, steps_hist=100):   # Model, ASs, PCRs, NCRs, CRs
+    def making_mixed_hist(df, steps_hist):   # Model, ASs, PCRs, NCRs, CRs
         df_hist = Visualization.making_property_array_for_hist(df, steps_hist)
         fig = plt.figure()  # 그래프 창생성
         ax = fig.add_subplot(111)
@@ -298,11 +330,14 @@ if __name__ == "__main__":
     print("Visualization")
     setting = SettingSimulationValue.SettingSimulationValue()
     setting.database = 'pv_variable'
-    setting.table = 'keynode_table'   #'step_same_table'  #'comparison_os_table'
+    # setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_order_table3'
+    setting.table = 'keyedge_table'
     visualization = Visualization(setting)
     visualization.run(setting, plot_type='timeflow', p_value_list=None, v_value_list=None, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
-                      x_index=1, y_index=0, p_values=[0.4], v_values=[0.4], order=(False, 1),
-                      keynode_method=(True, 0), select_layer='A_layer', keynode_number=(True, 1), steps_timeflow=100,
+                      x_index=2, y_index=0, p_values=[0.4], v_values=[0.4], order=False,
+                      keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+                      keyedge_method=True, select_edge_layer='A_mixed', keyedge_number=(True, 1), steps_timeflow=100,
                       steps_hist=100)
+
     print("paint finished")
