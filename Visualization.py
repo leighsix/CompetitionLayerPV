@@ -331,13 +331,13 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     setting.database = 'pv_variable'
     # setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_order_table3'
-    setting.table = 'keyedge_table'
+    setting.table = 'keynode_table'
     visualization = Visualization(setting)
     visualization.run(setting, plot_type='timeflow', p_value_list=None, v_value_list=None, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
-                      x_index=2, y_index=0, p_values=[0.4], v_values=[0.4], order=False,
-                      keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
-                      keyedge_method=True, select_edge_layer='A_mixed', keyedge_number=(True, 1), steps_timeflow=100,
+                      x_index=1, y_index=0, p_values=[0.4], v_values=[0.4], order=False,
+                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1),
+                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
                       steps_hist=100)
 
     print("paint finished")

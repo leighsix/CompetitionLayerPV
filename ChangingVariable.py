@@ -88,7 +88,7 @@ class ChangingVariable:
 if __name__ == "__main__":
     print("Changing_Variable")
     setting = SettingSimulationValue.SettingSimulationValue()
-    ChangingVariable(setting, p=[0.4], v=[0.4], gap=1, select_using_prob=[False], steps=[1],
+    ChangingVariable(setting, p=[0, 1], v=[0, 1], gap=30, select_using_prob=[False], steps=[1],
                      select_node_layers=[0], select_node_methods=[0], node_numbers=[0, 0], unchanged_state=0,
-                     select_edge_layers=[1], select_edge_methods=[7], edge_numbers=[1, 50])
+                     select_edge_layers=[0], select_edge_methods=[0], edge_numbers=[0, 0])
     print("Operating end")

@@ -3,8 +3,8 @@ import numpy as np
 
 class SettingSimulationValue:
     def __init__(self):
-        self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'keyedge_table'
+        self.database = 'pv_variable2'  # 'competition  renew_competition'
+        self.table = 'total_variable'
         self.Model = 'BA-BA'
         self.Structure = 'BA-BA'
 

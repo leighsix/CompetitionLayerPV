@@ -85,7 +85,6 @@ class NodeProperty:
                 B_node_order.append((individual_pagerank_order[i][0], individual_pagerank_order[i][1]))
         return A_node_order, B_node_order, individual_pagerank_order   # value = pagerank[node_number]
 
-
     @staticmethod
     def order_pagerank(setting, inter_layer):
         A_node_order = []

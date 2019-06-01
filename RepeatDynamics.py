@@ -41,8 +41,7 @@ class RepeatDynamics:
             key_edges = RepeatDynamics.select_keyedge(setting, key_nodes[2], select_edge_layer, select_edge_method, edge_number)
             dynamics_result = InterconnectedDynamics.InterconnectedDynamics(setting, key_edges[2], p, v, using_prob,
                                                                             select_step, key_nodes[0], key_nodes[1], key_edges[1])
-            print("unchanged_nodelist: %s" % key_nodes[0])
-            print("removed_edgelist: %s" % key_edges[0])
+            print("unchanged_nodelist: %s " % len(key_nodes[0]) + "  removed_edgelist: %s" % key_edges[0])
             num_data = num_data + dynamics_result.dynamics_result_array
         Num_Data = num_data / setting.Repeating_number
         panda_db = RepeatDynamics.making_dataframe_per_step(setting, Num_Data)
@@ -131,8 +130,10 @@ class RepeatDynamics:
             for edge in select_edges_list:
                 if edge[0] < setting.A_node and edge[1] < setting.A_node:
                     inter_layer.edges_on_A.remove(edge)
+                    inter_layer.A_layer_graph.remove_edges_from(select_edges_list)
                 elif edge[0] >= setting.A_node and edge[1] >= setting.A_node:
                     inter_layer.edges_on_B.remove(edge)
+                    inter_layer.B_layer_graph.remove_edges_from(select_edges_list)
                 else:
                     inter_layer.edges_on_AB.remove(edge)
                 inter_layer.unique_neighbor_dict[edge[0]].remove(edge[1])
@@ -164,16 +165,14 @@ class RepeatDynamics:
                 for edge in select_edges_list:
                     if edge[0] < setting.A_node and edge[1] < setting.A_node:
                         inter_layer.edges_on_A.remove(edge)
-                        inter_layer.A_layer_graph.remove_edge(select_edges_list)
+                        inter_layer.A_layer_graph.remove_edges_from(select_edges_list)
                     elif edge[0] >= setting.A_node and edge[1] >= setting.A_node:
                         inter_layer.edges_on_B.remove(edge)
-                        inter_layer.B_layer_graph.remove_edge(select_edges_list)
+                        inter_layer.B_layer_graph.remove_edges_from(select_edges_list)
                     else:
                         inter_layer.edges_on_AB.remove(edge)
                     inter_layer.unique_neighbor_dict[edge[0]].remove(edge[1])
                 edges_properties = sum(edges_properties_list)
-                print('select_edges_list : %s' % select_edges_list)
-                print(len(inter_layer.A_layer_graph.edges))
             elif select_edge_method.split('_')[-1] == 'sequential':
                 for removed_number in range(edge_number):
                     edges_calculation = EdgeProperty.EdgeProperty(setting, inter_layer, select_edges_number, select_edge_method)
@@ -192,8 +191,6 @@ class RepeatDynamics:
                     else:
                         inter_layer.edges_on_AB.remove(edge)
                     inter_layer.unique_neighbor_dict[edge[0]].remove(edge[1])
-                    print('select_edges_list : %s' % select_edges_list)
-                    print(len(inter_layer.A_layer_graph.edges))
                 edges_properties = sum(edges_properties_list)
         return select_edges_list, edges_properties, inter_layer
 
@@ -218,12 +215,14 @@ if __name__ == "__main__":
     print("RepeatDynamics")
     start = time.time()
     setting = SettingSimulationValue.SettingSimulationValue()
-    setting.Repeating_number = 5
+    setting.A_node = 256
+    setting.B_node = 256
+    setting.Repeating_number = 3
     p = 0.2
     v = 0.5
     res = RepeatDynamics(setting, p, v, using_prob=False, select_step=1,
-                         select_node_layer='A_layer', select_node_method='0', node_number=0, unchanged_state=-1,
-                         select_edge_layer='A_internal', select_edge_method='edge_betweenness', edge_number=5)
-    print(res.repeated_result.columns)
+                         select_node_layer='A_layer', select_node_method='0', node_number=0, unchanged_state=0,
+                         select_edge_layer='A_internal', select_edge_method='edge_pagerank_sequential', edge_number=5)
+    print(res.repeated_result)
     end = time.time()
     print(end - start)

@@ -231,8 +231,10 @@ if __name__ == "__main__":
     setting.B_node = 64
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     start = time.time()
-    edge_property = EdgeProperty(setting, inter_layer, 0, 'edge_pagerank')
-    print(edge_property.edges_order[0:10])
+    edge_property1 = EdgeProperty(setting, inter_layer, 0, 'edge_pagerank')
+    edge_property2 = EdgeProperty(setting, inter_layer, 0, 'edge_pagerank_sequential')
+    for i in range(10):
+        print(edge_property1.edges_order[i], edge_property2.edges_order[i])
     end = time.time()
     print(end - start)
     
