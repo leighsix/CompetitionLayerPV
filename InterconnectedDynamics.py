@@ -3,10 +3,18 @@ import SettingSimulationValue
 import OpinionDynamics
 import DecisionDynamics
 import InterconnectedLayerModeling
+import InterconnectedNetworkVisualization
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib.animation import FuncAnimation
+import matplotlib
+from matplotlib.animation import FFMpegWriter
 import time
 import math
 import networkx as nx
 import copy
+matplotlib.use("TkAgg")
+
 
 class InterconnectedDynamics:
     def __init__(self, setting, inter_layer, p, v, using_prob=False, select_step=1, unchanged_nodes=None,

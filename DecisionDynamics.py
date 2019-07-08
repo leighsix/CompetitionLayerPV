@@ -91,7 +91,7 @@ class DecisionDynamics:
         return prob_v_array, prob_v_mean
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     print("DecisionDynamics")
     setting = SettingSimulationValue.SettingSimulationValue()
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
@@ -100,7 +100,7 @@ if __name__ == "__main__" :
         state += inter_layer.two_layer_graph.nodes[i]['state']
     print(state)
     start = time.time()
-    for i in range(10):
+    for i in range(100):
         decision_result = DecisionDynamics(setting, inter_layer, 0.5, order=0, unchanged_nodes={2048, 2049})
         print(decision_result)
         print(inter_layer.two_layer_graph.nodes[2048]['state'], inter_layer.two_layer_graph.nodes[2049]['state'])

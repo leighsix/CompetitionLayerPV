@@ -55,9 +55,11 @@ class OpinionDynamics:
         compromise_count = 0
         if unchanged_nodes is None:
             unchanged_nodes = set()
+        previous_states = []
+        for node_i in range(setting.A_node + setting.B_node):
+            previous_states.append(inter_layer.two_layer_graph.nodes[node_i]['state'])
         edges_list = inter_layer.edges_on_A + inter_layer.edges_on_AB
         random.shuffle(edges_list)
-        temp_inter_layer = copy.deepcopy(inter_layer)
         for edges in edges_list:
             if edges[1] < setting.A_node:
                 internal_result = self.two_node_in_layer_A(setting, inter_layer, p, unchanged_nodes, edges[0], edges[1])
@@ -67,7 +69,7 @@ class OpinionDynamics:
                 external_result = self.two_node_in_layer_AB(setting, inter_layer, p, unchanged_nodes, edges[0], edges[1])
                 inter_layer.two_layer_graph.nodes[edges[0]]['state'] = external_result
         for node_i in inter_layer.A_nodes:
-            previous_state = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
+            previous_state = previous_states[node_i]
             present_state = inter_layer.two_layer_graph.nodes[node_i]['state']
             if previous_state * present_state > 0:
                 if abs(previous_state) > abs(present_state):
@@ -98,9 +100,11 @@ class OpinionDynamics:
         volatility_count = 0
         if unchanged_nodes is None:
             unchanged_nodes = set()
+        previous_states = []
+        for node_i in range(setting.A_node + setting.B_node):
+            previous_states.append(inter_layer.two_layer_graph.nodes[node_i]['state'])
         edges_list = inter_layer.edges_on_A + inter_layer.edges_on_AB + inter_layer.B_nodes
         random.shuffle(edges_list)
-        temp_inter_layer = copy.deepcopy(inter_layer)
         for edges in edges_list:
             if type(edges) is tuple:
                 if edges[1] < setting.A_node:
@@ -132,7 +136,7 @@ class OpinionDynamics:
                         self.A_COUNT += 1
                         volatility_count += 1
         for node_i in inter_layer.A_nodes:
-            previous_state = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
+            previous_state = previous_states[node_i]
             present_state = inter_layer.two_layer_graph.nodes[node_i]['state']
             if previous_state * present_state > 0:
                 if abs(previous_state) > abs(present_state):
@@ -154,9 +158,11 @@ class OpinionDynamics:
         persuasion_count = 0
         compromise_count = 0
         volatility_count = 0
-        temp_inter_layer = copy.deepcopy(inter_layer)
         if unchanged_nodes is None:
             unchanged_nodes = set()
+        previous_states = []
+        for node_i in range(setting.A_node + setting.B_node):
+            previous_states.append(inter_layer.two_layer_graph.nodes[node_i]['state'])
         for node_i in inter_layer.A_nodes:
             connected_B_nodes_list = OpinionDynamics.finding_B_node(setting, inter_layer, node_i)
             if len(connected_B_nodes_list) == 1:
@@ -226,7 +232,7 @@ class OpinionDynamics:
                             self.A_COUNT += 1
                             volatility_count += 1
         for node_i in inter_layer.A_nodes:
-            previous_state = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
+            previous_state = previous_states[node_i]
             present_state = inter_layer.two_layer_graph.nodes[node_i]['state']
             if previous_state * present_state > 0:
                 if abs(previous_state) > abs(present_state):
@@ -329,7 +335,9 @@ class OpinionDynamics:
         compromise_count = 0
         if unchanged_nodes is None:
             unchanged_nodes = set()
-        temp_inter_layer = copy.deepcopy(inter_layer)
+        previous_states = []
+        for node_i in range(setting.A_node + setting.B_node):
+            previous_states.append(inter_layer.two_layer_graph.nodes[node_i]['state'])
         for node_i in inter_layer.A_nodes:
             neighbor_list = inter_layer.unique_neighbor_dict[node_i]
             random.shuffle(neighbor_list)
@@ -341,9 +349,8 @@ class OpinionDynamics:
                 elif neighbor >= setting.A_node:
                     external_result = self.two_node_in_layer_AB(setting, inter_layer, p, unchanged_nodes, node_i, neighbor)
                     inter_layer.two_layer_graph.nodes[node_i]['state'] = external_result
-        for node_i in inter_layer.A_nodes:
-            previous_state = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
             present_state = inter_layer.two_layer_graph.nodes[node_i]['state']
+            previous_state = previous_states[node_i]
             if previous_state * present_state > 0:
                 if abs(previous_state) > abs(present_state):
                     compromise_count += 1
@@ -379,11 +386,11 @@ class OpinionDynamics:
         return inter_layer, persuasion_prob, compromise_prob
 
     def A_layer_simultaneous_dynamics1(self, setting, inter_layer, p, unchanged_nodes):  # original_same
-        temp_inter_layer = copy.deepcopy(inter_layer)
         persuasion_count = 0
         compromise_count = 0
         if unchanged_nodes is None:
             unchanged_nodes = set()
+        temp_inter_layer = copy.deepcopy(inter_layer)
         for node_i in inter_layer.A_nodes:
             neighbor_list = sorted(nx.neighbors(inter_layer.two_layer_graph, node_i))
             random.shuffle(neighbor_list)
@@ -394,9 +401,8 @@ class OpinionDynamics:
                 elif neighbor >= setting.A_node:
                     external_result = self.two_node_in_layer_AB(setting, temp_inter_layer, p, unchanged_nodes, node_i, neighbor)
                     inter_layer.two_layer_graph.nodes[node_i]['state'] = external_result
-        for node_i in inter_layer.A_nodes:
-            previous_state = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
             present_state = inter_layer.two_layer_graph.nodes[node_i]['state']
+            previous_state = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
             if previous_state * present_state > 0:
                 if abs(previous_state) > abs(present_state):
                     compromise_count += 1
@@ -413,11 +419,11 @@ class OpinionDynamics:
         return inter_layer, persuasion_prob, compromise_prob
 
     def A_layer_simultaneous_dynamics2(self, setting, inter_layer, p, unchanged_nodes):    # probability same
-        temp_inter_layer = copy.deepcopy(inter_layer)
         persuasion_count = 0
         compromise_count = 0
         if unchanged_nodes is None:
             unchanged_nodes = set()
+        temp_inter_layer = copy.deepcopy(inter_layer)
         probability_result = OpinionDynamics.A_state_change_probability_cal(inter_layer, p)
         prob_array = probability_result[0]
         z = np.random.random((setting.A_node, 1))
@@ -498,9 +504,9 @@ class OpinionDynamics:
         f = math.factorial
         return f(n) // f(r) // f(n - r)
 
-    def one_node_in_layer_A(self, setting, temp_inter_layer, p, unchanged_nodes, node_i, neighbor):
-        a = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
-        b = temp_inter_layer.two_layer_graph.nodes[neighbor]['state']
+    def one_node_in_layer_A(self, setting, inter_layer, p, unchanged_nodes, node_i, neighbor):
+        a = inter_layer.two_layer_graph.nodes[node_i]['state']
+        b = inter_layer.two_layer_graph.nodes[neighbor]['state']
         result_a = a
         if a * b > 0:
             z = random.random()
@@ -516,9 +522,9 @@ class OpinionDynamics:
                     result_a = compromise_func[0]
         return result_a
 
-    def two_node_in_layer_A(self, setting, temp_inter_layer, p, unchanged_nodes, node_i, neighbor):
-        a = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
-        b = temp_inter_layer.two_layer_graph.nodes[neighbor]['state']
+    def two_node_in_layer_A(self, setting, inter_layer, p, unchanged_nodes, node_i, neighbor):
+        a = inter_layer.two_layer_graph.nodes[node_i]['state']
+        b = inter_layer.two_layer_graph.nodes[neighbor]['state']
         result_a = a
         result_b = b
         if a * b > 0:
@@ -543,20 +549,20 @@ class OpinionDynamics:
                     result_b = compromise_func[1]
         return result_a, result_b
 
-    def two_node_in_layer_AB(self, setting, temp_inter_layer, p, unchanged_nodes, node_i, neighbor):
-        a = temp_inter_layer.two_layer_graph.nodes[node_i]['state']
-        b = temp_inter_layer.two_layer_graph.nodes[neighbor]['state']
+    def two_node_in_layer_AB(self, setting, inter_layer, p, unchanged_nodes, node_i, neighbor):
+        a = inter_layer.two_layer_graph.nodes[node_i]['state']
+        b = inter_layer.two_layer_graph.nodes[neighbor]['state']
         result_a = a
         if a * b > 0:
             z = random.random()
             if z < p:
                 if node_i not in unchanged_nodes:
-                    result_a = self.one_node_persuasion_function(setting, temp_inter_layer, node_i)
+                    result_a = self.one_node_persuasion_function(setting, inter_layer, node_i)
         elif a * b < 0:
             z = random.random()
             if z < (1 - p):
                 if node_i not in unchanged_nodes:
-                    result_a = self.one_node_compromise_function(setting, temp_inter_layer, node_i)
+                    result_a = self.one_node_compromise_function(setting, inter_layer, node_i)
         return result_a
     
     def two_node_persuasion_function(self, setting, a, b):  # A layer 중에서 same orientation 에서 일어나는  변동 현상
@@ -627,14 +633,14 @@ class OpinionDynamics:
 
 if __name__ == "__main__":
     print("OpinionDynamics")
+    start = time.time()
     setting = SettingSimulationValue.SettingSimulationValue()
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     state = 0
     for i in inter_layer.A_nodes:
         state += inter_layer.two_layer_graph.nodes[i]['state']
     print(state)
-    start = time.time()
-    for i in range(10):
+    for i in range(100):
         opinion_result = OpinionDynamics(setting, inter_layer, 0.2, 0.5, order=0, using_prob=False,
                                          unchanged_nodes={1, 3, 4})
 

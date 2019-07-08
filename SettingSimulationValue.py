@@ -3,24 +3,26 @@ import numpy as np
 
 class SettingSimulationValue:
     def __init__(self):
-        self.database = 'pv_variable2'  # 'competition  renew_competition'
-        self.table = 'total_variable'
-        self.Model = 'BA-BA'
+        self.database = 'pv_variable'  # 'competition  renew_competition'
+        self.table = 'finding_keynode'
+        self.Model = 'BA(3)-BA(3)'
         self.Structure = 'BA-BA'
 
         self.Limited_step = 100
         self.Repeating_number = 100
 
         self.A_node = 2048
-        self.A_edge = 4
+        self.A_edge = 3
         self.A = SettingSimulationValue.static_making_A_array(self.A_node, A_state=[1, 2])
         self.MAX = 2
         self.MIN = -2
 
         self.B_node = 2048
-        self.B_edge = 4
+        self.B_edge = 3
         self.B = SettingSimulationValue.static_making_B_array(self.B_node, B_state=[-1])
         self.workers = 5
+        self.NodeColorDict = {1: 'orangered', 2: 'red', -1: 'royalblue', -2: 'blue'}
+        self.EdgeColorDict = {1: 'yellowgreen', 2: 'hotpink', 4: 'red', -1: 'royalblue', -2: 'blue', -4: 'darkblue'}
 
     @staticmethod
     def static_making_A_array(A_node, A_state):
@@ -37,7 +39,7 @@ class SettingSimulationValue:
 
 if __name__ == "__main__":
     SS = SettingSimulationValue()
-    SS.A_node =128
+    print(SS.A)
     #layer_A1 = Layer_A_Modeling.Layer_A_Modeling(SS)
     # print(SS.A_node)
     #print(len(layer_A1.A))

@@ -1,9 +1,14 @@
 import networkx as nx
 import numpy as np
-import matplotlib
-import SettingSimulationValue
 import random
 import time
+from pymnet import *
+import matplotlib.pyplot as plt
+import SettingSimulationValue
+from mpl_toolkits.mplot3d.axes3d import *
+import matplotlib.animation as animation
+import matplotlib
+matplotlib.use("TkAgg")
 matplotlib.use("TkAgg")
 
 
@@ -20,6 +25,7 @@ class InterconnectedLayerModeling:
         self.edges_on_A = edges_tuple[0]
         self.edges_on_B = edges_tuple[1]
         self.edges_on_AB = edges_tuple[2]
+        self.node_location = InterconnectedLayerModeling.making_node_location(self.A_nodes+self.B_nodes)
 
     @staticmethod
     def making_interconnected_graph(setting, A_nodes, B_nodes):
@@ -102,24 +108,28 @@ class InterconnectedLayerModeling:
     def select_layer_B_model(setting):
         B_edges = []
         if setting.Structure.split('-')[1] == 'RR':
-            b_edges = nx.random_regular_graph(setting.B_edge, setting.B_node, seed=None)
-            for i in range(len(b_edges.edges)):
-                B_edges.append((sorted(b_edges.edges)[i][0] + setting.A_node,
-                                sorted(b_edges.edges)[i][1] + setting.A_node))
+            b_edges = sorted(nx.random_regular_graph(setting.B_edge, setting.B_node, seed=None).edges)
+            for i in range(len(b_edges)):
+                B_edges.append(tuple(np.array(b_edges[i]) + setting.A_node))
         elif setting.Structure.split('-')[1] == 'BA':
-            b_edges = nx.barabasi_albert_graph(setting.B_node, setting.B_edge, seed=None)
-            for i in range(len(b_edges.edges)):
-                B_edges.append((sorted(b_edges.edges)[i][0] + setting.A_node,
-                                sorted(b_edges.edges)[i][1] + setting.A_node))
+            b_edges = sorted(nx.barabasi_albert_graph(setting.B_node, setting.B_edge, seed=None).edges)
+            for i in range(len(b_edges)):
+                B_edges.append(tuple(np.array(b_edges[i]) + setting.A_node))
         return B_edges
 
+    @staticmethod
+    def making_node_location(nodes):  # layer, node_number, location
+        node_loc = {i: (random.random(), random.random()) for i in nodes}
+        return node_loc
 
 if __name__ == "__main__":
     print("interconnectedlayer")
     setting = SettingSimulationValue.SettingSimulationValue()
     start = time.time()
     inter_layer = InterconnectedLayerModeling(setting)
-    print(sorted(inter_layer.A_layer_graph.edges))
+    print(inter_layer.edges_on_B)
+    end = time.time()
+    print(end - start)
     # print(inter_layer.two_layer_graph.nodes[1]['state'])
     # states = 0
     # for i in inter_layer.two_layer_graph.nodes:

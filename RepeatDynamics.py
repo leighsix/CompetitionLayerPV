@@ -24,7 +24,7 @@ step_list2 = [r'$O(s, s) \leftrightarrow D(s)$', r'$O(o, s) \to D(o)$', r'$O(o, 
 
 class RepeatDynamics:
     def __init__(self, setting, p, v, using_prob=False, select_step=1,
-                 select_node_layer='A_layer', select_node_method='0',  node_number=0, unchanged_state=-1,
+                 select_node_layer='A_layer', select_node_method='0',  node_number=0, unchanged_state='None',
                  select_edge_layer='A_internal', select_edge_method='0',  edge_number=0):
         self.repeated_result = RepeatDynamics.repeat_dynamics(setting, p, v, using_prob, select_step,
                                                               select_node_layer, select_node_method, node_number, unchanged_state,
@@ -35,9 +35,9 @@ class RepeatDynamics:
                         select_node_layer, select_node_method, node_number, unchanged_state,
                         select_edge_layer, select_edge_method, edge_number):
         num_data = np.zeros([setting.Limited_step + 1, 17])
-        for i in range(setting.Repeating_number):
+        for repeat in range(setting.Repeating_number):
             inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
-            key_nodes = RepeatDynamics.select_keynode(setting, inter_layer, select_node_layer, select_node_method, node_number, unchanged_state)
+            key_nodes = RepeatDynamics.select_keynode(setting, inter_layer, select_node_layer, select_node_method, node_number)
             key_edges = RepeatDynamics.select_keyedge(setting, key_nodes[2], select_edge_layer, select_edge_method, edge_number)
             dynamics_result = InterconnectedDynamics.InterconnectedDynamics(setting, key_edges[2], p, v, using_prob,
                                                                             select_step, key_nodes[0], key_nodes[1], key_edges[1])
@@ -69,7 +69,7 @@ class RepeatDynamics:
         return panda_db
 
     @staticmethod
-    def select_keynode(setting, inter_layer, select_node_layer, select_node_method, node_number, unchanged_state):
+    def select_keynode(setting, inter_layer, select_node_layer, select_node_method, node_number):
         if select_node_method == '0':
             unchanged_nodes = None
             sum_properties = 0
@@ -82,8 +82,6 @@ class RepeatDynamics:
             elif select_node_layer == 'mixed':
                 node_list = sorted(inter_layer.two_layer_graph.nodes)
             select_nodes_list = random.sample(node_list, k=node_number)
-            for i in select_nodes_list:
-                inter_layer.two_layer_graph.nodes[i]['state'] = unchanged_state
             unchanged_nodes = set(select_nodes_list)
             sum_properties = 0
         else:
@@ -99,7 +97,6 @@ class RepeatDynamics:
             nodes_calculation = NodeProperty.NodeProperty(setting, inter_layer, select_layer_number, select_node_method)
             ordering = nodes_calculation.nodes_order[0:node_number]
             for i, j in ordering:
-                inter_layer.two_layer_graph.nodes[i]['state'] = unchanged_state
                 select_nodes_list.append(i)
                 nodes_properties.append(j)
             unchanged_nodes = set(select_nodes_list)
@@ -214,15 +211,13 @@ class RepeatDynamics:
 if __name__ == "__main__":
     print("RepeatDynamics")
     start = time.time()
-    setting = SettingSimulationValue.SettingSimulationValue()
-    setting.A_node = 256
-    setting.B_node = 256
-    setting.Repeating_number = 3
-    p = 0.2
-    v = 0.5
-    res = RepeatDynamics(setting, p, v, using_prob=False, select_step=1,
-                         select_node_layer='A_layer', select_node_method='0', node_number=0, unchanged_state=0,
-                         select_edge_layer='A_internal', select_edge_method='edge_pagerank_sequential', edge_number=5)
+    settings = SettingSimulationValue.SettingSimulationValue()
+    settings.Repeating_number = 10
+    P = 0.1
+    V = 0.1
+    res = RepeatDynamics(settings, P, V, using_prob=False, select_step=1,
+                         select_node_layer='A_layer', select_node_method='pagerank', node_number=5, unchanged_state='pos',
+                         select_edge_layer='A_internal', select_edge_method='0', edge_number=0)
     print(res.repeated_result)
     end = time.time()
     print(end - start)
