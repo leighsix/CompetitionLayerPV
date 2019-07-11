@@ -97,17 +97,17 @@ class InterconnectedNetworkVisualization:
              layershape='rectangle',
              nodeCoords=inter_layer.node_location,
              nodelayerCoords={},
-             layerPadding=0.03, alignedNodes=True, ax=ax, layerColorDict={'layer A': 'pink', 'layer B': 'steelblue'},
+             layerPadding=0.02, alignedNodes=True, ax=ax, layerColorDict={'layer A': 'pink', 'layer B': 'steelblue'},
              layerColorRule={},
              edgeColorDict=InterconnectedNetworkVisualization.making_edge_color(setting, inter_layer),
              edgeColorRule={},
-             edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.4, edgeStyleDict={},
+             edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.5, edgeStyleDict={},
              edgeStyleRule={'rule': 'edgetype', 'inter': ':', 'intra': '-'}, defaultEdgeStyle='-',
              nodeLabelDict={}, nodeLabelRule={}, defaultNodeLabel=None,
              nodeColorDict=InterconnectedNetworkVisualization.making_node_color(setting, inter_layer), nodeColorRule={},
              defaultNodeColor=None,
              nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
-             nodeSizeDict={}, nodeSizeRule={"propscale": 0.05, 'rule': 'degree'}, defaultNodeSize=None)
+             nodeSizeDict={}, nodeSizeRule={"propscale": 0.07, 'rule': 'degree'}, defaultNodeSize=None)
         plt.savefig(save_file_name)
         im = plt.imshow(plt.imread(save_file_name), animated=True)
         return im
@@ -117,9 +117,14 @@ class InterconnectedNetworkVisualization:
 if __name__ == "__main__":
     print("Interconnected Layer Modeling")
     setting = SettingSimulationValue.SettingSimulationValue()
+    setting.A_node = 64
+    setting.B_node = 64
+    setting.Structure = 'RR-RR'
+    setting.A_edge = 2
+    setting.B_edge = 5
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
-    # InterconnectedNetworkVisualization.draw_interconnected_network(setting, inter_layer, 'result.png')
-    InterconnectedNetworkVisualization.making_competition_movie(setting, inter_layer, 0.1, 0.1, 'result.png',
-                                                                using_prob=None, unchanged_nodes=None)
+    InterconnectedNetworkVisualization.draw_interconnected_network(setting, inter_layer, 'result.png')
+    # InterconnectedNetworkVisualization.making_competition_movie(setting, inter_layer, 0.1, 0.1, 'result.png',
+    #                                                             using_prob=None, unchanged_nodes=None)
     plt.show()
     print("Operating finished")

@@ -101,6 +101,6 @@ if __name__ == "__main__":
     print("Changing_Variable")
     settings = SettingSimulationValue.SettingSimulationValue()
     ChangingVariable(settings, p=[0.2], v=[0.4], gap=1, select_using_prob=[False], steps=[1],
-                     select_node_layers=[0], select_node_methods=[1, 4], node_numbers=[1, 100], unchanged_state='pos',
+                     select_node_layers=[0], select_node_methods=[1, 4], node_numbers=[101, 200], unchanged_state='pos',
                      select_edge_layers=[0], select_edge_methods=[0], edge_numbers=[0, 0])
     print("Operating end")

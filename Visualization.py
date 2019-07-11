@@ -197,6 +197,13 @@ class Visualization:
                         # plt.annotate('branch point', xy=(1, 0.9), arrowprops=dict(arrowstyle="->"))
 
                 elif order is False:
+                    if keynode_method is False and keyedge_method is False:
+                        orders = pv_df['Orders'].unique()
+                        for ordering in orders:
+                            pv_df3 = pv_df[pv_df.Orders == ordering]
+                            pv_df4 = pv_df3[pv_df3.keynode_method == '0']
+                            pv_df4 = pv_df4.sort_values(by='Steps', ascending=True)
+                            plt.plot(pv_df4[x_list[x_index]], pv_df4[y_list[y_index]], linewidth=0.5)
                     if keynode_method is True:
                         pv_df3 = pv_df[pv_df.select_node_layer == select_node_layer]
                         key_methods = pv_df3['keynode_method'].unique()
@@ -366,7 +373,7 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    visualization.run(setting, plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    visualization.run(setting, plot_type='timeflow', p_value_list=(0, 1), v_value_list=(0, 1), y_axis=0, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
                       x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
                       keynode_method=True, select_layer='A_layer', keynode_number=(True, 1),

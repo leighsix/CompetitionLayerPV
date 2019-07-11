@@ -99,7 +99,9 @@ class InterconnectedLayerModeling:
     def select_layer_A_model(setting):
         A_edges = []
         if setting.Structure.split('-')[0] == 'RR':
-            A_edges = sorted(nx.random_regular_graph(setting.A_edge, setting.A_node, seed=None).edges)
+            a_edges = sorted(nx.random_regular_graph(setting.A_edge, setting.A_node, seed=None).edges)
+            for i in range(len(a_edges)):
+                A_edges.append(tuple(np.array(a_edges[i][0:2])))
         elif setting.Structure.split('-')[0] == 'BA':
             A_edges = sorted(nx.barabasi_albert_graph(setting.A_node, setting.A_edge, seed=None).edges)
         return A_edges
@@ -110,7 +112,7 @@ class InterconnectedLayerModeling:
         if setting.Structure.split('-')[1] == 'RR':
             b_edges = sorted(nx.random_regular_graph(setting.B_edge, setting.B_node, seed=None).edges)
             for i in range(len(b_edges)):
-                B_edges.append(tuple(np.array(b_edges[i]) + setting.A_node))
+                B_edges.append(tuple(np.array(b_edges[i][0:2]) + setting.A_node))
         elif setting.Structure.split('-')[1] == 'BA':
             b_edges = sorted(nx.barabasi_albert_graph(setting.B_node, setting.B_edge, seed=None).edges)
             for i in range(len(b_edges)):
@@ -125,9 +127,11 @@ class InterconnectedLayerModeling:
 if __name__ == "__main__":
     print("interconnectedlayer")
     setting = SettingSimulationValue.SettingSimulationValue()
+    setting.Structure = 'RR-RR'
     start = time.time()
-    inter_layer = InterconnectedLayerModeling(setting)
-    print(inter_layer.edges_on_B)
+    print(InterconnectedLayerModeling.select_layer_A_model(setting))
+    # inter_layer = InterconnectedLayerModeling(setting)
+    # print(inter_layer.edges_on_B)
     end = time.time()
     print(end - start)
     # print(inter_layer.two_layer_graph.nodes[1]['state'])
