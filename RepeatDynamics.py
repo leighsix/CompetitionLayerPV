@@ -34,14 +34,14 @@ class RepeatDynamics:
     def repeat_dynamics(setting, p, v, using_prob, select_step,
                         select_node_layer, select_node_method, node_number, unchanged_state,
                         select_edge_layer, select_edge_method, edge_number):
-        num_data = np.zeros([setting.Limited_step + 1, 17])
+        num_data = np.zeros([setting.Limited_step+1, 17])
         for repeat in range(setting.Repeating_number):
             inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
             key_nodes = RepeatDynamics.select_keynode(setting, inter_layer, select_node_layer, select_node_method, node_number)
             key_edges = RepeatDynamics.select_keyedge(setting, key_nodes[2], select_edge_layer, select_edge_method, edge_number)
             dynamics_result = InterconnectedDynamics.InterconnectedDynamics(setting, key_edges[2], p, v, using_prob,
                                                                             select_step, key_nodes[0], key_nodes[1], key_edges[1])
-            print("unchanged_nodelist: %s " % len(key_nodes[0]) + "  removed_edgelist: %s" % key_edges[0])
+            # print("unchanged_nodelist: %s " % len(key_nodes[0]) + "  removed_edgelist: %s" % key_edges[0])
             num_data = num_data + dynamics_result.dynamics_result_array
         Num_Data = num_data / setting.Repeating_number
         panda_db = RepeatDynamics.making_dataframe_per_step(setting, Num_Data)

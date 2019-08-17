@@ -9,7 +9,6 @@ from mpl_toolkits.mplot3d.axes3d import *
 import matplotlib.animation as animation
 import matplotlib
 matplotlib.use("TkAgg")
-matplotlib.use("TkAgg")
 
 
 class InterconnectedLayerModeling:

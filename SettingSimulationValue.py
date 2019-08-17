@@ -4,21 +4,21 @@ import numpy as np
 class SettingSimulationValue:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'finding_keynode'
-        self.Model = 'BA(3)-BA(3)'
-        self.Structure = 'BA-BA'
+        self.table = 'pv_variable3'
+        self.Model = 'HM(2)'
+        self.Structure = 'RR-RR'
 
         self.Limited_step = 100
         self.Repeating_number = 100
-
         self.A_node = 2048
-        self.A_edge = 3
+
+        self.A_edge = 5
         self.A = SettingSimulationValue.static_making_A_array(self.A_node, A_state=[1, 2])
         self.MAX = 2
         self.MIN = -2
 
-        self.B_node = 2048
-        self.B_edge = 3
+        self.B_node = 1024
+        self.B_edge = 5
         self.B = SettingSimulationValue.static_making_B_array(self.B_node, B_state=[-1])
         self.workers = 5
         self.NodeColorDict = {1: 'orangered', 2: 'red', -1: 'royalblue', -2: 'blue'}

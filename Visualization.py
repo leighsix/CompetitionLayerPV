@@ -42,7 +42,7 @@ class Visualization:
             keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
             keyedge_method=False, select_edge_layer='A_internal', keyedge_number=(False, 1), steps_timeflow=100,
             steps_hist=100):
-        df = self.df[self.df.Model == 'BA(3)-BA(3)']
+        df = self.df[self.df.Model == 'BA(2)-BA(2)']
         Visualization.making_chart(df, setting, plot_type, p_value_list, v_value_list, y_axis, steps_2d,
                                    chart_type, steps_3d, x_index, y_index, p_values, v_values, order,
                                    keynode_method, select_layer, keynode_number,
@@ -204,7 +204,7 @@ class Visualization:
                             pv_df4 = pv_df3[pv_df3.keynode_method == '0']
                             pv_df4 = pv_df4.sort_values(by='Steps', ascending=True)
                             plt.plot(pv_df4[x_list[x_index]], pv_df4[y_list[y_index]], linewidth=0.5)
-                    if keynode_method is True:
+                    elif keynode_method is True:
                         pv_df3 = pv_df[pv_df.select_node_layer == select_node_layer]
                         key_methods = pv_df3['keynode_method'].unique()
                         for key_method in key_methods:
@@ -221,7 +221,7 @@ class Visualization:
                                 plt.plot(pv_df5[x_list[x_index]] / setting.A_node, pv_df5[y_list[y_index]],
                                          marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
-                    if keyedge_method is True:
+                    elif keyedge_method is True:
                         pv_df3 = pv_df[pv_df.select_edge_layer == select_edge_layer]
                         key_methods = pv_df3['keyedge_method'].unique()
                         for key_method in key_methods:
@@ -323,10 +323,9 @@ class Visualization:
     def covert_to_select_list_value(select_list, input_values):  # list가 만들어져 있는 곳에 사용
         temp_value = 0
         if len(input_values) == 1:
-            for input_value in input_values:
-                loc = np.sum(select_list <= input_value)  # select_list는 making_select_list를 사용, array로 만들어져 있음
-                temp_v = select_list[loc-1]
-                temp_value = [temp_v]
+            loc = np.sum(select_list <= input_values)  # select_list는 making_select_list를 사용, array로 만들어져 있음
+            temp_v = select_list[loc-1]
+            temp_value = [temp_v]
         elif len(input_values) > 1:
             temp_value = []
             for input_value in input_values:
@@ -337,12 +336,12 @@ class Visualization:
 
     @staticmethod
     def making_select_list(df, list_name):
-        list = []
+        # list = []
         df = df[list_name]
-        select_list = np.array(df.drop_duplicates())
-        for i in range(len(select_list)):
-            list.append(select_list[i])
-        return np.array(sorted(list))
+        select_list = sorted(np.array(df.drop_duplicates()))
+        # for i in range(len(select_list)):
+        #     list.append(select_list[i])
+        return np.array(select_list)
 
 
 if __name__ == "__main__":
@@ -354,9 +353,9 @@ if __name__ == "__main__":
     # setting.table = 'pv_variable2'
     # setting.table = 'updating_rule'
     visualization = Visualization(setting)
-    # visualization.run(setting, plot_type='2D', p_value_list=[0.1, 0.2, 0.3, 0.4], v_value_list=None, y_axis=0, steps_2d=100,
+    # visualization.run(setting, plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='contour', steps_3d=100,
-    #                   x_index=0, y_index=0, p_values=[0.4], v_values=[0.4], order=False,
+    #                   x_index=0, y_index=5, p_values=(0, 1), v_values=(0, 1), order=False,
     #                   keynode_method=False, select_layer='B_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
@@ -373,10 +372,10 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    visualization.run(setting, plot_type='timeflow', p_value_list=(0, 1), v_value_list=(0, 1), y_axis=0, steps_2d=100,
+    visualization.run(setting, plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
-                      x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
-                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1),
+                      x_index=1, y_index=0, p_values=[0.3], v_values=[0.5], order=False,
+                      keynode_method=True, select_layer='B_layer', keynode_number=(True, 1),
                       keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
                       steps_hist=100)
 

@@ -38,9 +38,9 @@ class DecisionDynamics:
                     prob_v = 0
                 else:
                     if v == 0:
-                        prob_v = 0
+                        prob_v = 1
                     else:
-                        prob_v = (opposite_orientation / len(neighbors)) ** (1 / v) * (len(neighbors) / opposite_orientation)
+                        prob_v = ((opposite_orientation / len(neighbors)) ** (1 / v)) * (len(neighbors) / opposite_orientation)
                 z = random.random()
                 if z < prob_v:
                     inter_layer.two_layer_graph.nodes[node_i]['state'] = -(inter_layer.two_layer_graph.nodes[node_i]['state'])
@@ -82,7 +82,7 @@ class DecisionDynamics:
                 prob_v = 0
             else:
                 if v == 0:
-                    prob_v = 0
+                    prob_v = 1
                 else:
                     prob_v = ((opposite_orientation / len(neighbors)) ** (1 / v)) * (len(neighbors) / opposite_orientation)
             prob_v_list.append(prob_v)
