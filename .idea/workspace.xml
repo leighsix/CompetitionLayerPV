@@ -3,12 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d1f7fbf9-dd3c-47cd-bf5a-940cb41d5cb0" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChangingVariable.py" beforeDir="false" afterPath="$PROJECT_DIR$/ChangingVariable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DecisionDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/DecisionDynamics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InterconnectedLayerModeling.py" beforeDir="false" afterPath="$PROJECT_DIR$/InterconnectedLayerModeling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RepeatDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/RepeatDynamics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SettingSimulationValue.py" beforeDir="false" afterPath="$PROJECT_DIR$/SettingSimulationValue.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,7 +56,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.ChangingVariable">
+  <component name="RunManager" selected="Python.InterconnectedLayerModeling">
     <configuration name="ChangingVariable" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="CompetitionLayerPV" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -168,11 +164,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.InterconnectedLayerModeling" />
         <item itemvalue="Python.ChangingVariable" />
         <item itemvalue="Python.Visualization" />
         <item itemvalue="Python.InterconnectedDynamics" />
         <item itemvalue="Python.InterconnectedNetworkVisualization" />
-        <item itemvalue="Python.InterconnectedLayerModeling" />
       </list>
     </recent_temporary>
   </component>

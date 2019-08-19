@@ -126,11 +126,13 @@ class InterconnectedLayerModeling:
 if __name__ == "__main__":
     print("interconnectedlayer")
     setting = SettingSimulationValue.SettingSimulationValue()
-    setting.Structure = 'RR-RR'
+    setting.Structure = 'BA-RR'
+    setting.A_edge = 3
+    setting.B_edge = 6
     start = time.time()
-    print(InterconnectedLayerModeling.select_layer_A_model(setting))
-    # inter_layer = InterconnectedLayerModeling(setting)
-    # print(inter_layer.edges_on_B)
+    # print(InterconnectedLayerModeling.select_layer_A_model(setting))
+    inter_layer = InterconnectedLayerModeling(setting)
+    print(len(inter_layer.edges_on_A), len(inter_layer.edges_on_B))
     end = time.time()
     print(end - start)
     # print(inter_layer.two_layer_graph.nodes[1]['state'])

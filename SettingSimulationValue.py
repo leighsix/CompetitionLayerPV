@@ -5,7 +5,7 @@ class SettingSimulationValue:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
         self.table = 'pv_variable3'
-        self.Model = 'HM(2)'
+        self.Model = 'HM(8)'
         self.Structure = 'RR-RR'
 
         self.Limited_step = 100
@@ -17,7 +17,7 @@ class SettingSimulationValue:
         self.MAX = 2
         self.MIN = -2
 
-        self.B_node = 1024
+        self.B_node = 256
         self.B_edge = 5
         self.B = SettingSimulationValue.static_making_B_array(self.B_node, B_state=[-1])
         self.workers = 5
