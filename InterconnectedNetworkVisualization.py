@@ -107,8 +107,8 @@ class InterconnectedNetworkVisualization:
              nodeColorDict=InterconnectedNetworkVisualization.making_node_color(setting, inter_layer), nodeColorRule={},
              defaultNodeColor=None,
              nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
-             nodeSizeDict={}, nodeSizeRule={"propscale": 0.07, 'rule': 'degree'}, defaultNodeSize=None)
-        plt.savefig(save_file_name)
+             nodeSizeDict={}, nodeSizeRule={"propscale": 0.1, 'rule': 'degree'}, defaultNodeSize=None)
+        plt.savefig(save_file_name, dpi=200)
         im = plt.imshow(plt.imread(save_file_name), animated=True)
         return im
 
@@ -119,8 +119,8 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     setting.A_node = 64
     setting.B_node = 64
-    setting.Structure = 'RR-RR'
-    setting.A_edge = 2
+    setting.Structure = 'BA-RR'
+    setting.A_edge = 3
     setting.B_edge = 5
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     InterconnectedNetworkVisualization.draw_interconnected_network(setting, inter_layer, 'result.png')

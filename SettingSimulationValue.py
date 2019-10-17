@@ -5,21 +5,22 @@ class SettingSimulationValue:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
         self.table = 'pv_variable3'
-        self.Model = 'HM(8)'
+        self.Model = 'RR(5)-RR(4)'
         self.Structure = 'RR-RR'
 
         self.Limited_step = 100
         self.Repeating_number = 100
-        self.A_node = 2048
 
+        self.A_node = 2048
         self.A_edge = 5
         self.A = SettingSimulationValue.static_making_A_array(self.A_node, A_state=[1, 2])
         self.MAX = 2
         self.MIN = -2
 
-        self.B_node = 256
-        self.B_edge = 5
+        self.B_node = 2048
+        self.B_edge = 4
         self.B = SettingSimulationValue.static_making_B_array(self.B_node, B_state=[-1])
+
         self.workers = 5
         self.NodeColorDict = {1: 'orangered', 2: 'red', -1: 'royalblue', -2: 'blue'}
         self.EdgeColorDict = {1: 'yellowgreen', 2: 'hotpink', 4: 'red', -1: 'royalblue', -2: 'blue', -4: 'darkblue'}
