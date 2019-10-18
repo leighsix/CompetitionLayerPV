@@ -373,9 +373,9 @@ if __name__ == "__main__":
     print("Visualization")
     setting = SettingSimulationValue.SettingSimulationValue()
     setting.database = 'pv_variable'
-    setting.table = 'finding_keynode'
+    # setting.table = 'finding_keynode'
     # setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_order_table3'
-    # setting.table = 'pv_variable3'
+    setting.table = 'pv_variable3'
     # setting.table = 'pv_variable2'
     # setting.table = 'updating_rule'
     visualization = Visualization(setting)
@@ -390,7 +390,7 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 모델의 전체적인 컨센서스 확인
-    # visualization.run(setting, model=['HM(256)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    # visualization.run(setting, model=['RR(5)-RR(2)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='trisurf', steps_3d=100,
     #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
@@ -406,41 +406,48 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 키노드 찾기
-    visualization.run(setting, model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-                      chart_type='scatter', steps_3d=100,
-                      x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
-                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1),
-                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
-                      steps_hist=100)
+    # visualization.run(setting, model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='scatter', steps_3d=100,
+    #                   x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
+    #                   keynode_method=True, select_layer='A_layer', keynode_number=(True, 1),
+    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
 
     # 히스토그램
-    # visualization.run(setting, model=['RR(5)-RR(5)', 'HM(2)', 'HM(4)', 'HM(8)', 'HM(16)', 'HM(32)', 'HM(64)', 'HM(128)', 'HM(256)'],
+    # visualization.run(setting, model=['HM(2)', 'HM(4)', 'HM(8)', 'HM(16)', 'HM(32)', 'HM(64)', 'HM(128)', 'HM(256)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
     #                   x_index=1, y_index=0, p_values=[0.3], v_values=[0.5], order=False,
     #                   keynode_method=True, select_layer='B_layer', keynode_number=(True, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(2)-RR(5)', 'RR(5)-RR(2)', 'RR(5)-RR(5)' ],
+    # visualization.run(setting, model=['RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)' ],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
     #                   x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    # visualization.run(setting, model=['BA(3)-BA(3)', 'BA(3)-RR(6)', 'RR(6)-BA(3)', 'RR(6)-RR(6)' ],
+    # visualization.run(setting, model=['RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)' ],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
     #                   x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    # visualization.run(setting, model=['RR(5)-RR(5)'],
+    # visualization.run(setting, model=['BA(3)-BA(3)', 'BA(3)-RR(6)', 'RR(6)-BA(3)', 'RR(6)-RR(6)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
-    #                   x_index=0, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
+    #                   x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
+    visualization.run(setting, model=['RR(5)-RR(2)', 'RR(5)-RR(3)', 'BA(5)-BA(5)', 'RR(2)-RR(2)'],
+                      plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+                      chart_type='scatter', steps_3d=100,
+                      x_index=0, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
+                      keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+                      steps_hist=100)
 
     print("paint finished")
