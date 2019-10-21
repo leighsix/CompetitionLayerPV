@@ -390,7 +390,7 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 모델의 전체적인 컨센서스 확인
-    # visualization.run(setting, model=['RR(5)-RR(2)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    # visualization.run(setting, model=['RR(3)-RR(3)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='trisurf', steps_3d=100,
     #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
@@ -428,7 +428,17 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    # visualization.run(setting, model=['RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)' ],
+    visualization.run(setting, model=['RR(2)-RR(2)', 'RR(5)-RR(2)', 'RR(3)-RR(3)',  'RR(5)-RR(3)',
+                                      'RR(4)-RR(4)', 'RR(5)-RR(4)',
+                                      'RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)',
+                                      'RR(6)-RR(6)'],
+                      plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+                      chart_type='scatter', steps_3d=100,
+                      x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
+                      keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+                      steps_hist=100)
+    # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(3)-RR(3)', 'RR(4)-RR(4)', 'RR(5)-RR(5)', 'RR(6)-RR(6)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
     #                   x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
@@ -442,12 +452,20 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    visualization.run(setting, model=['RR(5)-RR(2)', 'RR(5)-RR(3)', 'BA(5)-BA(5)', 'RR(2)-RR(2)'],
-                      plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-                      chart_type='scatter', steps_3d=100,
-                      x_index=0, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
-                      keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
-                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
-                      steps_hist=100)
+    # visualization.run(setting, model=['RR(5)-RR(2)', 'RR(5)-RR(3)', 'BA(5)-BA(5)', 'RR(2)-RR(2)'],
+    #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='scatter', steps_3d=100,
+    #                   x_index=0, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
+    #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
+    # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(3)-RR(3)', 'RR(5)-RR(5)', 'RR(6)-RR(6)'],
+    #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='scatter', steps_3d=100,
+    #                   x_index=0, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
+    #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
+
 
     print("paint finished")

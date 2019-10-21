@@ -5,8 +5,8 @@ class SettingSimulationValue:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
         self.table = 'pv_variable3'
-        self.Model = 'RR(3)-RR(3)'
-        self.Structure = 'RR-RR'
+        self.Model = 'BA(3)-BA(3)'
+        self.Structure = 'BA-BA'
 
         self.Limited_step = 100
         self.Repeating_number = 100
