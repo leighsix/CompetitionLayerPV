@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 select_node_layers_list = ['A_layer', 'B_layer', 'mixed']
 select_edge_layers_list = ['A_internal', 'A_mixed', 'B_internal', 'B_mixed', 'external', 'mixed']
-select_node_method_list = ['0', 'degree', 'pagerank', 'random', 'eigenvector', 'closeness', 'betweenness',
+select_node_method_list = ['0', 'degree', 'pagerank', 'random', 'eigenvector', 'closeness', 'betweenness', 'PR+DE', 'PR+DE+BE',
                            'pagerank_individual', 'load', 'AB_pagerank', 'AB_eigenvector', 'AB_degree', 'AB_betweenness',
                            'AB_closeness', 'AB_load']
 select_edge_method_list = ['0', 'edge_pagerank', 'edge_betweenness', 'edge_degree', 'edge_eigenvector', 'edge_closeness',
@@ -100,7 +100,7 @@ class ChangingVariable:
 if __name__ == "__main__":
     print("Changing_Variable")
     settings = SettingSimulationValue.SettingSimulationValue()
-    ChangingVariable(settings,  p=[0, 1], v=[0, 1], gap=20, select_using_prob=[False], steps=[1],
-                     select_node_layers=[0], select_node_methods=[0, 0], node_numbers=[0, 0], unchanged_state='None',
+    ChangingVariable(settings,  p=[0.2], v=[0.4], gap=1, select_using_prob=[False], steps=[1],
+                     select_node_layers=[0], select_node_methods=[8], node_numbers=[1, 200], unchanged_state='pos',
                      select_edge_layers=(0, 0), select_edge_methods=(0, 0), edge_numbers=(0, 0))
     print("Operating end")

@@ -36,10 +36,10 @@ class Visualization:
     def __init__(self, setting):
         self.df = Visualization.select_data_from_DB(setting)
 
-    def run(self, setting, model=None, plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    def run(self, model=None, plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
             chart_type='scatter', steps_3d=100,
             x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
-            keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+            keynode_method=False, select_layer='A_layer', keynode_number=(False, 1), stability=False,
             keyedge_method=False, select_edge_layer='A_internal', keyedge_number=(False, 1), steps_timeflow=100,
             steps_hist=100):
         df = []
@@ -54,9 +54,9 @@ class Visualization:
                 elif i > 0:
                     df1 = self.df[self.df.Model == model[i]]
                     df = pd.concat([df, df1])
-        Visualization.making_chart(df, model, setting, plot_type, p_value_list, v_value_list, y_axis, steps_2d,
+        Visualization.making_chart(df, model, plot_type, p_value_list, v_value_list, y_axis, steps_2d,
                                    chart_type, steps_3d, x_index, y_index, p_values, v_values, order,
-                                   keynode_method, select_layer, keynode_number,
+                                   keynode_method, select_layer, keynode_number, stability,
                                    keyedge_method, select_edge_layer, keyedge_number, steps_timeflow,
                                    steps_hist)
         plt.show()
@@ -64,9 +64,9 @@ class Visualization:
 
 
     @staticmethod
-    def making_chart(df, model, setting, plot_type, p_value_list, v_value_list, y_axis, steps_2d,
+    def making_chart(df, model, plot_type, p_value_list, v_value_list, y_axis, steps_2d,
                      chart_type, steps_3d, x_index, y_index, p_values, v_values, order,
-                     keynode_method, select_layer, keynode_number,
+                     keynode_method, select_layer, keynode_number, stability,
                      keyedge_method, select_edge_layer, keyedge_number, steps_timeflow,
                      steps_hist):
         if plot_type == '2D':
@@ -74,8 +74,8 @@ class Visualization:
         elif plot_type == '3D':
             Visualization.plot_3D_for_average_state(df, chart_type, steps_3d)
         elif plot_type == 'timeflow':
-            Visualization.timeflow_chart(setting, df, x_index, y_index, p_values, v_values, order,
-                                         keynode_method, select_layer, keynode_number,
+            Visualization.timeflow_chart(df, x_index, y_index, p_values, v_values, order,
+                                         keynode_method, select_layer, keynode_number, stability,
                                          keyedge_method, select_edge_layer, keyedge_number, steps_timeflow)
         elif plot_type == 'hist':
             Visualization.making_mixed_hist(df, model, steps_hist)
@@ -165,8 +165,8 @@ class Visualization:
         return df
 
     @staticmethod
-    def timeflow_chart(setting, df, x_index, y_index, p_values, v_values, order,
-                       keynode_method, select_node_layer, keynode_number,
+    def timeflow_chart(df, x_index, y_index, p_values, v_values, order,
+                       keynode_method, select_node_layer, keynode_number, stability,
                        keyedge_method, select_edge_layer, keyedge_number, steps_timeflow):
         plt.figure()
         sns.set()
@@ -220,7 +220,9 @@ class Visualization:
                             plt.plot(pv_df4[x_list[x_index]], pv_df4[y_list[y_index]], linewidth=0.5)
                     elif keynode_method is True:
                         pv_df3 = pv_df[pv_df.select_node_layer == select_node_layer]
-                        key_methods = pv_df3['keynode_method'].unique()
+                        # key_methods = pv_df3['keynode_method'].unique()
+                        # key_methods = ['pagerank', 'degree', 'eigenvector', 'betweenness', 'closeness', 'random', 'PR+DE']
+                        key_methods = ['pagerank', 'degree', 'betweenness', 'PR+DE']
                         for key_method in key_methods:
                             pv_df4 = pv_df3[pv_df3.keynode_method == key_method]
                             if keynode_number[0] is False:
@@ -233,14 +235,43 @@ class Visualization:
                                 pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
                                 pv_df5 = pv_df5.sort_values(by='keynode_number', ascending=True)
                                 if select_node_layer == 'A_layer':
-                                    plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_node_number'], pv_df5[y_list[y_index]],
-                                            marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                    plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                    if stability is False:
+                                        plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_node_number'], pv_df5[y_list[y_index]],
+                                                marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                    elif stability is True:
+                                        stab = []
+                                        pv_df6 = pv_df5[y_list[y_index]]
+                                        AS_array = pv_df6.values
+                                        for i in range(len(pv_df5)):
+                                            if i == 0:
+                                                stab.append(0)
+                                            elif i > 0:
+                                                stab.append(abs(AS_array[i] - AS_array[i-1]))
+                                        stab = np.array(stab)
+                                        pv_df5['Stability'] = stab
+                                        plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_node_number'], pv_df5['Stability'],
+                                                 marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(stab)), markersize=3, linewidth=1.0)
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                                 elif select_node_layer == 'B_layer':
-                                    plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5[y_list[y_index]],
-                                            marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                    plt.legend(framealpha=1, frameon=True, prop={'size': 10})
-
+                                    if stability is False:
+                                        plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5[y_list[y_index]],
+                                                marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                    elif stability is True:
+                                        stab = []
+                                        pv_df6 = pv_df5[y_list[y_index]]
+                                        AS_array = pv_df6.values
+                                        for i in range(len(pv_df5)):
+                                            if i == 0:
+                                                stab.append(0)
+                                            elif i > 0:
+                                                stab.append(abs(AS_array[i] - AS_array[i-1]))
+                                        stab = np.array(stab)
+                                        pv_df5['Stability'] = np.array(stab)
+                                        plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5['Stability'],
+                                                 marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(stab)), markersize=3, linewidth=1.0)
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                     elif keyedge_method is True:
                         pv_df3 = pv_df[pv_df.select_edge_layer == select_edge_layer]
                         key_methods = pv_df3['keyedge_method'].unique()
@@ -261,7 +292,8 @@ class Visualization:
         # plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
         # plt.xlabel('ratio of unchanged nodes', fontsize=16, labelpad=6)
         plt.xlabel('ratio of stubborn nodes', fontsize=16, labelpad=6)
-        plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
+        plt.ylabel('stability', fontsize=16, labelpad=6)
+        # plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
         # plt.title('AS comparison according to dynamics order')
         # plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
 
@@ -373,9 +405,9 @@ if __name__ == "__main__":
     print("Visualization")
     setting = SettingSimulationValue.SettingSimulationValue()
     setting.database = 'pv_variable'
-    # setting.table = 'finding_keynode'
+    setting.table = 'finding_keynode'
     # setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_order_table3'
-    setting.table = 'pv_variable3'
+    # setting.table = 'pv_variable3'
     # setting.table = 'pv_variable2'
     # setting.table = 'updating_rule'
     visualization = Visualization(setting)
@@ -390,7 +422,7 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 모델의 전체적인 컨센서스 확인
-    # visualization.run(setting, model=['RR(3)-RR(3)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    # visualization.run(setting, model=['BA(3)-BA(3)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='trisurf', steps_3d=100,
     #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
@@ -406,12 +438,12 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 키노드 찾기
-    # visualization.run(setting, model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-    #                   chart_type='scatter', steps_3d=100,
-    #                   x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
-    #                   keynode_method=True, select_layer='A_layer', keynode_number=(True, 1),
-    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
-    #                   steps_hist=100)
+    visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+                      chart_type='scatter', steps_3d=100,
+                      x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
+                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1), stability=True,
+                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+                      steps_hist=100)
 
     # 히스토그램
     # visualization.run(setting, model=['HM(2)', 'HM(4)', 'HM(8)', 'HM(16)', 'HM(32)', 'HM(64)', 'HM(128)', 'HM(256)'],
@@ -428,16 +460,16 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    visualization.run(setting, model=['RR(2)-RR(2)', 'RR(5)-RR(2)', 'RR(3)-RR(3)',  'RR(5)-RR(3)',
-                                      'RR(4)-RR(4)', 'RR(5)-RR(4)',
-                                      'RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)',
-                                      'RR(6)-RR(6)'],
-                      plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-                      chart_type='scatter', steps_3d=100,
-                      x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
-                      keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
-                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
-                      steps_hist=100)
+    # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(5)-RR(2)', 'RR(3)-RR(3)',  'RR(5)-RR(3)',
+    #                                   'RR(4)-RR(4)', 'RR(5)-RR(4)',
+    #                                   'RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)',
+    #                                   'RR(6)-RR(6)'],
+    #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='scatter', steps_3d=100,
+    #                   x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
+    #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
+    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
     # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(3)-RR(3)', 'RR(4)-RR(4)', 'RR(5)-RR(5)', 'RR(6)-RR(6)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
@@ -445,7 +477,7 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    # visualization.run(setting, model=['BA(3)-BA(3)', 'BA(3)-RR(6)', 'RR(6)-BA(3)', 'RR(6)-RR(6)'],
+    # visualization.run(setting, model=['RR(6)-RR(6)', 'RR(6)-BA(3)', 'BA(3)-RR(6)', 'BA(3)-BA(3)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
     #                   x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
@@ -459,7 +491,7 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-    # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(3)-RR(3)', 'RR(5)-RR(5)', 'RR(6)-RR(6)'],
+    # visualization.run(setting, model=['BA(3)-BA(3)', 'BA(5)-BA(5)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
     #                   x_index=0, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,

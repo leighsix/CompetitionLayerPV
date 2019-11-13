@@ -101,13 +101,13 @@ class InterconnectedNetworkVisualization:
              layerColorRule={},
              edgeColorDict=InterconnectedNetworkVisualization.making_edge_color(setting, inter_layer),
              edgeColorRule={},
-             edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.5, edgeStyleDict={},
+             edgeWidthDict={}, edgeWidthRule={}, defaultEdgeWidth=0.3, edgeStyleDict={},
              edgeStyleRule={'rule': 'edgetype', 'inter': ':', 'intra': '-'}, defaultEdgeStyle='-',
              nodeLabelDict={}, nodeLabelRule={}, defaultNodeLabel=None,
              nodeColorDict=InterconnectedNetworkVisualization.making_node_color(setting, inter_layer), nodeColorRule={},
              defaultNodeColor=None,
              nodeLabelColorDict={}, nodeLabelColorRule={}, defaultNodeLabelColor='k',
-             nodeSizeDict={}, nodeSizeRule={"propscale": 0.1, 'rule': 'degree'}, defaultNodeSize=None)
+             nodeSizeDict={}, nodeSizeRule={"propscale": 0.05, 'rule': 'degree'}, defaultNodeSize=None)
         plt.savefig(save_file_name, dpi=200)
         im = plt.imshow(plt.imread(save_file_name), animated=True)
         return im
@@ -117,10 +117,10 @@ class InterconnectedNetworkVisualization:
 if __name__ == "__main__":
     print("Interconnected Layer Modeling")
     setting = SettingSimulationValue.SettingSimulationValue()
-    setting.A_node = 64
-    setting.B_node = 64
-    setting.Structure = 'BA-RR'
-    setting.A_edge = 3
+    setting.A_node = 60
+    setting.B_node = 60
+    setting.Structure = 'RR-RR'
+    setting.A_edge = 5
     setting.B_edge = 5
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     InterconnectedNetworkVisualization.draw_interconnected_network(setting, inter_layer, 'result.png')

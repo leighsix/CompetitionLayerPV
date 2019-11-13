@@ -38,6 +38,10 @@ class NodeProperty:
             ordering_node = NodeProperty.order_AB_closeness(setting, inter_layer)
         elif select_method == 'AB_load':
             ordering_node = NodeProperty.order_AB_load(setting, inter_layer)
+        elif select_method == 'PR+DE':
+            ordering_node = NodeProperty.order_mixed1(setting, inter_layer)[select_layer_number]
+        elif select_method == 'PR+DE+BE':
+            ordering_node = NodeProperty.order_mixed2(setting, inter_layer)[select_layer_number]
         return ordering_node
 
     @staticmethod
@@ -84,6 +88,61 @@ class NodeProperty:
             else:
                 B_node_order.append((individual_pagerank_order[i][0], individual_pagerank_order[i][1]))
         return A_node_order, B_node_order, individual_pagerank_order   # value = pagerank[node_number]
+
+    @staticmethod
+    def order_mixed1(setting, inter_layer):
+        A_node_order = []
+        B_node_order = []
+        node_prdic = {}
+        node_dedic = {}
+        node_mixdic = {}
+        pagerank = nx.pagerank(inter_layer.two_layer_graph)
+        pagerank_order = sorted(pagerank.items(), key=operator.itemgetter(1), reverse=True)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            node_prdic[pagerank_order[i][0]] = i
+        degree_centrality = nx.degree_centrality(inter_layer.two_layer_graph)
+        degree_order = sorted(degree_centrality.items(), key=operator.itemgetter(1), reverse=True)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            node_dedic[degree_order[i][0]] = i
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            node_mixdic[i] = node_prdic[i] + node_dedic[i]
+        mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            if mixed_order[i][0] < setting.A_node:
+                A_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+            else:
+                B_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+        return A_node_order, B_node_order, mixed_order
+
+    @staticmethod
+    def order_mixed2(setting, inter_layer):
+        A_node_order = []
+        B_node_order = []
+        node_prdic = {}
+        node_dedic = {}
+        node_bedic = {}
+        node_mixdic = {}
+        pagerank = nx.pagerank(inter_layer.two_layer_graph)
+        pagerank_order = sorted(pagerank.items(), key=operator.itemgetter(1), reverse=True)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            node_prdic[pagerank_order[i][0]] = i
+        degree_centrality = nx.degree_centrality(inter_layer.two_layer_graph)
+        degree_order = sorted(degree_centrality.items(), key=operator.itemgetter(1), reverse=True)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            node_dedic[degree_order[i][0]] = i
+        betweenness_centrality = nx.betweenness_centrality(inter_layer.two_layer_graph)
+        betweenness_order = sorted(betweenness_centrality.items(), key=operator.itemgetter(1), reverse=True)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            node_bedic[betweenness_order[i][0]] = i
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            node_mixdic[i] = node_prdic[i] + node_dedic[i] + node_bedic[i]
+        mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
+        for i in sorted(inter_layer.two_layer_graph.nodes):
+            if mixed_order[i][0] < setting.A_node:
+                A_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+            else:
+                B_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+        return A_node_order, B_node_order, mixed_order
 
     @staticmethod
     def order_pagerank(setting, inter_layer):
@@ -247,11 +306,12 @@ if __name__ == "__main__":
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     start = time.time()
     ordering_nodes1 = NodeProperty(setting, inter_layer, 0, 'pagerank')
+    ordering_nodes2 = NodeProperty(setting, inter_layer, 0, 'PR+DE')
+    ordering_nodes3 = NodeProperty(setting, inter_layer, 0, 'PR+DE+BE')
 
-    ordering_nodes2 = NodeProperty(setting, inter_layer, 0, 'pagerank_individual')
     # select = cal_property.cal_node_A_and_node_B_centrality(inter_layer)
-    for i in range(20):
-        print(ordering_nodes1.nodes_order[i][0], ordering_nodes2.nodes_order[i][0])
+    for i in range(100):
+        print(ordering_nodes1.nodes_order[i][0], ordering_nodes2.nodes_order[i][0], ordering_nodes3.nodes_order[i][0])
     # select2 = cal_property.order_AB_pagerank(inter_layer)
     # print(select2[0:10])
     # select3 = nx.pagerank(inter_layer.two_layer_graph)
