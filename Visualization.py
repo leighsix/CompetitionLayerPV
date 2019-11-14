@@ -221,7 +221,7 @@ class Visualization:
                     elif keynode_method is True:
                         pv_df3 = pv_df[pv_df.select_node_layer == select_node_layer]
                         # key_methods = pv_df3['keynode_method'].unique()
-                        # key_methods = ['pagerank', 'degree', 'eigenvector', 'betweenness', 'closeness', 'random', 'PR+DE']
+                        # key_methods = ['pagerank', 'degree', 'eigenvector', 'betweenness', 'closeness', 'random']
                         key_methods = ['pagerank', 'degree', 'betweenness', 'PR+DE']
                         for key_method in key_methods:
                             pv_df4 = pv_df3[pv_df3.keynode_method == key_method]
@@ -230,7 +230,7 @@ class Visualization:
                                 pv_df5 = pv_df5.sort_values(by='Steps', ascending=True)
                                 plt.plot(pv_df5[x_list[x_index]], pv_df5[y_list[y_index]],
                                          label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                             elif keynode_number[0] is True:
                                 pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
                                 pv_df5 = pv_df5.sort_values(by='keynode_number', ascending=True)
@@ -238,7 +238,7 @@ class Visualization:
                                     if stability is False:
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_node_number'], pv_df5[y_list[y_index]],
                                                 marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                                     elif stability is True:
                                         stab = []
                                         pv_df6 = pv_df5[y_list[y_index]]
@@ -252,12 +252,12 @@ class Visualization:
                                         pv_df5['Stability'] = stab
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_node_number'], pv_df5['Stability'],
                                                  marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(stab)), markersize=3, linewidth=1.0)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                                 elif select_node_layer == 'B_layer':
                                     if stability is False:
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5[y_list[y_index]],
                                                 marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                                     elif stability is True:
                                         stab = []
                                         pv_df6 = pv_df5[y_list[y_index]]
@@ -271,7 +271,7 @@ class Visualization:
                                         pv_df5['Stability'] = np.array(stab)
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5['Stability'],
                                                  marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(stab)), markersize=3, linewidth=1.0)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                     elif keyedge_method is True:
                         pv_df3 = pv_df[pv_df.select_edge_layer == select_edge_layer]
                         key_methods = pv_df3['keyedge_method'].unique()
@@ -292,8 +292,8 @@ class Visualization:
         # plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
         # plt.xlabel('ratio of unchanged nodes', fontsize=16, labelpad=6)
         plt.xlabel('ratio of stubborn nodes', fontsize=16, labelpad=6)
-        plt.ylabel('stability', fontsize=16, labelpad=6)
-        # plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
+        # plt.ylabel('stability', fontsize=16, labelpad=6)
+        plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
         # plt.title('AS comparison according to dynamics order')
         # plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
 
@@ -441,7 +441,7 @@ if __name__ == "__main__":
     visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
                       x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
-                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1), stability=True,
+                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1), stability=False,
                       keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
                       steps_hist=100)
 
