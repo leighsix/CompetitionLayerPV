@@ -220,9 +220,9 @@ class Visualization:
                             plt.plot(pv_df4[x_list[x_index]], pv_df4[y_list[y_index]], linewidth=0.5)
                     elif keynode_method is True:
                         pv_df3 = pv_df[pv_df.select_node_layer == select_node_layer]
-                        # key_methods = pv_df3['keynode_method'].unique()
+                        key_methods = pv_df3['keynode_method'].unique()
                         # key_methods = ['pagerank', 'degree', 'eigenvector', 'betweenness', 'closeness', 'random']
-                        key_methods = ['pagerank', 'degree', 'betweenness', 'PR+DE']
+                        # key_methods = ['pagerank', 'degree', 'betweenness', 'PR+DE']
                         for key_method in key_methods:
                             pv_df4 = pv_df3[pv_df3.keynode_method == key_method]
                             if keynode_number[0] is False:

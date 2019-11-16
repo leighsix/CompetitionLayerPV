@@ -12,19 +12,19 @@ class EdgeProperty:
     @staticmethod
     def ordering_edge(setting, inter_layer, select_edges_number, select_edge_method):
         ordering_edge = []
-        if select_edge_method == 'edge_betweenness' or 'edge_betweenness_sequential':
+        if select_edge_method == 'edge_betweenness':
             ordering_edge = EdgeProperty.ordering_edge_betweenness(setting, inter_layer)[select_edges_number]
-        elif select_edge_method == 'edge_pagerank' or 'edge_pagerank_sequential':
+        elif select_edge_method == 'edge_pagerank':
             ordering_edge = EdgeProperty.ordering_edge_pagerank(setting, inter_layer)[select_edges_number]
-        elif select_edge_method == 'edge_degree' or 'edge_degree_sequential':
+        elif select_edge_method == 'edge_degree':
             ordering_edge = EdgeProperty.ordering_edge_degree(setting, inter_layer)[select_edges_number]
-        elif select_edge_method == 'edge_eigenvector' or 'edge_eigenvector_sequential':
+        elif select_edge_method == 'edge_eigenvector':
             ordering_edge = EdgeProperty.ordering_edge_eigenvector(setting, inter_layer)[select_edges_number]
-        elif select_edge_method == 'edge_closeness' or 'edge_closeness_sequential':
+        elif select_edge_method == 'edge_closeness':
             ordering_edge = EdgeProperty.ordering_edge_closeness(setting, inter_layer)[select_edges_number]
-        elif select_edge_method == 'edge_load' or 'edge_load_sequential':
+        elif select_edge_method == 'edge_load':
             ordering_edge = EdgeProperty.ordering_edge_load(setting, inter_layer)[select_edges_number]
-        elif select_edge_method == 'edge_jaccard' or 'edge_jaccard_sequential':
+        elif select_edge_method == 'edge_jaccard':
             ordering_edge = EdgeProperty.ordering_edge_jaccard_coefficient(setting, inter_layer)[select_edges_number]
         return ordering_edge
 
