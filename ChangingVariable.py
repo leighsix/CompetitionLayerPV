@@ -8,8 +8,6 @@ from tqdm import tqdm
 select_node_layers_list = ['A_layer', 'B_layer', 'mixed']
 select_edge_layers_list = ['A_internal', 'A_mixed', 'B_internal', 'B_mixed', 'external', 'mixed']
 
-
-
 class ChangingVariable:
     def __init__(self, setting, p=(0, 1), v=(0, 1), gap=30, select_using_prob=(True, False), steps=(1, 2),
                  select_node_layers=(0, 0), select_node_methods=(0, 0), node_numbers=0, unchanged_state='None',
@@ -43,21 +41,20 @@ class ChangingVariable:
                                                       p=setting_variable_tuple[1],
                                                       v=setting_variable_tuple[2],
                                                       using_prob=setting_variable_tuple[3],
-                                                      select_step=setting_variable_tuple[4],
-                                                      select_node_layer=setting_variable_tuple[5],
-                                                      node_method=setting_variable_tuple[6],
+                                                      updating_rule=setting_variable_tuple[4],
+                                                      node_layer=setting_variable_tuple[5],
+                                                      node_method_list=setting_variable_tuple[6],
                                                       node_numbers=setting_variable_tuple[7],
                                                       unchanged_state=setting_variable_tuple[8],
-                                                      select_edge_layer=setting_variable_tuple[9],
-                                                      edge_method=setting_variable_tuple[10],
+                                                      edge_layer=setting_variable_tuple[9],
+                                                      edge_method_list=setting_variable_tuple[10],
                                                       edge_numbers=setting_variable_tuple[11])
         result_panda = repeat_result.repeated_result
         return result_panda
 
     @staticmethod
     def making_variable_tuples_list(setting, p, v, gap, select_using_prob, steps,
-                                    select_node_layers, select_node_methods, node_numbers, unchanged_state,
-                                    select_edge_layers, select_edge_methods, edge_numbers):
+                                    select_node_layers, unchanged_state, select_edge_layers):
         p_list = np.linspace(p[0], p[-1], gap)
         v_list = np.linspace(v[0], v[-1], gap)
         setting_variable_list = []
@@ -79,12 +76,9 @@ class ChangingVariable:
                             select_steps = [select_steps_list[step] for step in steps]
                     for select_step in select_steps:
                         for node_layer in select_node_layers_list[select_node_layers[0]:select_node_layers[-1]+1]:
-                            for node_method in select_node_methods:
-                                for edge_layer in select_edge_layers_list[select_edge_layers[0]:select_edge_layers[-1]+1]:
-                                    for edge_method in select_edge_methods:
-                                        setting_variable_list.append((setting, p_value, v_value, using_prob, select_step,
-                                                                      node_layer, node_method, node_numbers, unchanged_state,
-                                                                      edge_layer, edge_method, edge_numbers))
+                            for edge_layer in select_edge_layers_list[select_edge_layers[0]:select_edge_layers[-1]+1]:
+                                setting_variable_list.append((setting, p_value, v_value, using_prob, select_step,
+                                                              node_layer, unchanged_state, edge_layer))
         return setting_variable_list
 
 
@@ -92,13 +86,8 @@ if __name__ == "__main__":
     print("Changing_Variable")
     settings = SettingSimulationValue.SettingSimulationValue()
     ChangingVariable(settings,  p=[0.2], v=[0.4], gap=1, select_using_prob=[False], steps=[1],
-                     select_node_layers=[0], select_node_methods=[8], node_numbers=200, unchanged_state='pos',
-                     select_edge_layers=(0, 0), select_edge_methods=(0, 0), edge_numbers=0)
+                     select_node_layers=[0], select_node_methods=['degree', 'pagerank','random'],
+                     node_numbers=200, unchanged_state='pos',
+                     select_edge_layers=(0, 0), select_edge_methods=['0'], edge_numbers=0)
     print("Operating end")
 
-# select_node_method_list = ['0', 'degree', 'pagerank', 'random', 'eigenvector', 'closeness', 'betweenness', 'PR+DE', 'PR+DE+BE',
-#                            'pagerank_individual', 'load', 'AB_pagerank', 'AB_eigenvector', 'AB_degree', 'AB_betweenness',
-#                            'AB_closeness', 'AB_load']
-#
-# select_edge_method_list = ['0', 'edge_pagerank', 'edge_betweenness', 'edge_degree', 'edge_eigenvector', 'edge_closeness',
-#                            'edge_load', 'edge_jaccard', 'random']

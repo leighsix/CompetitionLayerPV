@@ -6,9 +6,16 @@ import networkx as nx
 #                [[10, 11, 12],[13, 14, 15], [16, 17, 18]]])
 # print(x2[1:, :])
 unchanged_nodes_list = [{1}, {3}, {5}]
+result_array = np.zeros(3)
+zero = np.zeros(3)
+A = np.array([[1, 3, 5], [2, 4, 6],[3, 5, 7]])
+result_array = np.vstack([result_array, A])
+print(result_array)
+print(result_array[1:])
+print(zero + result_array)
+B = '0'
+print(B[0])
 
-for i, nodes_list in enumerate(unchanged_nodes_list):
-    print(i, nodes_list)
 
 # G = nx.random_regular_graph(4, 20)
 # G1 = nx.barabasi_albert_graph(20, 4)
