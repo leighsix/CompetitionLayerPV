@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d1f7fbf9-dd3c-47cd-bf5a-940cb41d5cb0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Saving_DB_and_Changing_Variable.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChangingVariable.py" beforeDir="false" afterPath="$PROJECT_DIR$/ChangingVariable.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InterconnectedDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/InterconnectedDynamics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NodeProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/NodeProperty.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RepeatDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/RepeatDynamics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Saving_DB_and_Changing_Variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/Saving_DB_and_Changing_Variable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,8 +51,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Saving_DB_and_Changing_Variable">
-    <configuration name="InterconnectedDynamics" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.NodeProperty">
+    <configuration name="NodeProperty" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="CompetitionLayerPV" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -64,7 +64,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/InterconnectedDynamics.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/NodeProperty.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -159,11 +159,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.NodeProperty" />
+        <item itemvalue="Python.Visualization" />
         <item itemvalue="Python.Saving_DB_and_Changing_Variable" />
         <item itemvalue="Python.RepeatDynamics" />
         <item itemvalue="Python.example" />
-        <item itemvalue="Python.Visualization" />
-        <item itemvalue="Python.InterconnectedDynamics" />
       </list>
     </recent_temporary>
   </component>

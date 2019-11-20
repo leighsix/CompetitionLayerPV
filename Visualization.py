@@ -404,6 +404,8 @@ class Visualization:
 if __name__ == "__main__":
     print("Visualization")
     setting = SettingSimulationValue.SettingSimulationValue()
+    # setting.database = 'test'
+    # setting.table = 'test'
     setting.database = 'pv_variable'
     setting.table = 'finding_keynode'
     # setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_order_table3'

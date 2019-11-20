@@ -26,22 +26,23 @@ updating_rule_list2 = [r'$O(s, s) \leftrightarrow D(s)$', r'$O(o, s) \to D(o)$',
 
 class RepeatDynamics:
     def __init__(self, setting, p, v, using_prob=False, updating_rule=1,
-                 node_layer='A_layer', node_method_list=None,  node_numbers=0, unchanged_state='0',
+                 node_layer='A_layer', node_method_list=None,  node_numbers=0,
                  edge_layer='A_internal', edge_method_list=None,  edge_numbers=0):
         self.repeated_result = RepeatDynamics.many_execute_for_repeating(setting, p, v, using_prob, updating_rule,
-                                                                         node_layer, node_method_list, node_numbers, unchanged_state,
+                                                                         node_layer, node_method_list, node_numbers,
                                                                          edge_layer, edge_method_list, edge_numbers)
 
     @staticmethod
     def many_execute_for_repeating(setting, p, v, using_prob, updating_rule,
-                                   node_layer, node_method_list, node_numbers, unchanged_state,
+                                   node_layer, node_method_list, node_numbers,
                                    edge_layer, edge_method_list, edge_numbers):
-        num_data = np.zeros(22)
+        num_data = np.zeros(23)
         with futures.ProcessPoolExecutor(max_workers=setting.workers) as executor:
             to_do_map = {}
             for repeat in range(setting.Repeating_number):
                 future = executor.submit(RepeatDynamics.combined_dynamics, setting, p, v, using_prob, updating_rule,
-                                         node_layer, node_method_list, node_numbers, edge_layer, edge_method_list, edge_numbers)
+                                         node_layer, node_method_list, node_numbers,
+                                         edge_layer, edge_method_list, edge_numbers)
                 to_do_map[future] = repeat
             done_iter = futures.as_completed(to_do_map)
             done_iter = tqdm(done_iter, total=setting.Repeating_number)
@@ -59,7 +60,6 @@ class RepeatDynamics:
             panda_db['Orders'] = updating_rule_list1[updating_rule]
         elif using_prob is True:
             panda_db['Orders'] = updating_rule_list2[updating_rule]
-        panda_db['unchanged_state'] = unchanged_state
         return panda_db
 
     @staticmethod
@@ -72,7 +72,7 @@ class RepeatDynamics:
             edge_method_list = ['0']
         inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
         dic_key_edges = RepeatDynamics.dictionary_edges(setting, inter_layer, edge_layer, edge_method_list, edge_numbers)
-        result_array = np.zeros(22)
+        result_array = np.zeros(23)
         for edge_method in edge_method_list:
             key_edges = dic_key_edges[edge_method]
             for edge_number in range(edge_numbers + 1):
@@ -80,6 +80,12 @@ class RepeatDynamics:
                 dic_key_nodes = RepeatDynamics.dictionary_centralities(setting, inter_layer, node_layer,
                                                                        node_method_list, node_numbers)
                 for node_method in node_method_list:
+                    if node_layer == 'A_layer' and node_method != '0':
+                        unchanged_state = 1
+                    elif node_layer == 'B_layer' and node_method != '0':
+                        unchanged_state = 2
+                    else:
+                        unchanged_state = 0
                     key_nodes = dic_key_nodes[node_method]
                     keynode_method = RepeatDynamics.naming_keynode_method(node_method)
                     keyedge_method = RepeatDynamics.naming_keyedge_method(edge_method)
@@ -89,7 +95,7 @@ class RepeatDynamics:
                                                                                     key_nodes[1],
                                                                                     key_edges[1][edge_number],
                                                                                     edge_number, keynode_method,
-                                                                                    keyedge_method)
+                                                                                    keyedge_method, unchanged_state)
                     result_array = np.vstack([result_array, dynamics_result.dynamics_result_array])
         result_array = result_array[1:]
         return result_array
@@ -228,7 +234,7 @@ class RepeatDynamics:
                    'Layer_A_Mean', 'Layer_B_Mean', 'AS',
                    'A_total_edges', 'B_total_edges', 'change_count',
                    'key_nodes_property', 'key_edges_property', 'keynode_number',
-                   'keyedge_number', 'Steps', 'keynode_method', 'keyedge_method']
+                   'keyedge_number', 'Steps', 'keynode_method', 'keyedge_method', 'unchanged_state']
         df = pd.DataFrame(value_array, columns=columns)
         df = RepeatDynamics.naming_method_in_df(df)
         df['Model'] = setting.Model
@@ -242,7 +248,16 @@ class RepeatDynamics:
         for i in range(len(df)):
             df.iloc[i, 20] = RepeatDynamics.renaming_keynode_method(df['keynode_method'][i])
             df.iloc[i, 21] = RepeatDynamics.renaming_keyedge_method(df['keyedge_method'][i])
+            df.iloc[i, 22] = RepeatDynamics.renaming_unchanged_state(df['unchanged_state'][i])
         return df
+
+    @staticmethod
+    def renaming_unchanged_state(unchanged_state_number):
+        unchanged_state = '0'
+        if unchanged_state_number == 0: unchanged_state = '0'
+        elif unchanged_state_number == 1: unchanged_state = 'pos'
+        elif unchanged_state_number == 2: unchanged_state = 'neg'
+        return unchanged_state
 
     @staticmethod
     def naming_keynode_method(node_method):
@@ -326,9 +341,10 @@ if __name__ == "__main__":
     p = 0.1
     v = 0.1
     res = RepeatDynamics(settings, p, v, using_prob=False, updating_rule=1,
-                         node_layer='A_layer', node_method_list=['pagerank', 'degree'], node_numbers=5, unchanged_state='pos',
+                         node_layer='A_layer', node_method_list=['0', 'pagerank', 'degree'], node_numbers=5,
                          edge_layer='A_internal', edge_method_list=None, edge_numbers=0)
     print(res.repeated_result)
     print(res.repeated_result['keynode_method'])
+    print(res.repeated_result['unchanged_state'])
     end = time.time()
     print(end - start)
