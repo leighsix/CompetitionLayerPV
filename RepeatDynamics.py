@@ -49,8 +49,8 @@ class RepeatDynamics:
             for future in done_iter:
                 result_array = future.result()
                 num_data = num_data + result_array
-                print("result1: %s" %num_data)
-        print("result2: %s" %num_data)
+        #         print("result1: %s" %num_data)
+        # print("result2: %s" %num_data)
         Num_Data = num_data / setting.Repeating_number
         panda_db = RepeatDynamics.making_dataframe_per_step(setting, Num_Data)
         panda_db['select_node_layer'] = node_layer

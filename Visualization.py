@@ -222,7 +222,9 @@ class Visualization:
                         pv_df3 = pv_df[pv_df.select_node_layer == select_node_layer]
                         key_methods = pv_df3['keynode_method'].unique()
                         # key_methods = ['pagerank', 'degree', 'eigenvector', 'betweenness', 'closeness', 'random']
-                        # key_methods = ['pagerank', 'degree', 'betweenness', 'PR+DE']
+                        key_methods = ['pagerank', 'degree', 'betweenness', 'PR+DE', 'PR+DE+BE']
+                        key_methods = ['pagerank', 'PR+DE', 'PR+DE+BE']
+
                         for key_method in key_methods:
                             pv_df4 = pv_df3[pv_df3.keynode_method == key_method]
                             if keynode_number[0] is False:
@@ -443,7 +445,7 @@ if __name__ == "__main__":
     visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
                       x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
-                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1), stability=False,
+                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1), stability=True,
                       keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
                       steps_hist=100)
 

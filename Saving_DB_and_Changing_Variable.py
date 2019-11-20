@@ -13,7 +13,6 @@ class Saving_DB_and_Changing_Variable:
             select_node_layers = [0]
             select_node_methods = ['0']
             node_numbers = 0
-            unchanged_state = 'None'
         if select_edge_layers is None:
             select_edge_layers = [0]
             select_edge_methods = ['0']
@@ -64,12 +63,9 @@ class Saving_DB_and_Changing_Variable:
 if __name__ == "__main__":
     print("Saving_DB")
     settings = SettingSimulationValue.SettingSimulationValue()
-    settings.workers = 1
-    settings.database = 'test'
-    settings.table = 'test'
     Saving_DB_and_Changing_Variable(settings, p=[0.2], v=[0.4], gap=1, select_using_prob=None, updating_rules_list=None,
                                     select_node_layers=['A_layer'],
-                                    select_node_methods=['degree', 'pagerank', 'eigenvector', 'random', 'betweenness', 'closeness','PR+DE', 'PR+DE+BE'],
+                                    select_node_methods=['degree', 'pagerank', 'eigenvector', 'random', 'betweenness', 'closeness', 'PR+DE', 'PR+DE+BE'],
                                     node_numbers=200,
                                     select_edge_layers=None, select_edge_methods=None, edge_numbers=0)
     print("Operating end")
