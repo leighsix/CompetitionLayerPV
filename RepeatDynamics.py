@@ -344,7 +344,5 @@ if __name__ == "__main__":
                          node_layer='A_layer', node_method_list=['0', 'pagerank', 'degree'], node_numbers=5,
                          edge_layer='A_internal', edge_method_list=None, edge_numbers=0)
     print(res.repeated_result)
-    print(res.repeated_result['keynode_method'])
-    print(res.repeated_result['unchanged_state'])
     end = time.time()
     print(end - start)

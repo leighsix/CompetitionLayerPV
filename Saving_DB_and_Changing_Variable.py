@@ -2,8 +2,6 @@ import SettingSimulationValue
 import RepeatDynamics
 import sqlalchemy
 import numpy as np
-from concurrent import futures
-from tqdm import tqdm
 
 class Saving_DB_and_Changing_Variable:
     def __init__(self, setting, p=(0, 1), v=(0, 1), gap=30, select_using_prob=None, updating_rules_list=None,

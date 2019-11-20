@@ -4,7 +4,7 @@ import numpy as np
 class SettingSimulationValue:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
-        self.table = 'finding_keynode'
+        self.table = 'finding_keynode2'
         self.Model = 'BA(3)-BA(3)'
         self.Structure = 'BA-BA'
 
