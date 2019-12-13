@@ -103,6 +103,10 @@ class InterconnectedLayerModeling:
                 A_edges.append(tuple(np.array(a_edges[i][0:2])))
         elif setting.Structure.split('-')[0] == 'BA':
             A_edges = sorted(nx.barabasi_albert_graph(setting.A_node, setting.A_edge, seed=None).edges)
+        elif setting.Structure.split('-')[0] == 'KR':
+            a_edges = sorted(nx.karate_club_graph().edges)
+            for i in range(len(a_edges)):
+                A_edges.append(tuple(np.array(a_edges[i][0:2])))
         return A_edges
 
     @staticmethod
@@ -116,6 +120,10 @@ class InterconnectedLayerModeling:
             b_edges = sorted(nx.barabasi_albert_graph(setting.B_node, setting.B_edge, seed=None).edges)
             for i in range(len(b_edges)):
                 B_edges.append(tuple(np.array(b_edges[i]) + setting.A_node))
+        elif setting.Structure.split('-')[1] == 'KR':
+            b_edges = sorted(nx.karate_club_graph().edges)
+            for i in range(len(b_edges)):
+                B_edges.append(tuple(np.array(b_edges[i][0:2]) + setting.A_node))
         return B_edges
 
     @staticmethod
@@ -126,9 +134,11 @@ class InterconnectedLayerModeling:
 if __name__ == "__main__":
     print("interconnectedlayer")
     setting = SettingSimulationValue.SettingSimulationValue()
-    setting.Structure = 'BA-RR'
+    setting.Structure = 'BA-BA'
+    setting.A_node = 512
+    setting.B_node = 128
     setting.A_edge = 3
-    setting.B_edge = 6
+    setting.B_edge = 3
     start = time.time()
     # print(InterconnectedLayerModeling.select_layer_A_model(setting))
     inter_layer = InterconnectedLayerModeling(setting)

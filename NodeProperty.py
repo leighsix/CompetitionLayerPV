@@ -16,6 +16,7 @@ class NodeProperty:
         mixed_order = []
         node_prdic = {}
         node_dedic = {}
+        node_eidic = {}
         node_bedic = {}
         node_mixdic = {}
         pagerank = nx.pagerank(inter_layer.two_layer_graph)
@@ -49,6 +50,60 @@ class NodeProperty:
                 else:
                     B_node_order.append((degree_order[i][0], degree_order[i][1]))
             mixed_order = degree_order
+        elif select_method == 'PR+DE':
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_prdic[pagerank_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_dedic[degree_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_mixdic[i] = node_prdic[i] + node_dedic[i]
+            mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                if mixed_order[i][0] < setting.A_node:
+                    A_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+                else:
+                    B_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+        elif select_method == 'PR+EI':
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_prdic[pagerank_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_eidic[eigenvector_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_mixdic[i] = node_prdic[i] + node_eidic[i]
+            mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                if mixed_order[i][0] < setting.A_node:
+                    A_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+                else:
+                    B_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+        elif select_method == 'DE+EI':
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_dedic[degree_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_eidic[eigenvector_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_mixdic[i] = node_dedic[i] + node_eidic[i]
+            mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                if mixed_order[i][0] < setting.A_node:
+                    A_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+                else:
+                    B_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+        elif select_method == 'PR+DE+EI':
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_prdic[pagerank_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_dedic[degree_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_eidic[eigenvector_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_mixdic[i] = node_prdic[i] + node_dedic[i] + node_eidic[i]
+            mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                if mixed_order[i][0] < setting.A_node:
+                    A_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+                else:
+                    B_node_order.append((mixed_order[i][0], mixed_order[i][1]))
         elif select_method == 'betweenness':
             for i in sorted(inter_layer.two_layer_graph.nodes):
                 if betweenness_order[i][0] < setting.A_node:
@@ -63,13 +118,26 @@ class NodeProperty:
                 else:
                     B_node_order.append((closeness_order[i][0], closeness_order[i][1]))
             mixed_order = closeness_order
-        elif select_method == 'PR+DE':
+        elif select_method == 'PR+BE':
             for i in sorted(inter_layer.two_layer_graph.nodes):
                 node_prdic[pagerank_order[i][0]] = i
             for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_bedic[betweenness_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_mixdic[i] = node_prdic[i] + node_bedic[i]
+            mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                if mixed_order[i][0] < setting.A_node:
+                    A_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+                else:
+                    B_node_order.append((mixed_order[i][0], mixed_order[i][1]))
+        elif select_method == 'DE+BE':
+            for i in sorted(inter_layer.two_layer_graph.nodes):
                 node_dedic[degree_order[i][0]] = i
             for i in sorted(inter_layer.two_layer_graph.nodes):
-                node_mixdic[i] = node_prdic[i] + node_dedic[i]
+                node_bedic[betweenness_order[i][0]] = i
+            for i in sorted(inter_layer.two_layer_graph.nodes):
+                node_mixdic[i] = node_dedic[i] + node_bedic[i]
             mixed_order = sorted(node_mixdic.items(), key=operator.itemgetter(1), reverse=False)
             for i in sorted(inter_layer.two_layer_graph.nodes):
                 if mixed_order[i][0] < setting.A_node:

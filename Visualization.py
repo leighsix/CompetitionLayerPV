@@ -39,8 +39,8 @@ class Visualization:
     def run(self, model=None, plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
             chart_type='scatter', steps_3d=100,
             x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=(False, 1),
-            keynode_method=False, select_layer='A_layer', keynode_number=(False, 1), stability=False,
-            keyedge_method=False, select_edge_layer='A_internal', keyedge_number=(False, 1), steps_timeflow=100,
+            keynode_method=False, select_layer=0, keynode_number=(False, 1), stability=False,
+            keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
             steps_hist=100):
         df = []
         if model is None:
@@ -220,27 +220,35 @@ class Visualization:
                             plt.plot(pv_df4[x_list[x_index]], pv_df4[y_list[y_index]], linewidth=0.5)
                     elif keynode_method is True:
                         pv_df3 = pv_df[pv_df.select_node_layer == select_node_layer]
+                        select_node_layer = Visualization.renaming_node_layer(select_node_layer)
                         key_methods = pv_df3['keynode_method'].unique()
-                        # key_methods = ['pagerank', 'degree', 'eigenvector', 'betweenness', 'closeness', 'random']
-                        key_methods = ['pagerank', 'degree', 'betweenness', 'PR+DE', 'PR+DE+BE']
-                        key_methods = ['pagerank', 'PR+DE', 'PR+DE+BE']
-
+                        #  2 = 'degree', 3 = 'pagerank', 4 = 'random', 5= 'eigenvector'
+                        #  6 = 'closeness', 7 = 'betweenness', 8 = 'PR+DE', 9: node_method = 'PR+DE+BE'
+                        #  10 = 'PR+BE', 11 = 'DE+BE'
+                        key_methods = [2, 3, 4, 5, 6, 7]
+                        key_methods = [8, 9, 10, 11]
+                        # key_methods = [2, 3, 9]
                         for key_method in key_methods:
                             pv_df4 = pv_df3[pv_df3.keynode_method == key_method]
+                            key_method = Visualization.renaming_keynode_method(key_method)
                             if keynode_number[0] is False:
                                 pv_df5 = pv_df4[pv_df4.keynode_number == keynode_number[1]]
                                 pv_df5 = pv_df5.sort_values(by='Steps', ascending=True)
-                                plt.plot(pv_df5[x_list[x_index]], pv_df5[y_list[y_index]],
+                                plt.plot(pv_df5['keynode_number'], pv_df5['AS'],
                                          label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                plt.legend(framealpha=1, frameon=True, prop={'size': 15})
+                                plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                             elif keynode_number[0] is True:
                                 pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
                                 pv_df5 = pv_df5.sort_values(by='keynode_number', ascending=True)
+                                pv_df5 = pv_df5.groupby(pv_df5['keynode_number']).mean()
+                                pv_df5 = pv_df5.reset_index()
                                 if select_node_layer == 'A_layer':
                                     if stability is False:
-                                        plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_node_number'], pv_df5[y_list[y_index]],
-                                                marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
+                                        pv_df6 = pv_df5['AS']
+                                        AS_array = pv_df6.values
+                                        plt.plot(pv_df5['keynode_number'] / pv_df5['A_node_number'], pv_df5['AS'],
+                                                marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(AS_array)), linewidth=1.5)
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                                     elif stability is True:
                                         stab = []
                                         pv_df6 = pv_df5[y_list[y_index]]
@@ -256,10 +264,12 @@ class Visualization:
                                                  marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(stab)), markersize=3, linewidth=1.0)
                                         plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                                 elif select_node_layer == 'B_layer':
+                                    pv_df6 = pv_df5[y_list[y_index]]
+                                    AS_array = pv_df6.values
                                     if stability is False:
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5[y_list[y_index]],
-                                                marker='o', label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
+                                                 marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(AS_array)), linewidth=1.5)
+                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                                     elif stability is True:
                                         stab = []
                                         pv_df6 = pv_df5[y_list[y_index]]
@@ -292,10 +302,9 @@ class Visualization:
                                          marker='o', label=r'%s(%s)' % (key_method, select_edge_layer), linewidth=1.5)
                                 plt.legend(framealpha=1, frameon=True, prop={'size': 10})
         # plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
-        # plt.xlabel('ratio of unchanged nodes', fontsize=16, labelpad=6)
-        plt.xlabel('ratio of stubborn nodes', fontsize=16, labelpad=6)
-        # plt.ylabel('stability', fontsize=16, labelpad=6)
-        plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
+        plt.xlabel('ratio of stubborn nodes', fontsize=14, labelpad=4)
+        plt.ylabel('AS', fontsize=14, labelpad=4)
+        # plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
         # plt.title('AS comparison according to dynamics order')
         # plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
 
@@ -402,6 +411,109 @@ class Visualization:
         #     list.append(select_list[i])
         return np.array(select_list)
 
+    @staticmethod
+    def naming_method_in_df(df):
+        for i in range(len(df)):
+            df.iloc[i, 20] = Visualization.renaming_keynode_method(df['keynode_method'][i])
+            df.iloc[i, 21] = Visualization.renaming_keyedge_method(df['keyedge_method'][i])
+            df.iloc[i, 22] = Visualization.renaming_unchanged_state(df['unchanged_state'][i])
+            df.iloc[i, 23] = Visualization.renaming_node_layer(df['select_node_layer'][i])
+            df.iloc[i, 24] = Visualization.renaming_edge_layer(df['select_edge_layer'][i])
+        return df
+
+    @staticmethod
+    def renaming_node_layer(node_layer_number):
+        node_layer = '0'
+        if node_layer_number == 0:
+            node_layer = 'A_layer'
+        elif node_layer_number == 1:
+            node_layer = 'B_layer'
+        elif node_layer_number == 2:
+            node_layer = 'mixed'
+        elif node_layer_number == 3:
+            node_layer = '0'
+        return node_layer
+
+    @staticmethod
+    def renaming_edge_layer(edge_layer_number):
+        edge_layer = '0'
+        if edge_layer_number == 0:
+            edge_layer = 'A_internal'
+        elif edge_layer_number == 1:
+            edge_layer = 'A_mixed'
+        elif edge_layer_number == 2:
+            edge_layer = 'B_internal'
+        elif edge_layer_number == 3:
+            edge_layer = 'B_mixed'
+        elif edge_layer_number == 4:
+            edge_layer = 'external'
+        elif edge_layer_number == 5:
+            edge_layer = 'mixed'
+        elif edge_layer_number == 6:
+            edge_layer = '0'
+        return edge_layer
+
+    @staticmethod
+    def renaming_unchanged_state(unchanged_state_number):
+        unchanged_state = '0'
+        if unchanged_state_number == 0:
+            unchanged_state = '0'
+        elif unchanged_state_number == 1:
+            unchanged_state = 'pos'
+        elif unchanged_state_number == 2:
+            unchanged_state = 'neg'
+        return unchanged_state
+
+    @staticmethod
+    def renaming_keynode_method(keynode_method):
+        node_method = '0'
+        if keynode_method == 1: node_method = '0'
+        elif keynode_method == 2: node_method = 'degree'
+        elif keynode_method == 3: node_method = 'pagerank'
+        elif keynode_method == 4: node_method = 'random'
+        elif keynode_method == 5: node_method = 'eigenvector'
+        elif keynode_method == 6: node_method = 'closeness'
+        elif keynode_method == 7: node_method = 'betweenness'
+        elif keynode_method == 8: node_method = 'PR+DE'
+        elif keynode_method == 9: node_method = 'PR+DE+BE'
+        elif keynode_method == 10: node_method = 'PR+BE'
+        elif keynode_method == 11: node_method = 'DE+BE'
+        elif keynode_method == 12: node_method = 'load'
+        elif keynode_method == 13: node_method = 'pagerank_individual'
+        elif keynode_method == 14: node_method = 'AB_pagerank'
+        elif keynode_method == 15: node_method = 'AB_eigenvector'
+        elif keynode_method == 16: node_method = 'AB_degree'
+        elif keynode_method == 17: node_method = 'AB_betweenness'
+        elif keynode_method == 18: node_method = 'AB_closeness'
+        elif keynode_method == 19: node_method = 'AB_load'
+        elif keynode_method == 20: node_method = 'PR+EI'
+        elif keynode_method == 21: node_method = 'DE+EI'
+        elif keynode_method == 22: node_method = 'PR+DE+EI'
+        return node_method
+
+    @staticmethod
+    def renaming_keyedge_method(keyedge_method):
+        edge_method = '0'
+        if keyedge_method == 0:
+            edge_method = '0'
+        elif keyedge_method == 1:
+            edge_method = 'edge_pagerank'
+        elif keyedge_method == 2:
+            edge_method = 'edge_betweenness'
+        elif keyedge_method == 3:
+            edge_method = 'edge_degree'
+        elif keyedge_method == 4:
+            edge_method = 'edge_eigenvector'
+        elif keyedge_method == 5:
+            edge_method = 'edge_closeness'
+        elif keyedge_method == 6:
+            edge_method = 'edge_load'
+        elif keyedge_method == 7:
+            edge_method = 'edge_jaccard'
+        elif keyedge_method == 8:
+            edge_method = 'random'
+        return edge_method
+
 
 if __name__ == "__main__":
     print("Visualization")
@@ -409,7 +521,7 @@ if __name__ == "__main__":
     # setting.database = 'test'
     # setting.table = 'test'
     setting.database = 'pv_variable'
-    setting.table = 'finding_keynode'
+    setting.table = 'finding_keynode_on_layers'
     # setting.table = 'comparison_order_table3'   #'step_same_table'  #'comparison_order_table3'
     # setting.table = 'pv_variable3'
     # setting.table = 'pv_variable2'
@@ -442,12 +554,13 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 키노드 찾기
-    visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    visualization.run(model=['RR(6)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
-                      x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
-                      keynode_method=True, select_layer='A_layer', keynode_number=(True, 1), stability=True,
-                      keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+                      x_index=1, y_index=0, p_values=[0.3], v_values=[0.5], order=False,
+                      keynode_method=True, select_layer=1, keynode_number=(True, 1), stability=False,
+                      keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
                       steps_hist=100)
+    # select_layer = 0, 1, 2
 
     # 히스토그램
     # visualization.run(setting, model=['HM(2)', 'HM(4)', 'HM(8)', 'HM(16)', 'HM(32)', 'HM(64)', 'HM(128)', 'HM(256)'],
@@ -502,6 +615,4 @@ if __name__ == "__main__":
     #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
-
-
     print("paint finished")
