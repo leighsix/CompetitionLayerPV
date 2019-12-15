@@ -5,12 +5,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InterconnectedDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/InterconnectedDynamics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/InterconnectedLayerModeling.py" beforeDir="false" afterPath="$PROJECT_DIR$/InterconnectedLayerModeling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NodeProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/NodeProperty.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RepeatDynamics.py" beforeDir="false" afterPath="$PROJECT_DIR$/RepeatDynamics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Saving_DB_and_Changing_Variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/Saving_DB_and_Changing_Variable.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SettingSimulationValue.py" beforeDir="false" afterPath="$PROJECT_DIR$/SettingSimulationValue.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Visualization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/example.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +51,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Visualization">
+  <component name="RunManager" selected="Python.InterconnectedDynamics">
     <configuration name="InterconnectedDynamics" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="CompetitionLayerPV" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -162,10 +159,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Visualization" />
         <item itemvalue="Python.InterconnectedDynamics" />
-        <item itemvalue="Python.Saving_DB_and_Changing_Variable" />
         <item itemvalue="Python.InterconnectedLayerModeling" />
+        <item itemvalue="Python.Visualization" />
+        <item itemvalue="Python.Saving_DB_and_Changing_Variable" />
         <item itemvalue="Python.RepeatDynamics" />
       </list>
     </recent_temporary>

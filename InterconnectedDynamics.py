@@ -693,7 +693,7 @@ if __name__ == "__main__":
     setting.B_node = 512
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     centrality = NodeProperty.NodeProperty(setting, inter_layer, select_layer_number=0, select_method='pagerank')
-    ordering = centrality.nodes_order[0:256]
+    ordering = centrality.nodes_order[0:500]
     unchanged_nodes_list = []
     nodes_properties_list = []
     select_nodes_list = []
@@ -705,8 +705,8 @@ if __name__ == "__main__":
     sum_properties = sum(nodes_properties)
     unchanged_nodes_list.append(unchanged_nodes)
     nodes_properties_list.append(sum_properties)
-    p = 0.5
-    v = 0.3
+    p = 0.6
+    v = 0.4
     using_prob = False
     select_step = 1
     edges_properties = 0

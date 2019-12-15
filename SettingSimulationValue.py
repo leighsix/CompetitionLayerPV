@@ -5,20 +5,20 @@ class SettingSimulationValue:
     def __init__(self):
         self.database = 'pv_variable'  # 'competition  renew_competition'
         self.table = 'finding_keynode_on_layers'
-        self.Model = 'BA(2)-BA(4)'
-        self.Structure = 'BA-BA'
+        self.Model = 'RR(6)-BA(3)'
+        self.Structure = 'RR-BA'
 
         self.Limited_step = 100
         self.Repeating_number = 30
 
         self.A_node = 512
-        self.A_edge = 2
+        self.A_edge = 6
         self.A = SettingSimulationValue.static_making_A_array(self.A_node, A_state=[1, 2])
         self.MAX = 2
         self.MIN = -2
 
         self.B_node = 512
-        self.B_edge = 4
+        self.B_edge = 3
         self.B = SettingSimulationValue.static_making_B_array(self.B_node, B_state=[-1])
 
         self.workers = 6

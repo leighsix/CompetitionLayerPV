@@ -136,7 +136,7 @@ if __name__ == "__main__":
     setting = SettingSimulationValue.SettingSimulationValue()
     setting.Structure = 'BA-BA'
     setting.A_node = 512
-    setting.B_node = 128
+    setting.B_node = 64
     setting.A_edge = 3
     setting.B_edge = 3
     start = time.time()

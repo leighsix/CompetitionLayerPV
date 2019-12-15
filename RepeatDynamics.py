@@ -82,15 +82,15 @@ class RepeatDynamics:
                     for node_layer in node_layer_list:
                         node_layer_number = RepeatDynamics.naming_node_layer(node_layer)
                         if node_layer_number == 0:
-                            p = [0.57]
-                            v = [0.37]
-                            gap = 1
-                            node_numbers = 256
-                        elif node_layer_number == 1:
-                            p = [0.6]
+                            p = [0.2]
                             v = [0.4]
                             gap = 1
                             node_numbers = 64
+                        elif node_layer_number == 1:
+                            p = [0.3]
+                            v = [0.5]
+                            gap = 1
+                            node_numbers = 256
                         elif node_layer_number == 2:
                             p = [0.2]
                             v = [0.4]
