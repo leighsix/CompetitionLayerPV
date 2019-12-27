@@ -554,9 +554,9 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 키노드 찾기
-    visualization.run(model=['BA(2)-BA(4)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    visualization.run(model=['RR(6)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
                       chart_type='scatter', steps_3d=100,
-                      x_index=1, y_index=0, p_values=[0.6], v_values=[0.4], order=False,
+                      x_index=1, y_index=0, p_values=[0.3], v_values=[0.5], order=False,
                       keynode_method=True, select_layer=1, keynode_number=(True, 1), stability=False,
                       keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
                       steps_hist=100)

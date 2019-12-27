@@ -301,11 +301,13 @@ class NodeProperty:
 if __name__ == "__main__":
     print("CalculatingProperty")
     setting = SettingSimulationValue.SettingSimulationValue()
+    setting.Structure = 'RR-RR'
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)
     start = time.time()
-    ordering_nodes1 = NodeProperty(setting, inter_layer, 0, 'pagerank')
-    ordering_nodes2 = NodeProperty(setting, inter_layer, 0, 'PR+DE')
-    ordering_nodes3 = NodeProperty(setting, inter_layer, 0, 'PR+DE+BE')
+    ordering_nodes1 = NodeProperty(setting, inter_layer, 0, 'degree')
+    ordering_nodes2 = NodeProperty(setting, inter_layer, 0, 'pagerank')
+    ordering_nodes3 = NodeProperty(setting, inter_layer, 0, 'PR+DE')
+    ordering_nodes4 = NodeProperty(setting, inter_layer, 0, 'PR+DE+BE')
 
     # select = cal_property.cal_node_A_and_node_B_centrality(inter_layer)
     for i in range(100):

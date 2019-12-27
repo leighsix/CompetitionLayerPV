@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import networkx as nx
-dic_edges = {}
-dic_edges['0'] = [[], 0]
-print(dic_edges)
+
+
 # karate = nx.karate_club_graph()
 # nx.draw(karate, pos=nx.circular_layout(karate))
 # plt.draw()
@@ -23,15 +22,15 @@ print(dic_edges)
 # print(B[0])
 
 
-# G = nx.random_regular_graph(4, 20)
-# G1 = nx.barabasi_albert_graph(20, 4)
-# G2 = nx.watts_strogatz_graph(20, 4, 0.6)
-# G3 = nx.complete_graph(20)
-# G4 = nx.erdos_renyi_graph(20, 0.2)
-# nx.draw_circular(G4, with_labels=False, node_color='#A0CBE2', edge_color='#A0CBE2')
-# # nx.draw_circular(G1, with_labels=False)
-# # nx.draw_circular(G2, with_labels=False)
-# # nx.draw_circular(G3, with_labels=False)
-# # nx.draw_circular(G4, with_labels=False)
+G = nx.random_regular_graph(3, 20)
+G1 = nx.barabasi_albert_graph(20, 3)
+G2 = nx.watts_strogatz_graph(20, 4, 0)
+G3 = nx.complete_graph(20)
+G4 = nx.erdos_renyi_graph(20, 0.15)
+nx.draw_circular(G2, with_labels=False, node_color='#0165fc', edge_color='#0165fc')
+# nx.draw_circular(G1, with_labels=False)
+# nx.draw_circular(G2, with_labels=False)
+# nx.draw_circular(G3, with_labels=False)
+# nx.draw_circular(G4, with_labels=False)
 
-# plt.show()
+plt.show()
