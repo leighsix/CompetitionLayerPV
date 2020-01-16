@@ -230,7 +230,7 @@ class InterconnectedNetworkVisualization:
         for i in inter_layer.A_nodes:
             node_color_dic[(i, 'layer A')] = setting.NodeColorDict[inter_layer.two_layer_graph.nodes[i]['state']]
         for i in inter_layer.B_nodes:
-            node_color_dic[(i-len(inter_layer.A_nodes), 'layer B')] = setting.NodeColorDict[inter_layer.two_layer_graph.nodes[i]['state']]
+            node_color_dic[((i-len(inter_layer.A_nodes))*(len(inter_layer.A_nodes)/len(inter_layer.B_nodes)), 'layer B')] = setting.NodeColorDict[inter_layer.two_layer_graph.nodes[i]['state']]
         return node_color_dic
 
     @staticmethod
@@ -243,11 +243,12 @@ class InterconnectedNetworkVisualization:
         for i, j in inter_layer.edges_on_B:
             a = inter_layer.two_layer_graph.nodes[i]['state']
             b = inter_layer.two_layer_graph.nodes[j]['state']
-            edge_color_dic[(i-len(inter_layer.A_nodes), 'layer B'), (j-len(inter_layer.A_nodes), 'layer B')] = setting.EdgeColorDict[a * b]
+            edge_color_dic[((i-len(inter_layer.A_nodes))*(len(inter_layer.A_nodes)/len(inter_layer.B_nodes)), 'layer B'),
+                           ((j-len(inter_layer.A_nodes))*(len(inter_layer.A_nodes)/len(inter_layer.B_nodes)), 'layer B')] = setting.EdgeColorDict[a * b]
         for i, j in inter_layer.edges_on_AB:
             a = inter_layer.two_layer_graph.nodes[j]['state']
             b = inter_layer.two_layer_graph.nodes[i]['state']
-            edge_color_dic[(i, 'layer A'), (j-len(inter_layer.A_nodes), 'layer B')] = setting.EdgeColorDict[a * b]
+            edge_color_dic[(i, 'layer A'), ((j-len(inter_layer.A_nodes))*(len(inter_layer.A_nodes)/len(inter_layer.B_nodes)), 'layer B')] = setting.EdgeColorDict[a * b]
         return edge_color_dic
 
     @staticmethod
@@ -265,7 +266,9 @@ class InterconnectedNetworkVisualization:
         for i in inter_layer.B_nodes:
             interconnected_network.add_node(i-len(inter_layer.A_nodes))
         for i, j in inter_layer.edges_on_B:
-            interconnected_network[i-len(inter_layer.A_nodes), j-len(inter_layer.A_nodes), 'layer B'] = 1
+            interconnected_network[(i-len(inter_layer.A_nodes))*(len(inter_layer.A_nodes)/len(inter_layer.B_nodes)),
+                                   (j-len(inter_layer.A_nodes))*(len(inter_layer.A_nodes)/len(inter_layer.B_nodes)),
+                                   'layer B'] = 1
         return interconnected_network
 
     @staticmethod
@@ -274,7 +277,7 @@ class InterconnectedNetworkVisualization:
         InterconnectedNetworkVisualization.making_layer_A_graph(inter_layer, interconnected_network)
         InterconnectedNetworkVisualization.making_layer_B_graph(inter_layer, interconnected_network)
         for i, j in sorted(inter_layer.edges_on_AB):
-            interconnected_network[i, 'layer A'][j-len(inter_layer.A_nodes), 'layer B'] = 1
+            interconnected_network[i, 'layer A'][(j-len(inter_layer.A_nodes))*(len(inter_layer.A_nodes)/len(inter_layer.B_nodes)), 'layer B'] = 1
         return interconnected_network
 
     @staticmethod
@@ -304,9 +307,9 @@ class InterconnectedNetworkVisualization:
 if __name__ == "__main__":
     print("Interconnected Layer Modeling")
     setting = SettingSimulationValue.SettingSimulationValue()
-    setting.A_node = 40
-    setting.B_node = 40
-    setting.Structure = 'RR-RR'
+    setting.A_node = 32
+    setting.B_node = 8
+    setting.Structure = 'KR-BA'
     setting.A_edge = 3
     setting.B_edge = 3
     inter_layer = InterconnectedLayerModeling.InterconnectedLayerModeling(setting)

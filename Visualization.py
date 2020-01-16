@@ -19,18 +19,22 @@ random.shuffle(linestyle)
 x_list = ['Steps', 'keynode_number', 'keyedge_number']
 y_list = ['AS', 'prob_v', 'persuasion', 'compromise', 'change_count', 'consensus_index']
 
-
-# orders = [r'$O(o, o) \to D(o)$', r'$O(r, r) \to D(o)$', r'$O(s, o) \to D(o)$', r'$O(o, s) \to D(o)$',
-#           r'$O(s, s) \to D(o)$']
-# # orders = [r'$O(o, o) \to D(o)$', r'$O(o, o) \leftarrow D(o)$', r'$O(s, o) \to D(s)$', r'$O(s, o) \leftarrow D(s)$']
-# orders = [r'$O(o, o) \to D(o)$', r'$O(s, s) \leftrightarrow D(s)$', r'$O(r, r) \Leftrightarrow D(r)$']
-# # orders = [r'$O(o, o) \to D(o)$', r'$O(o, o) \to D(s)$', r'$O(s, o) \to D(o)$', r'$O(o, s) \to D(o)$',
-# #           r'$O(s, o) \to D(s)$', r'$O(o, s) \to D(s)$', r'$O(s, s) \to D(o)$',
-# #           r'$O(s, s) \to D(s)$']
+#layer order
 # orders = [r'$O(o, o) \to D(o)$', r'$O(o, o) \leftarrow D(o)$',
 #           r'$O(s, o) \leftrightarrow D(s)$',
 #           r'$O(s, o) \to D(s)$', r'$O(s, o) \leftarrow D(s)$',
 #           r'$O(o, o) \Leftrightarrow D(o)$']
+
+#node order
+# orders = [r'$O(r, r) \to D(o)$',, r'$O(o, o) \to D(o)$',  r'$O(s, o) \to D(o)$',
+#           r'$O(r, r) \to D(s)$', r'$O(o, o) \to D(s)$', r'$O(s, o) \to D(s)$']
+
+#edge order
+# orders = [r'$O(o, o) \to D(o)$',  r'$O(s, o) \to D(o)$',
+#           r'$O(o, s) \to D(o)$', r'$O(s, s) \to D(o)$']
+
+
+
 
 class Visualization:
     def __init__(self, setting):
@@ -147,11 +151,11 @@ class Visualization:
             X, Y = np.meshgrid(v_list, p_list)
             Z = Visualization.state_list_function(df, p_list, v_list)
             ax.contour3D(X, Y, Z, 50, cmap='RdBu')
-        ax.set_xlabel(r'$v$', fontsize=18, labelpad=8)
-        ax.set_ylabel(r'$prob.p$', fontsize=18, labelpad=8)
+        ax.set_xlabel(r'$v$', fontsize=20, labelpad=8)
+        ax.set_ylabel(r'$prob.p$', fontsize=20, labelpad=8)
         ax.set_zlabel('AS', fontsize=18, labelpad=8)
-        ax.set_title(r'$v$-$prob.p$-AS', fontsize=18)
-        ax.tick_params(axis='both', labelsize=14)
+        ax.set_title(r'$v$-$prob.p$-AS', fontsize=20)
+        ax.tick_params(axis='both', labelsize=16)
         ax.view_init(45, 45)
 
     @staticmethod
@@ -198,8 +202,17 @@ class Visualization:
                 pv_df = df1[df1.v == temp_v_values[i]]
                 if order is True:
                     orders = pv_df['Orders'].unique()
-                    # orders = [r'$O(o, o) \to D(o)$', r'$O(o, s) \to D(o)$',
-                    #           r'$O(s, o) \to D(o)$', r'$O(s, s) \to D(o)$']
+                    # layer order
+                    # orders = [r'$O(o, o) \to D(o)$', r'$O(o, o) \leftarrow D(o)$',
+                    #           r'$O(s, o) \leftrightarrow D(s)$',
+                    #           r'$O(s, o) \to D(s)$', r'$O(s, o) \leftarrow D(s)$',
+                    #           r'$O(o, o) \Leftrightarrow D(o)$']
+                    # node order
+                    # orders = [r'$O(r, r) \to D(o)$', r'$O(o, o) \to D(o)$',  r'$O(s, o) \to D(o)$',
+                    #           r'$O(r, r) \to D(s)$', r'$O(o, o) \to D(s)$', r'$O(s, o) \to D(s)$']
+                    # edge order
+                    # orders = [r'$O(o, o) \to D(o)$',  r'$O(s, o) \to D(o)$',
+                    #           r'$O(o, s) \to D(o)$', r'$O(s, s) \to D(o)$']
 
                     for style, ordering in enumerate(orders):
                         pv_df2 = pv_df[pv_df.Orders == ordering]
@@ -207,7 +220,6 @@ class Visualization:
                         pv_df3 = pv_df3.sort_values(by='Steps', ascending=True)
                         plt.plot(pv_df3[x_list[x_index]], pv_df3[y_list[y_index]], linestyle[style],
                                  label=r'%s' % ordering, linewidth=1.5)
-                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                         # plt.annotate('branch point', xy=(1, 0.9), arrowprops=dict(arrowstyle="->"))
 
                 elif order is False:
@@ -237,7 +249,6 @@ class Visualization:
                                 pv_df5 = pv_df5.sort_values(by='Steps', ascending=True)
                                 plt.plot(pv_df5['keynode_number'], pv_df5['AS'],
                                          label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                             elif keynode_number[0] is True:
                                 pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
                                 pv_df5 = pv_df5.sort_values(by='keynode_number', ascending=True)
@@ -249,7 +260,6 @@ class Visualization:
                                         AS_array = pv_df6.values
                                         plt.plot(pv_df5['keynode_number'] / pv_df5['A_node_number'], pv_df5['AS'],
                                                 marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(AS_array)), linewidth=1.5)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                                     elif stability is True:
                                         stab = []
                                         pv_df6 = pv_df5[y_list[y_index]]
@@ -263,14 +273,12 @@ class Visualization:
                                         pv_df5['Stability'] = stab
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_node_number'], pv_df5['Stability'],
                                                  marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(stab)), markersize=3, linewidth=1.0)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                                 elif select_node_layer == 'B_layer':
                                     pv_df6 = pv_df5[y_list[y_index]]
                                     AS_array = pv_df6.values
                                     if stability is False:
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5[y_list[y_index]],
                                                  marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(AS_array)), linewidth=1.5)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                                     elif stability is True:
                                         stab = []
                                         pv_df6 = pv_df5[y_list[y_index]]
@@ -284,7 +292,6 @@ class Visualization:
                                         pv_df5['Stability'] = np.array(stab)
                                         plt.plot(pv_df5[x_list[x_index]] / pv_df5['B_node_number'], pv_df5['Stability'],
                                                  marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(stab)), markersize=3, linewidth=1.0)
-                                        plt.legend(framealpha=1, frameon=True, prop={'size': 15})
                     elif keyedge_method is True:
                         pv_df3 = pv_df[pv_df.select_edge_layer == select_edge_layer]
                         key_methods = pv_df3['keyedge_method'].unique()
@@ -295,16 +302,16 @@ class Visualization:
                                 pv_df5 = pv_df5.sort_values(by='Steps', ascending=True)
                                 plt.plot(pv_df5[x_list[x_index]], pv_df5[y_list[y_index]],
                                          label=r'%s(%s)' % (key_method, select_node_layer.split('_')[0]), linewidth=1.5)
-                                plt.legend(framealpha=1, frameon=True, prop={'size': 10})
                             elif keyedge_number[0] is True:
                                 pv_df5 = pv_df4[pv_df4.Steps == steps_timeflow]
                                 pv_df5 = pv_df5.sort_values(by='keyedge_number', ascending=True)
                                 plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_total_edges'], pv_df5[y_list[y_index]],
                                          marker='o', label=r'%s(%s)' % (key_method, select_edge_layer), linewidth=1.5)
-                                plt.legend(framealpha=1, frameon=True, prop={'size': 10})
         # plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
-        plt.xlabel('step(time)', fontsize=14, labelpad=4)
-        plt.ylabel('CI', fontsize=14, labelpad=4)
+        plt.tick_params(axis='both', which='major', labelsize=18)
+        plt.xlabel('step(time)', fontsize=22, labelpad=4)
+        plt.ylabel('AS', fontsize=22, labelpad=4)
+        # plt.legend(framealpha=1, frameon=True, prop={'size': 12})
         # plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
         # plt.title('AS comparison according to dynamics order')
         # plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
@@ -324,13 +331,16 @@ class Visualization:
         p1 = ax.bar(ind - (width / 2), PCRs, width, color='SkyBlue')
         p2 = ax.bar(ind - (width / 2), NCRs, width, color='IndianRed', bottom=PCRs)
         p3 = ax.bar(ind + (width / 2), ASs, width, color='palegreen', label='AS')
-        ax.set_xlabel('model', fontsize=16)  # x축 라벨
-        ax.set_title('Competition results', fontsize=18)  # subplot의 제목
-        ax.set_yticks(np.arange(-0.5, 1.2, 0.2))
+        ax.set_xlabel('model', fontsize=22)  # x축 라벨
+        ax.set_title('Competition results', fontsize=22)  # subplot의 제목
+        ax.set_yticks(np.arange(-0.4, 1.0, 0.2))
         ax.set_xticks(ind)  # x축 틱설정
-        ax.set_xticklabels(tuples[0])  # x축 틱 라벨설정
-        ax.tick_params(labelsize=13)
-        plt.legend((p1[0], p2[0], p3[0]), ("PCR", "NCR", "AS total"), loc=0, fontsize=14)
+        ax.set_xticklabels(tuples[0], rotation=45, horizontalalignment="right") # x축 틱 라벨설정
+        # labels = ax.set_xticklabels(tuples[0]) # x축 틱 라벨설정
+        # for i, label in enumerate(labels):
+        #     label.set_y(label.get_position()[1] - (i % 2) * 0.075)
+        ax.tick_params(labelsize=18)
+        plt.legend((p1[0], p2[0], p3[0]), ("PCR", "NCR", "AS total"), loc=0, fontsize=18)
 
     @staticmethod
     def making_property_array_for_hist(df, model, steps_hist):
@@ -515,6 +525,24 @@ class Visualization:
             edge_method = 'random'
         return edge_method
 
+    @staticmethod
+    def consensus_index_figure(setting):
+        def CI_cal(Ap, Bp):
+            return ((Ap * (setting.B_node - Bp)) + ((setting.A_node - Ap) * Bp)) / (setting.A_node * setting.B_node)
+
+        Aps = [i for i in range(setting.A_node + 1)]
+        Bps = [i for i in range(setting.B_node + 1)]
+        A, B = np.meshgrid(Aps, Bps)
+        CI = CI_cal(A, B)
+        plt.figure()
+        ax = plt.axes(projection='3d')
+        ax.contour3D(A, B, CI, 200, cmap='viridis')
+        ax.set_xlabel('layer A', fontsize=22, labelpad=16)
+        ax.set_ylabel('layer B', fontsize=22, labelpad=16)
+        ax.set_zlabel('CI', fontsize=22,  labelpad=16)
+        ax.view_init(60, 35)
+        plt.tick_params(axis='both', which='major', labelsize=18)
+        plt.show()
 
 if __name__ == "__main__":
     print("Visualization")
@@ -523,10 +551,10 @@ if __name__ == "__main__":
     # setting.table = 'test'
     setting.database = 'pv_variable'
     # setting.table = 'finding_keynode_on_layers'
+    # setting.table = 'updating_rule'
+    setting.table = 'pv_variable3'
     # setting.table = 'comparison_order_table3'
-    # setting.table = 'pv_variable3'
     # setting.table = 'pv_variable2'
-    setting.table = 'updating_rule'
     visualization = Visualization(setting)
 
     # 모델의 2D 컨센서스 확인
@@ -539,20 +567,24 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 모델의 전체적인 컨센서스 확인
-    # visualization.run(setting, model=['BA(3)-BA(3)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    # visualization.run(model=['HM(2)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='trisurf', steps_3d=100,
     #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
-    #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
-    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+    #                   keynode_method=False, select_layer=0, keynode_number=(False, 1), stability=False,
+    #                   keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
 
+    # CI 그래프 그리기
+    # Visualization.consensus_index_figure(setting)
+
+
     # 모델의 전체적인 스텝 확인
-    visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-                      chart_type='scatter', steps_3d=100,
-                      x_index=0, y_index=5, p_values=[0.4], v_values=[0.4], order=True,
-                      keynode_method=False, select_layer=0, keynode_number=(False, 1), stability=False,
-                      keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
-                      steps_hist=100)
+    # visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='scatter', steps_3d=100,
+    #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
+    #                   keynode_method=False, select_layer=0, keynode_number=(False, 1), stability=False,
+    #                   keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
 
     # 키노드 찾기
     # visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
@@ -564,13 +596,14 @@ if __name__ == "__main__":
     # select_layer = 0, 1, 2
 
     # 히스토그램
-    # visualization.run(setting, model=['HM(2)', 'HM(4)', 'HM(8)', 'HM(16)', 'HM(32)', 'HM(64)', 'HM(128)', 'HM(256)'],
+    # visualization.run(model=['RR(5)-RR(5)','HM(2)', 'HM(4)', 'HM(8)', 'HM(16)', 'HM(32)', 'HM(64)', 'HM(128)', 'HM(256)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
-    #                   x_index=1, y_index=0, p_values=[0.3], v_values=[0.5], order=False,
-    #                   keynode_method=True, select_layer='B_layer', keynode_number=(True, 1),
-    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
+    #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
+    #                   keynode_method=True, select_layer=0, keynode_number=(True, 1),
+    #                   keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
+
     # visualization.run(setting, model=['RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)' ],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='scatter', steps_3d=100,
@@ -579,16 +612,16 @@ if __name__ == "__main__":
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
 
-    # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(5)-RR(2)', 'RR(3)-RR(3)',  'RR(5)-RR(3)',
-    #                                   'RR(4)-RR(4)', 'RR(5)-RR(4)',
-    #                                   'RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)',
-    #                                   'RR(6)-RR(6)'],
-    #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-    #                   chart_type='scatter', steps_3d=100,
-    #                   x_index=1, y_index=0, p_values=[0, 1], v_values=[0, 1], order=False,
-    #                   keynode_method=False, select_layer='A_layer', keynode_number=(False, 1),
-    #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
-    #                   steps_hist=100)
+    visualization.run(model=['RR(2)-RR(2)', 'RR(5)-RR(2)', 'RR(3)-RR(3)',  'RR(5)-RR(3)',
+                             'RR(4)-RR(4)', 'RR(5)-RR(4)',
+                             'RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)',
+                             'RR(6)-RR(6)'],
+                      plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+                      chart_type='scatter', steps_3d=100,
+                      x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
+                      keynode_method=False, select_layer=0, keynode_number=(False, 1),
+                      keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
+                      steps_hist=100)
 
     # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(3)-RR(3)', 'RR(4)-RR(4)', 'RR(5)-RR(5)', 'RR(6)-RR(6)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
