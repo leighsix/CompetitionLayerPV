@@ -1,6 +1,8 @@
 import SettingSimulationValue
 import matplotlib.pyplot as plt
 import matplotlib
+import io
+import numpy as np
 import seaborn as sns
 import random
 import pandas as pd
@@ -10,6 +12,7 @@ from sympy import *
 from matplotlib import cycler
 from mpl_toolkits.mplot3d.axes3d import *
 matplotlib.use("TkAgg")
+# matplotlib.use('agg')
 
 marker = ['-o', '-x', '-v', '-^', '-s', '-d', '']
 linestyle = ['-r', '--r', '-.r', ':r', '-g', '--g', '-.g', ':g', '-b', '--b', '-.b', ':b', '-c', '--c', '-.c',
@@ -50,7 +53,38 @@ class Visualization:
         if model is None:
             df = self.df
         elif len(model) == 1:
-            df = self.df[self.df.Model == model[0]]
+            if keynode_method is False:
+                df = self.df[self.df.Model == model[0]]
+            elif keynode_method is True:
+                if model == ['BA(3)-BA(3)'] or model == ['BA(3)-RR(6)'] or model == ['RR(6)-BA(3)']:
+                    if select_layer == 0:
+                        p_values = [0.2]
+                        v_values = [0.4]
+                    elif select_layer == 1:
+                        p_values = [0.3]
+                        v_values = [0.5]
+                elif model == ['BA(4)-BA(2)']:
+                    if select_layer == 0:
+                        p_values = [0.15]
+                        v_values = [0.3]
+                    elif select_layer == 1:
+                        p_values = [0.2]
+                        v_values = [0.4]
+                elif model == ['BA(2)-BA(4)']:
+                    if select_layer == 0:
+                        p_values = [0.57]
+                        v_values = [0.37]
+                    elif select_layer == 1:
+                        p_values = [0.6]
+                        v_values = [0.4]
+                elif model == ['HM(8)_BA(3)']:
+                    if select_layer == 0:
+                        p_values = [0.2]
+                        v_values = [0.2]
+                    elif select_layer == 1:
+                        p_values = [0.25]
+                        v_values = [0.3]
+                df = self.df[self.df.Model == model[0]]
         elif len(model) > 1:
             for i in range(len(model)):
                 if i == 0:
@@ -63,9 +97,6 @@ class Visualization:
                                    keynode_method, select_layer, keynode_number, stability,
                                    keyedge_method, select_edge_layer, keyedge_number, steps_timeflow,
                                    steps_hist)
-        plt.show()
-        plt.close()
-
 
     @staticmethod
     def making_chart(df, model, plot_type, p_value_list, v_value_list, y_axis, steps_2d,
@@ -74,7 +105,7 @@ class Visualization:
                      keyedge_method, select_edge_layer, keyedge_number, steps_timeflow,
                      steps_hist):
         if plot_type == '2D':
-            Visualization.plot_2D_for_average_state(df, p_value_list, v_value_list, y_axis, steps_2d)
+            Visualization.plot_2D_for_average_state(df, model, p_value_list, v_value_list, y_axis, steps_2d)
         elif plot_type == '3D':
             Visualization.plot_3D_for_average_state(df, chart_type, steps_3d)
         elif plot_type == 'timeflow':
@@ -85,12 +116,11 @@ class Visualization:
             Visualization.making_mixed_hist(df, model, steps_hist)
 
     @staticmethod
-    def plot_2D_for_average_state(df, p_value_list, v_value_list, y_axis, steps_2d):  # v_values =[]
+    def plot_2D_for_average_state(df, model, p_value_list, v_value_list, y_axis, steps_2d):  # v_values =[]
         fig = plt.figure()
         sns.set()
         plt.style.use('seaborn-whitegrid')
         ax = fig.add_subplot(111)
-        ax.tick_params(axis='both', labelsize=14)
         df = df[df.Steps == steps_2d]
         if p_value_list is not None:
             p_list = Visualization.making_select_list(df, 'p')
@@ -103,6 +133,7 @@ class Visualization:
                 y_value = y_list[y_axis]
                 plt.plot(df1['v'], df1[y_value], marker[i], label=r'$p$=%.2f' % p_value,
                          markersize=6, linewidth=1.5, markeredgewidth=1)
+                plt.tick_params(axis='both', labelsize=14)
                 plt.xlabel(r'$v$', fontsize=18, labelpad=4)
                 plt.legend(framealpha=1, frameon=True, prop={'size': 12})
                 plt.ylim(-1.5, 1.5)
@@ -116,23 +147,60 @@ class Visualization:
                 y_value = y_list[y_axis]
                 plt.plot(df1['p'], df1[y_value], marker[i], label=r'$v$=%.2f' % v_value,
                          markersize=6, linewidth=1.5, markeredgewidth=1)
+                plt.tick_params(axis='both', labelsize=14)
                 plt.xlabel(r'$p$', fontsize=18, labelpad=4)
                 plt.legend(framealpha=1, frameon=True, prop={'size': 12})
                 plt.ylim(-1.5, 1.5)
                 plt.ylabel(y_value, fontsize=18, labelpad=4)
         elif p_value_list is None and v_value_list is None:
-            v_list = Visualization.making_select_list(df, 'v')  # list이지만 실제로는 array
-            p_list = Visualization.making_select_list(df, 'p')
-            X, Y = np.meshgrid(v_list, p_list)
-            Z = Visualization.state_list_function(df, p_list, v_list)
-            plt.contourf(X, Y, Z, 50, cmap='RdBu')
-            cb = plt.colorbar()
-            cb.set_label(label='AS', size=15, labelpad=10)
-            cb.ax.tick_params(labelsize=12)
-            plt.clim(-1, 1)
-            plt.xlabel(r'$v$', fontsize=18, labelpad=6)
-            plt.ylabel(r'$p$', fontsize=18, labelpad=6)
-            # plt.clabel(contours, inline=True, fontsize=8)
+            if len(model) == 1:
+                v_list = Visualization.making_select_list(df, 'v')  # list이지만 실제로는 array
+                p_list = Visualization.making_select_list(df, 'p')
+                X, Y = np.meshgrid(v_list, p_list)
+                Z = Visualization.state_list_function(df, p_list, v_list)
+                plt.contourf(X, Y, Z, 50, cmap='RdBu')
+                cb = plt.colorbar()
+                cb.set_label(label='AS', size=15, labelpad=10)
+                cb.ax.tick_params(labelsize=12)
+                plt.clim(-1.1, 1.1)
+                plt.tick_params(axis='both', which='major', labelsize=20, pad=8)
+                ax.set_xticks(np.arange(0, 1.1, 0.5))
+                ax.set_yticks(np.arange(0, 1.1, 0.5))
+                plt.xlabel(r'$v$', fontsize=20, labelpad=4)
+                plt.ylabel(r'$p$', fontsize=20, labelpad=4)
+            elif len(model) > 1:
+                figsize = (10, 8)
+                cols = 1
+                rows = len(model) // cols
+                fig, axs = plt.subplots(rows, cols, figsize=figsize, sharex='all', sharey='all')
+                sns.set()
+                plt.style.use('seaborn-whitegrid')
+
+                def trim_axs(axs, N):
+                    axs = axs.flat
+                    for ax in axs[N:]:
+                        ax.remove()
+                    return axs[:N]
+                axs = trim_axs(axs, len(model))
+                num = 0
+                for ax, mo in zip(axs, model):
+                    num += 1
+                    ax.set_title('%s' % mo, fontsize=22)
+                    df_1 = df[df.Model == mo]
+                    ax.set_xticks(np.arange(0, 1.1, 0.5))
+                    ax.set_yticks(np.arange(0, 1.1, 0.5))
+                    # ax.set_xlabel(r'$v$', fontsize=20, labelpad=8)
+                    # ax.set_ylabel(r'$p$', fontsize=20, labelpad=8)
+                    ax.tick_params(axis='both', which='major', labelsize=20, pad=8)
+                    v_list = Visualization.making_select_list(df_1, 'v')  # list이지만 실제로는 array
+                    p_list = Visualization.making_select_list(df_1, 'p')
+                    X, Y = np.meshgrid(v_list, p_list)
+                    Z = Visualization.state_list_function(df_1, p_list, v_list)
+                    ax.contourf(X, Y, Z, 50, cmap='RdBu')
+                fig.tight_layout()
+                plt.subplots_adjust(bottom=0.2, wspace=0.2)
+        plt.show()
+        plt.close()
 
     @staticmethod
     def plot_3D_for_average_state(df, chart_type, steps_3d):
@@ -259,7 +327,7 @@ class Visualization:
                                         pv_df6 = pv_df5['AS']
                                         AS_array = pv_df6.values
                                         plt.plot(pv_df5['keynode_number'] / pv_df5['A_node_number'], pv_df5['AS'],
-                                                marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(AS_array)), linewidth=1.5)
+                                                 marker='o', label=r'%s(%s)=%.4f' % (key_method, select_node_layer.split('_')[0], sum(AS_array)), linewidth=1.5)
                                     elif stability is True:
                                         stab = []
                                         pv_df6 = pv_df5[y_list[y_index]]
@@ -308,13 +376,15 @@ class Visualization:
                                 plt.plot(pv_df5[x_list[x_index]] / pv_df5['A_total_edges'], pv_df5[y_list[y_index]],
                                          marker='o', label=r'%s(%s)' % (key_method, select_edge_layer), linewidth=1.5)
         # plt.xlabel('%s' % x_list[x_index], fontsize=16, labelpad=6)
-        plt.tick_params(axis='both', which='major', labelsize=18)
-        plt.xlabel('step(time)', fontsize=22, labelpad=4)
-        plt.ylabel('AS', fontsize=22, labelpad=4)
-        # plt.legend(framealpha=1, frameon=True, prop={'size': 12})
-        # plt.ylabel('%s' % y_list[y_index], fontsize=16, labelpad=6)
+        plt.tick_params(axis='both', which='major', labelsize=22)
+        plt.xlabel('ratio of stubborn nodes', fontsize=26, labelpad=4)
+        plt.ylabel('AS', fontsize=26, labelpad=4)
+        plt.legend(framealpha=1, frameon=True, prop={'size': 22})
+        plt.show()
+        plt.close()
         # plt.title('AS comparison according to dynamics order')
         # plt.text(20, -0.13, r'$p=%.2f, v=%.2f$' % (p[0], v[0]))
+
 
     @staticmethod
     def making_mixed_hist(df, model, steps_hist):   # Model, ASs, PCRs, NCRs, CRs
@@ -550,9 +620,9 @@ if __name__ == "__main__":
     # setting.database = 'test'
     # setting.table = 'test'
     setting.database = 'pv_variable'
-    # setting.table = 'finding_keynode_on_layers'
+    setting.table = 'finding_keynode_on_layers'
     # setting.table = 'updating_rule'
-    setting.table = 'pv_variable3'
+    # setting.table = 'pv_variable3'
     # setting.table = 'comparison_order_table3'
     # setting.table = 'pv_variable2'
     visualization = Visualization(setting)
@@ -567,7 +637,25 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 모델의 전체적인 컨센서스 확인
-    # visualization.run(model=['HM(2)'], plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+
+    # visualization.run(model=['RR(5)-RR(5)', 'HM(2)', 'HM(4)', 'HM(8)', 'HM(16)', 'HM(32)', 'HM(64)', 'HM(128)', 'HM(256)'],
+    #                   plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='trisurf', steps_3d=100,
+    #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
+    #                   keynode_method=False, select_layer=0, keynode_number=(False, 1), stability=False,
+    #                   keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
+
+    # visualization.run(model=['RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)'],
+    #                   plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='trisurf', steps_3d=100,
+    #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
+    #                   keynode_method=False, select_layer=0, keynode_number=(False, 1), stability=False,
+    #                   keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
+
+    # visualization.run(model=['BA(3)-BA(3)', 'BA(5)-BA(5)'],
+    #                   plot_type='2D', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
     #                   chart_type='trisurf', steps_3d=100,
     #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
     #                   keynode_method=False, select_layer=0, keynode_number=(False, 1), stability=False,
@@ -587,12 +675,12 @@ if __name__ == "__main__":
     #                   steps_hist=100)
 
     # 키노드 찾기
-    # visualization.run(model=['BA(3)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-    #                   chart_type='scatter', steps_3d=100,
-    #                   x_index=1, y_index=0, p_values=[0.3], v_values=[0.5], order=False,
-    #                   keynode_method=True, select_layer=1, keynode_number=(True, 1), stability=False,
-    #                   keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
-    #                   steps_hist=100)
+    visualization.run(model=['RR(6)-BA(3)'], plot_type='timeflow', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+                      chart_type='scatter', steps_3d=100,
+                      x_index=1, y_index=0, p_values=[0.2], v_values=[0.4], order=False,
+                      keynode_method=True, select_layer=1, keynode_number=(True, 1), stability=False,
+                      keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
+                      steps_hist=100)
     # select_layer = 0, 1, 2
 
     # 히스토그램
@@ -612,16 +700,16 @@ if __name__ == "__main__":
     #                   keyedge_method=False, select_edge_layer='A_mixed', keyedge_number=(False, 1), steps_timeflow=100,
     #                   steps_hist=100)
 
-    visualization.run(model=['RR(2)-RR(2)', 'RR(5)-RR(2)', 'RR(3)-RR(3)',  'RR(5)-RR(3)',
-                             'RR(4)-RR(4)', 'RR(5)-RR(4)',
-                             'RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)',
-                             'RR(6)-RR(6)'],
-                      plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
-                      chart_type='scatter', steps_3d=100,
-                      x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
-                      keynode_method=False, select_layer=0, keynode_number=(False, 1),
-                      keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
-                      steps_hist=100)
+    # visualization.run(model=['RR(2)-RR(2)', 'RR(5)-RR(2)', 'RR(3)-RR(3)',  'RR(5)-RR(3)',
+    #                          'RR(4)-RR(4)', 'RR(5)-RR(4)',
+    #                          'RR(2)-RR(5)', 'RR(3)-RR(5)', 'RR(4)-RR(5)', 'RR(5)-RR(5)',
+    #                          'RR(6)-RR(6)'],
+    #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
+    #                   chart_type='scatter', steps_3d=100,
+    #                   x_index=0, y_index=0, p_values=(0, 1), v_values=(0, 1), order=False,
+    #                   keynode_method=False, select_layer=0, keynode_number=(False, 1),
+    #                   keyedge_method=False, select_edge_layer=0, keyedge_number=(False, 1), steps_timeflow=100,
+    #                   steps_hist=100)
 
     # visualization.run(setting, model=['RR(2)-RR(2)', 'RR(3)-RR(3)', 'RR(4)-RR(4)', 'RR(5)-RR(5)', 'RR(6)-RR(6)'],
     #                   plot_type='hist', p_value_list=None, v_value_list=None, y_axis=0, steps_2d=100,
